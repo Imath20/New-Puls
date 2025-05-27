@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import Layout from '../Layout';
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import ProblemaDetaliata from "../Problemadetaliata";
+import { problemeData } from '../problemedata';
 
 // Icon components
 const SearchIcon = () => (
@@ -80,7 +82,9 @@ const problemsMock = [
 ];
 
 // Problem Card Component
-const ProblemCard = ({ id, title, difficulty, topic, solved }) => {
+const ProblemCard = ({ problem, onResolveClick }) => {
+    const { id, title, difficulty, topic, solved } = problem;
+
     const getDifficultyColorClass = (diff) => {
         switch (diff) {
             case 'ușor': return 'difficulty--usor';
@@ -94,45 +98,37 @@ const ProblemCard = ({ id, title, difficulty, topic, solved }) => {
         <div className={`problem-card${solved ? ' solved' : ''}`}>
             <div className="problem-card-header">
                 <div className="problem-card-info">
-                    <span className="problem-card-id">
-                        #{id}
-                    </span>
-                    <h3 className="problem-card-title">
-                        {title}
-                    </h3>
-                    <p className="problem-card-topic">
-                        {topic}
-                    </p>
+                    <span className="problem-card-id">#{id}</span>
+                    <h3 className="problem-card-title">{title}</h3>
+                    <p className="problem-card-topic">{topic}</p>
                 </div>
-                {solved && (
-                    <div className="problem-card-solved-badge">
-                        Rezolvată
-                    </div>
-                )}
+                {solved && <div className="problem-card-solved-badge">Rezolvată</div>}
             </div>
             <div className="problem-card-footer">
                 <div className={`problem-card-difficulty ${getDifficultyColorClass(difficulty)}`}>
                     {difficulty}
                 </div>
-                <a
-                    href={`/probleme/${id}`}
+                <button
                     className="problem-card-link"
+                    onClick={() => onResolveClick(problem)}
                 >
                     <span>Rezolvă</span>
-                    <ExternalLinkIcon />
-                </a>
+                </button>
             </div>
         </div>
     );
 };
+
 
 const PhysicsProblems = () => {
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedDifficulty, setSelectedDifficulty] = useState("Toate");
     const [selectedCategory, setSelectedCategory] = useState("Toate");
     const [sortBy, setSortBy] = useState("newest");
+    const [selectedProblem, setSelectedProblem] = useState(null);
 
     const navigate = useNavigate();
+    const location = useLocation();
 
     useEffect(() => {
         const params = new URLSearchParams();
@@ -145,8 +141,7 @@ const PhysicsProblems = () => {
             pathname: location.pathname,
             search: params.toString(),
         });
-    }, [selectedDifficulty]);
-
+    }, [selectedDifficulty, navigate, location.pathname]);
 
     const categories = [
         "Toate",
@@ -159,11 +154,9 @@ const PhysicsProblems = () => {
 
     const difficulties = ["Toate", "ușor", "mediu", "dificil"];
 
-    // Verifică dacă e pe ruta specialized și definește topicurile speciale
     const isSpecializedPage = location.pathname.includes("/specialized");
     const specializedTopics = ["pendul", "unde", "lissajous", "seism"];
 
-    // Filtrăm doar problemele specializate dacă e pagina respectivă
     const relevantProblems = isSpecializedPage
         ? problemsMock.filter((problem) =>
             specializedTopics.some(topic =>
@@ -171,7 +164,6 @@ const PhysicsProblems = () => {
             )
         )
         : problemsMock;
-
 
     const filteredProblems = relevantProblems.filter((problem) => {
         if (
@@ -196,22 +188,47 @@ const PhysicsProblems = () => {
         return true;
     });
 
+    // Funcție pentru sortarea după dificultate
+    const difficultyOrder = { "ușor": 1, "mediu": 2, "dificil": 3 };
+
+    const sortedProblems = [...filteredProblems].sort((a, b) => {
+        switch (sortBy) {
+            case "newest":
+                return b.id - a.id; // presupunem că id mai mare e mai nou
+            case "oldest":
+                return a.id - b.id;
+            case "difficulty-asc":
+                return difficultyOrder[a.difficulty] - difficultyOrder[b.difficulty];
+            case "difficulty-desc":
+                return difficultyOrder[b.difficulty] - difficultyOrder[a.difficulty];
+            default:
+                return 0;
+        }
+    });
+
+    if (selectedProblem) {
+        return (
+            <Layout>
+                <ProblemaDetaliata
+                    problema={selectedProblem}
+                    onBack={() => setSelectedProblem(null)}
+                />
+            </Layout>
+        );
+    }
+
     return (
         <Layout>
             <div className="problems-page">
                 <div className="problems-page-inner">
                     {/* Title */}
-                    <h1 className="problems-page-title">
-                        Probleme de fizică
-                    </h1>
+                    <h1 className="problems-page-title">Probleme de fizică</h1>
 
                     {/* Search and Filters */}
                     <div className="problems-page-filters">
                         <div className="filters-row">
                             <div className="search-container">
-                                <span className="search-icon">
-                                    <SearchIcon />
-                                </span>
+                                <span className="search-icon"><SearchIcon /></span>
                                 <input
                                     type="text"
                                     placeholder="Caută probleme..."
@@ -263,7 +280,7 @@ const PhysicsProblems = () => {
                     {/* Results Header */}
                     <div className="results-header">
                         <p className="results-count">
-                            {filteredProblems.length} probleme găsite
+                            {sortedProblems.length} probleme găsite
                         </p>
                         <select
                             className="sort-select"
@@ -279,32 +296,26 @@ const PhysicsProblems = () => {
 
                     {/* Problem Cards Grid */}
                     <div className="problems-grid">
-                        {filteredProblems.map((problem) => (
+                        {sortedProblems.map((problem) => (
                             <ProblemCard
                                 key={problem.id}
-                                id={problem.id}
-                                title={problem.title}
-                                difficulty={problem.difficulty}
-                                topic={problem.topic}
-                                solved={problem.solved}
+                                problem={problem}
+                                onResolveClick={setSelectedProblem}
                             />
                         ))}
                     </div>
 
                     {/* No Results */}
-                    {filteredProblems.length === 0 && (
+                    {sortedProblems.length === 0 && (
                         <div className="no-results">
-                            <h3>
-                                Nicio problemă găsită
-                            </h3>
-                            <p>
-                                Încearcă să modifici filtrele sau să folosești alte cuvinte cheie.
-                            </p>
+                            <h3>Nicio problemă găsită</h3>
+                            <p>Încearcă să modifici filtrele sau să folosești alte cuvinte cheie.</p>
                         </div>
                     )}
 
                     {/* Pagination */}
-                    {filteredProblems.length > 0 && (
+                    {/* Pentru moment nu e logică funcțională pentru paginare, dar e afișat */}
+                    {sortedProblems.length > 0 && (
                         <div className="pagination">
                             <div className="pagination-navbar">
                                 <button className="pagination-btn" disabled>
@@ -313,19 +324,11 @@ const PhysicsProblems = () => {
                                 <button className="pagination-btn pagination-btn--active">
                                     1
                                 </button>
-                                <button className="pagination-btn">
-                                    2
-                                </button>
-                                <button className="pagination-btn">
-                                    3
-                                </button>
+                                <button className="pagination-btn">2</button>
+                                <button className="pagination-btn">3</button>
                                 <span className="pagination-dots">...</span>
-                                <button className="pagination-btn">
-                                    10
-                                </button>
-                                <button className="pagination-btn">
-                                    Următor
-                                </button>
+                                <button className="pagination-btn">10</button>
+                                <button className="pagination-btn">Următor</button>
                             </div>
                         </div>
                     )}

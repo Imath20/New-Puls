@@ -2,8 +2,28 @@ import { Link } from "react-router-dom";
 import Layout from "../Layout";
 import Slideshow from "../Slideshow";
 import { Waves, Atom, Circle, Activity, Calculator, BookOpen, Lightbulb, Target } from "lucide-react";
+import { useEffect } from "react";
 
 const Index = () => {
+
+
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('show')
+            }
+            // else {
+            //     entry.target.classList.remove('show')
+            // }
+        })
+    });
+
+    useEffect(() => {
+        const hiddenElements = document.querySelectorAll('.hidden');
+        hiddenElements.forEach(el => observer.observe(el));
+    }, []);
+
+    
     return (
         <Layout>
             {/* Hero Section */}
@@ -33,8 +53,8 @@ const Index = () => {
 
             {/* Features Section */}
             <section id="features" className="features-section">
-                <h2 className="section-title">Ce îți oferă PULS?</h2>
-                <div className="features-grid">
+                <h2 className="section-title hidden hidden-bottom">Ce îți oferă PULS?</h2>
+                <div className="features-grid hidden hidden-bottom">
                     <div className="feature-card">
                         <Link to="/probleme" className="feature-link">
                             <div className="feature-icon">
@@ -76,8 +96,8 @@ const Index = () => {
 
             {/* Simulations Section */}
             <section id="simulations" className="simulations-section">
-                <h2 className="section-title">Explorează simulările noastre</h2>
-                <div className="simulations-grid">
+                <h2 className="section-title hidden hidden-bottom">Explorează simulările noastre</h2>
+                <div className="simulations-grid hidden hidden-bottom">
                     <div className="simulation-card pendul">
                         {/* <Link to="/resurse/pendul" className="simulation-content">
                             <div className="simulation-content">
@@ -119,8 +139,8 @@ const Index = () => {
 
             {/* Problems Section */}
             <section id="problems" className="problems-section">
-                <h2 className="section-title">Probleme interactive</h2>
-                <div className="problems-grid">
+                <h2 className="section-title hidden hidden-bottom">Probleme interactive</h2>
+                <div className="problems-grid hidden hidden-bottom">
                     <Link to="/probleme?difficulty=ușor" className="problem-card-link">
                         <div className="problem-card">
                             <div className="problem-icon">
@@ -184,16 +204,16 @@ const Index = () => {
             </section>
 
             {/* About Us Preview Section */}
-            <section className="about-preview-section">
-                <div className="about-preview-text">
+            <section className="about-preview-section hidden hidden-bottom">
+                <div className="about-preview-text hidden hidden-bottom">
                     <h2 className="about-title" style={{ marginBottom: "1.5rem" }}>Despre noi</h2>
-                    <p className="about-description" style={{ marginBottom: "1.5rem" }}>
+                    <p className="about-description hidden hidden-bottom" style={{ marginBottom: "1.5rem" }}>
                         Suntem dedicați educației moderne și inovării în predarea fizicii. Platforma noastră oferă simulări interactive și exerciții pentru a transforma învățarea într-o experiență captivantă și practică.
                     </p>
-                    <p className="about-story" style={{ marginBottom: "1.5rem" }}>
+                    <p className="about-story hidden hidden-bottom" style={{ marginBottom: "1.5rem" }}>
                         Povestea noastră a început cu o simplă întrebare: cum putem face ca fenomenele oscilatorii să prindă viață și să devină mai ușor de înțeles pentru toți cei care le studiază? Noi, o echipă de elevi pasionați de știință, am simțit mereu că, dincolo de formule și definiții, există o lume fascinantă, plină de ritm, mișcare și conexiuni surprinzătoare cu natura și tehnologia.
                     </p>
-                    <Link to="/about-us" className="about-preview-button">
+                    <Link to="/about-us" className="about-preview-button hidden hidden-bottom">
                         Vezi mai mult
                     </Link>
                 </div>

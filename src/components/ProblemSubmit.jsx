@@ -92,7 +92,7 @@ const ProblemSubmit = () => {
                 solutionPhotoDataUris: solutionImageFiles.map(img => img.previewUrl),
             };
 
-            const response = await fetch('/api/analyze', {
+            const response = await fetch('https://puls-ai-two.vercel.app/api/analyze', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -100,14 +100,21 @@ const ProblemSubmit = () => {
                 body: JSON.stringify(payload),
             });
 
-            const result = await response.json();
+            // Defensive: check if response is JSON
+            let result;
+            const contentType = response.headers.get('content-type');
+            if (contentType && contentType.includes('application/json')) {
+                result = await response.json();
+            } else {
+                result = { error: await response.text() };
+            }
 
             if (!response.ok) {
                 throw new Error(result.error || `Request failed with status ${response.status}`);
             }
 
             setApiResponse(result);
-            alert("Analiza a fost primită.");
+            console.log("Analiza a fost primită.");
 
         } catch (err) {
             console.error('Error calling API:', err);

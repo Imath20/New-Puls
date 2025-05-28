@@ -40,10 +40,9 @@ Colaboratori:
 ## Tehnologii folosite
 
 - React + Vite (frontend)
-- Firebase (backend & autentificare)
 - Sass (stilizare)
 - Chart.js (grafice Lissajous și alte reprezentări)
-- FlatIcon & Freepik (resurse vizuale)
+- Lucide React (resurse vizuale)
 
 ---
 

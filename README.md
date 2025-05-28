@@ -30,16 +30,15 @@
 - ⚛️ **Frontend:** React cu Vite, SASS
 <!-- - 🔥 **Backend:** Firebase -->
 - 🗂️ **Hosting cod:** Vercel
-- 📦 **Librării externe:** Nu sunt utilizate
+- 📦 **Librării externe:** chart.js, d3.jx, math.jax
 - 📈 **Canvas API / SVG:** pentru animații fizice
 - 🤖 **OpenAI API (AI assistant)** – pentru interpretarea problemelor
-- 🎨 **Iconițe:** [FlatIcon](https://www.flaticon.com/)
-- 🖼️ **Fundal aplicație:** [Freepik](https://www.freepik.com/)
+- 🎨 **Iconițe:** [Lucide React]
 
 ## 📦 Instalare locală
 
 ```bash
-git clone https://github.com/username/puls.git
+git clone https://github.com/Imath20/New-Puls.git
 cd puls
 npm install
 npm run dev

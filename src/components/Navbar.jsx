@@ -62,8 +62,7 @@ const Navbar = () => {
         }
     };
 
-
-    // Change header on scroll
+    // Keep the original scroll logic untouched!
     $(document).on("scroll", () => {
         if ($(document).scrollTop() <= 100)
         {
@@ -77,8 +76,6 @@ const Navbar = () => {
         }
     });
 
-    
-    
     useEffect(() => {
         if (!darkModeOn)
         {            
@@ -162,18 +159,79 @@ const Navbar = () => {
                             onMouseEnter={handleMouseEnter}
                             onMouseLeave={handleMouseLeave}
                             onClick={handleDropdownClick}
-                            style={{ position: "relative", display: "inline-block", cursor: "pointer" }}
+                            style={{
+                                position: "relative",
+                                display: "inline-block",
+                                cursor: "pointer"
+                            }}
                         >
                             <span style={{ display: "flex", alignItems: "center" }}>
                                 <span>P.U.L.S.</span>
                                 <ChevronDown className="nav-icon" style={{ marginLeft: 4 }} />
                             </span>
                             {pulsOpen && (
-                                <div className="dropdown-menu">
-                                    <Link to="/resurse/pendule" className="dropdown-item">Pendule</Link>
-                                    <Link to="/resurse/unde" className="dropdown-item">Unde</Link>
-                                    <Link to="/resurse/lissajous" className="dropdown-item">Lissajous</Link>
-                                    <Link to="/resurse/seism" className="dropdown-item">Seisme</Link>
+                                <div
+                                    className="dropdown-menu"
+                                    style={{
+                                        position: "absolute",
+                                        top: "100%",
+                                        left: "50%",
+                                        transform: "translateX(-50%)",
+                                        background: "#222",
+                                        borderRadius: "0.5rem",
+                                        boxShadow: "0 4px 16px rgba(0,0,0,0.15)",
+                                        minWidth: "140px",
+                                        maxWidth: "200px",
+                                        zIndex: 2000,
+                                        padding: "0.25rem 0",
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        alignItems: "flex-start",
+                                        marginTop: 4,
+                                        border: "1px solid #444",
+                                        overflow: "hidden"
+                                    }}
+                                >
+                                    <Link to="/resurse/pendule" className="dropdown-item" style={{
+                                        color: "white",
+                                        padding: "0.5rem 1rem",
+                                        textDecoration: "none",
+                                        fontSize: "1rem",
+                                        transition: "background 0.2s",
+                                        cursor: "pointer",
+                                        width: "100%",
+                                        textAlign: "left"
+                                    }}>Pendule</Link>
+                                    <Link to="/resurse/unde" className="dropdown-item" style={{
+                                        color: "white",
+                                        padding: "0.5rem 1rem",
+                                        textDecoration: "none",
+                                        fontSize: "1rem",
+                                        transition: "background 0.2s",
+                                        cursor: "pointer",
+                                        width: "100%",
+                                        textAlign: "left"
+                                    }}>Unde</Link>
+                                    <Link to="/resurse/lissajous" className="dropdown-item" style={{
+                                        color: "white",
+                                        padding: "0.5rem 1rem",
+                                        textDecoration: "none",
+                                        fontSize: "1rem",
+                                        transition: "background 0.2s",
+                                        cursor: "pointer",
+                                        width: "100%",
+                                        textAlign: "left"
+                                    }}>Lissajous</Link>
+                                    <Link to="/resurse/seism" className="dropdown-item" style={{
+                                        color: "white",
+                                        padding: "0.5rem 1rem",
+                                        textDecoration: "none",
+                                        fontSize: "1rem",
+                                        transition: "background 0.2s",
+                                        cursor: "pointer",
+                                        width: "100%",
+                                        textAlign: "left"
+                                    }}>Seisme</Link>
                                 </div>
                             )}
                         </div>

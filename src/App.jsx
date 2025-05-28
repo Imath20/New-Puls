@@ -6,7 +6,7 @@ import OurWork from "@/components/OurWork";
 import Services from "@/components/Services";
 import Testimonials from "@/components/Testimonials";
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-
+import SearchResults from "./components/pages/searchresults";
 import './scss/style.scss';
 import Index from "./components/pages/Index";
 import Probleme from "./components/pages/Probleme";
@@ -105,6 +105,7 @@ const App = () => {
           <Route path="/resurse/lissajous" element={<Lissajous />} />
           <Route path="/resurse/seism" element={<Seism />} />
           <Route path="/about-us" element={<About />} />
+          <Route path="/search" element={<SearchResults />} />
         </Routes>
       </div>
     </Router>

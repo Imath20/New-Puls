@@ -28,17 +28,16 @@
 ## 🛠️ Tehnologii folosite
 
 - ⚛️ **Frontend:** React cu Vite, SASS
-<!-- - 🔥 **Backend:** Firebase -->
 - 🗂️ **Hosting cod:** Vercel
 - 📦 **Librării externe:** chart.js, d3.jx, math.jax
-- 📈 **Canvas API / SVG:** pentru animații fizice
+- 📈 **D3.JS API:** pentru animații fizice
 - 🤖 **OpenAI API (AI assistant)** – pentru interpretarea problemelor
 - 🎨 **Iconițe:** [Lucide React]
 
 ## 📦 Instalare locală
 
 ```bash
-git clone https://github.com/Imath20/New-Puls.git
+git clone https://github.com/Stefanarctic/New-Puls.git
 cd puls
 npm install
 npm run dev

@@ -6,7 +6,7 @@ export const problemeData = [
     titlu: 'Viteza undei P (Seism)',
     descriere: 'Calculul vitezei undelor primare în timpul unui seism',
     categorie: 'Seismologie',
-    dificultate: 'usoare',
+    dificultate: 'ușor',
     subpuncte: [
       {
         id: '1a',
@@ -34,7 +34,7 @@ export const problemeData = [
     titlu: 'Viteza undei S (Seism)',
     descriere: 'Calculul vitezei undelor secundare în timpul unui seism',
     categorie: 'Seismologie',
-    dificultate: 'usoare',
+    dificultate: 'ușor',
     subpuncte: [
       {
         id: '2a',

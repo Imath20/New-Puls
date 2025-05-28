@@ -149,7 +149,7 @@ const Index = () => {
                             <h3>Începători</h3>
                             <p>Probleme simple pentru a înțelege conceptele de bază ale fizicii</p>
                             <div className="problem-stats">
-                                <span>120+ probleme</span>
+                                <span>6 probleme</span>
                                 <span className="difficulty easy">Ușor</span>
                             </div>
                             <button className="problem-button">Începe acum</button>
@@ -164,7 +164,7 @@ const Index = () => {
                             <h3>Intermediar</h3>
                             <p>Exerciții care combină mai multe concepte și necesită raționament</p>
                             <div className="problem-stats">
-                                <span>85+ probleme</span>
+                                <span>2 probleme</span>
                                 <span className="difficulty medium">Mediu</span>
                             </div>
                             <button className="problem-button">Explorează</button>
@@ -179,10 +179,10 @@ const Index = () => {
                             <h3>Avansat</h3>
                             <p>Probleme complexe pentru pregătirea la olimpiade și examene</p>
                             <div className="problem-stats">
-                                <span>50+ probleme</span>
+                                <span>2 probleme</span>
                                 <span className="difficulty hard">Dificil</span>
                             </div>
-                            <button className="problem-button">Provocarea</button>
+                            <button className="problem-button">Provocacă-te</button>
                         </div>
                     </Link>
 
@@ -194,7 +194,7 @@ const Index = () => {
                             <h3>Specializat</h3>
                             <p>Probleme focusate pe teme specifice: pendul, unde, Lissajous, seism</p>
                             <div className="problem-stats">
-                                <span>40+ probleme</span>
+                                <span>Nu exista probleme inca</span>
                                 <span className="difficulty expert">Expert</span>
                             </div>
                             <button className="problem-button">Specializează-te</button>

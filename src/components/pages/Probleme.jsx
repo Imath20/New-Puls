@@ -60,6 +60,7 @@ const ProblemCard = ({ problem, onResolveClick }) => {
                     onClick={() => onResolveClick(problem)}
                 >
                     <span>Rezolvă</span>
+                    <ExternalLinkIcon />
                 </button>
             </div>
         </div>

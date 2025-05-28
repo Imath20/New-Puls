@@ -1,12 +1,16 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../scss/components/ProblemaDetaliata.scss';
 import { ArrowLeft, Bot, Calculator, BookOpen } from 'lucide-react';
 import { Button } from './Buttondet';
 import { Card, CardContent, CardHeader, CardTitle } from './card';
 import { Badge } from './badge';
 import { Separator } from './separator';
+import MathJaxRender from './MathJaxRender';
 
-export const ProblemaDetaliata = ({ problema, onBack }) => {
+export const ProblemaDetaliata = ({ problema }) => {
+  const navigate = useNavigate();
+
   const getDifficultyClass = (dificultate) => {
     return `badge-difficulty ${dificultate || 'default'}`;
   };
@@ -33,21 +37,7 @@ export const ProblemaDetaliata = ({ problema, onBack }) => {
 
   return (
     <div className="container">
-      <div className="header">
-        <div className="header-content">
-          <Button variant="ghost" onClick={onBack}>
-            <ArrowLeft className="w-4 h-4" />
-            <span>Înapoi la probleme</span>
-          </Button>
-          <div className="flex items-center space-x-4">
-            <Badge className={getDifficultyClass(problema.dificultate)}>
-              {getDifficultyName(problema.dificultate)}
-            </Badge>
-            <span className="text-sm text-gray-600">#{problema.index}</span>
-          </div>
-        </div>
-      </div>
-
+      {/* Butonul de "Înapoi la probleme" a fost eliminat */}
       <div className="main">
         <div>
           <Card className="mb-6">
@@ -69,9 +59,14 @@ export const ProblemaDetaliata = ({ problema, onBack }) => {
                   </h4>
                   <div className="space-y-2">
                     {problema.formule.map((formula, index) => (
-                      <code key={index} className="block bg-white px-3 py-2 rounded border text-sm font-mono">
-                        {formula}
-                      </code>
+                      <div key={index}>
+                        <span
+                          className="block bg-white px-3 py-2 rounded border text-sm font-mono"
+                          // MathJax inline
+                          dangerouslySetInnerHTML={{ __html: `\\(${formula}\\)` }}
+                        />
+                        <MathJaxRender />
+                      </div>
                     ))}
                   </div>
                 </div>

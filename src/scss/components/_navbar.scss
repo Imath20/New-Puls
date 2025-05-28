@@ -42,7 +42,9 @@ nav {
         margin-left: 20px;
         padding: 6px;
         border-radius: 5px;
-        border: 1px solid var(--primary-color-current-mode);
+        border: 1px solid #111 !important; // chenar negru la început
+        background: transparent !important;
+        transition: border-color 0.2s;
 
         .search-icon {
             color: var(--primary-color-current-mode);
@@ -241,6 +243,61 @@ nav {
     &.scrolled {
         backdrop-filter: blur(2px);
         background: linear-gradient(to bottom, rgba(0, 0, 0, 0.74), rgba(0, 0, 0, 0));
+    }
+
+    // Banda cu transparență pentru light mode
+    &.light-navbar.scrolled::after {
+        content: "";
+        position: absolute;
+        left: 0; right: 0; bottom: 0;
+        height: 100%; // sau height: 60%; dacă vrei proporțional
+        z-index: -1;
+        background: linear-gradient(to bottom, rgba(0,0,0,0.22), rgba(0,0,0,0.07));
+        pointer-events: none;
+        transition: background 0.3s;
+    }
+
+    // Fără banda la început
+    &.light-navbar::after {
+        content: none;
+    }
+
+    &.light-navbar {
+        color: var(--primary-color-white-mode); // text negru la început
+
+        .nav-link,
+        .search-input,
+        .search-icon {
+            color: var(--primary-color-white-mode); // text negru la început
+            transition: color 0.2s;
+        }
+
+        &.scrolled {
+            color: #fff !important;
+
+            .nav-link,
+            .search-input,
+            .search-icon {
+                color: #fff !important;
+            }
+        }
+
+        #dark-mode-toggle-container .dark-mode-toggle {
+            color: var(--primary-color-white-mode);
+            transition: color 0.2s;
+        }
+
+        &.scrolled {
+            #dark-mode-toggle-container .dark-mode-toggle {
+                color: #fff !important;
+            }
+        }
+
+    }
+
+    // Adăugat pentru a schimba border-ul la search bar în light mode când se face scroll
+    &.light-navbar.scrolled #navbar-search {
+        border: 1px solid #fff !important;
     }
 }
 

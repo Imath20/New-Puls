@@ -10,6 +10,7 @@ const Navbar = () => {
     const [pulsOpen, setPulsOpen] = useState(false);
     const [hoveringDropdown, setHoveringDropdown] = useState(false);
     const [searchValue, setSearchValue] = useState("");
+    const [scrolled, setScrolled] = useState(false);
     const dropdownRef = useRef(null);
     let closeTimeout = useRef();
     const darkModeOn = useDarkMode();
@@ -60,8 +61,16 @@ const Navbar = () => {
         }
     };
 
+    useEffect(() => {
+        const handleScroll = () => {
+            setScrolled(window.scrollY > 10);
+        };
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
     return (
-        <nav>
+        <nav className={`${darkModeOn ? "" : "light-navbar"}${scrolled ? " scrolled" : ""}`}>
             {/* Logo */}
             <div id="logo-container">
                 <Link to="/" id="logo-link">

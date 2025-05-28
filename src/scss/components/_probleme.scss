@@ -19,7 +19,7 @@
         font-size: 2rem;
         font-weight: 700;
         margin-bottom: 2rem;
-        color: #f8fafc;
+        color: var(--primary-color-current-mode); // folosește variabila, nu alb!
     }
 
     .problems-page-filters {

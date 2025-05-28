@@ -21,76 +21,23 @@ const ExternalLinkIcon = () => (
     </svg>
 );
 
-// Mock data
-const problemsMock = [
-    {
-        id: 1,
-        title: "Pendulul simplu",
-        difficulty: "ușor",
-        topic: "Mecanică - Oscilații",
-        solved: true,
-    },
-    {
-        id: 2,
-        title: "Calculul perioadei de oscilație",
-        difficulty: "mediu",
-        topic: "Mecanică - Oscilații",
-        solved: false,
-    },
-    {
-        id: 3,
-        title: "Interferența undelor",
-        difficulty: "dificil",
-        topic: "Unde - Unde mecanice",
-        solved: false,
-    },
-    {
-        id: 4,
-        title: "Figurile lui Lissajous",
-        difficulty: "mediu",
-        topic: "Oscilații - Lissajous",
-        solved: true,
-    },
-    {
-        id: 5,
-        title: "Undele seismice",
-        difficulty: "mediu",
-        topic: "Seismologie - Unde seismice",
-        solved: false,
-    },
-    {
-        id: 6,
-        title: "Energia mecanică a pendulului",
-        difficulty: "ușor",
-        topic: "Mecanică - Conservarea energiei",
-        solved: false,
-    },
-    {
-        id: 7,
-        title: "Analiza osciloscopică a undelor",
-        difficulty: "dificil",
-        topic: "Unde - Reprezentări",
-        solved: false,
-    },
-    {
-        id: 8,
-        title: "Pendulul elastic",
-        difficulty: "mediu",
-        topic: "Mecanică - Oscilații",
-        solved: true,
-    },
-];
-
 // Problem Card Component
 const ProblemCard = ({ problem, onResolveClick }) => {
-    const { id, title, difficulty, topic, solved } = problem;
+    const { index, titlu, dificultate, categorie, descriere, solved } = problem;
 
     const getDifficultyColorClass = (diff) => {
         switch (diff) {
-            case 'ușor': return 'difficulty--usor';
-            case 'mediu': return 'difficulty--mediu';
-            case 'dificil': return 'difficulty--dificil';
-            default: return '';
+            case 'ușor':
+            case 'usoare':
+                return 'difficulty--usor';
+            case 'mediu':
+            case 'medii':
+                return 'difficulty--mediu';
+            case 'dificil':
+            case 'dificile':
+                return 'difficulty--dificil';
+            default:
+                return '';
         }
     };
 
@@ -98,15 +45,15 @@ const ProblemCard = ({ problem, onResolveClick }) => {
         <div className={`problem-card${solved ? ' solved' : ''}`}>
             <div className="problem-card-header">
                 <div className="problem-card-info">
-                    <span className="problem-card-id">#{id}</span>
-                    <h3 className="problem-card-title">{title}</h3>
-                    <p className="problem-card-topic">{topic}</p>
+                    <span className="problem-card-id">#{index}</span>
+                    <h3 className="problem-card-title">{titlu}</h3>
+                    <p className="problem-card-topic">{categorie}</p>
                 </div>
                 {solved && <div className="problem-card-solved-badge">Rezolvată</div>}
             </div>
             <div className="problem-card-footer">
-                <div className={`problem-card-difficulty ${getDifficultyColorClass(difficulty)}`}>
-                    {difficulty}
+                <div className={`problem-card-difficulty ${getDifficultyColorClass(dificultate)}`}>
+                    {dificultate}
                 </div>
                 <button
                     className="problem-card-link"
@@ -119,16 +66,21 @@ const ProblemCard = ({ problem, onResolveClick }) => {
     );
 };
 
-
 const PhysicsProblems = () => {
     const [searchQuery, setSearchQuery] = useState("");
-    const [selectedDifficulty, setSelectedDifficulty] = useState("Toate");
-    const [selectedCategory, setSelectedCategory] = useState("Toate");
+    const location = useLocation();
+    const params = new URLSearchParams(location.search);
+
+    const [selectedDifficulty, setSelectedDifficulty] = useState(
+        params.get("difficulty") || "Toate"
+    );
+    const [selectedCategory, setSelectedCategory] = useState(
+        params.get("category") || "Toate"
+    );
     const [sortBy, setSortBy] = useState("newest");
     const [selectedProblem, setSelectedProblem] = useState(null);
 
     const navigate = useNavigate();
-    const location = useLocation();
 
     useEffect(() => {
         const params = new URLSearchParams();
@@ -158,29 +110,29 @@ const PhysicsProblems = () => {
     const specializedTopics = ["pendul", "unde", "lissajous", "seism"];
 
     const relevantProblems = isSpecializedPage
-        ? problemsMock.filter((problem) =>
+        ? problemeData.filter((problem) =>
             specializedTopics.some(topic =>
                 problem.topic.toLowerCase().includes(topic)
             )
         )
-        : problemsMock;
+        : problemeData;
 
     const filteredProblems = relevantProblems.filter((problem) => {
         if (
             searchQuery &&
-            !problem.title.toLowerCase().includes(searchQuery.toLowerCase()) &&
-            !problem.topic.toLowerCase().includes(searchQuery.toLowerCase())
+            !problem.titlu.toLowerCase().includes(searchQuery.toLowerCase()) &&
+            !problem.categorie.toLowerCase().includes(searchQuery.toLowerCase())
         ) {
             return false;
         }
 
-        if (selectedDifficulty !== "Toate" && problem.difficulty !== selectedDifficulty) {
+        if (selectedDifficulty !== "Toate" && problem.dificultate !== selectedDifficulty) {
             return false;
         }
 
         if (
             selectedCategory !== "Toate" &&
-            !problem.topic.toLowerCase().includes(selectedCategory.toLowerCase())
+            !problem.categorie.toLowerCase().includes(selectedCategory.toLowerCase())
         ) {
             return false;
         }
@@ -191,28 +143,12 @@ const PhysicsProblems = () => {
     // Funcție pentru sortarea după dificultate
     const difficultyOrder = { "ușor": 1, "mediu": 2, "dificil": 3 };
 
-    const sortedProblems = [...filteredProblems].sort((a, b) => {
-        switch (sortBy) {
-            case "newest":
-                return b.id - a.id; // presupunem că id mai mare e mai nou
-            case "oldest":
-                return a.id - b.id;
-            case "difficulty-asc":
-                return difficultyOrder[a.difficulty] - difficultyOrder[b.difficulty];
-            case "difficulty-desc":
-                return difficultyOrder[b.difficulty] - difficultyOrder[a.difficulty];
-            default:
-                return 0;
-        }
-    });
+    const sortedProblems = [...filteredProblems].sort((a, b) => a.index - b.index);
 
     if (selectedProblem) {
         return (
             <Layout>
-                <ProblemaDetaliata
-                    problema={selectedProblem}
-                    onBack={() => setSelectedProblem(null)}
-                />
+                <ProblemaDetaliata problema={selectedProblem} />
             </Layout>
         );
     }

@@ -1,12 +1,13 @@
 .container {
   min-height: 100vh;
-  background: linear-gradient(to bottom right, #ebf8ff, #ffffff, #f3e8ff);
+  background: var(--primary-background-current-mode);
+  padding-top: 150px; // ajustează la înălțimea navbarului tău (ex: 80px, 90px, 100px)
 }
 
 .header {
-  background-color: white;
+  background-color: var(--card-background-current-mode);
   box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--border-color-current-mode);
 }
 
 .header-content {
@@ -43,43 +44,43 @@
 .card-title {
   font-size: 1.5rem;
   font-weight: bold;
-  color: #1f2937;
+  color: var(--primary-color-current-mode);
   margin-bottom: 0.5rem;
 }
 
 .card-description {
-  color: #4b5563;
+  color: var(--muted-color-current-mode);
   margin-bottom: 1rem;
 }
 
 .category {
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--border-color-current-mode);
   padding: 0.25rem 0.5rem;
   border-radius: 0.375rem;
 }
 
 .total-points {
-  color: #2563eb;
+  color: var(--accent-color-current-mode);
   font-weight: 600;
   font-size: 1.125rem;
 }
 
 .formule-section {
-  background-color: #eff6ff;
+  background-color: var(--secondary-background-current-mode);
   padding: 1rem;
   border-radius: 0.5rem;
   margin-bottom: 1.5rem;
 }
 
 .date-section {
-  background-color: #f9fafb;
+  background-color: var(--secondary-background-current-mode);
   padding: 1rem;
   border-radius: 0.5rem;
   margin-bottom: 1.5rem;
 }
 
 .subpunct {
-  border-left: 4px solid #3b82f6;
+  border-left: 4px solid var(--accent-color-current-mode);
   padding-left: 1rem;
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
@@ -88,16 +89,16 @@
 .punctaj-item {
   display: flex;
   justify-content: space-between;
-  background-color: #f9fafb;
+  background-color: var(--secondary-background-current-mode);
   padding: 0.75rem;
   border-radius: 0.5rem;
-  color: #374151;
+  color: var(--primary-color-current-mode);
   font-weight: 500;
 }
 
 .total-badge {
-  background-color: #2563eb;
-  color: white;
+  background-color: var(--accent-color-current-mode);
+  color: #fff;
   padding: 0.5rem 0.75rem;
   border-radius: 9999px;
 }
@@ -112,7 +113,7 @@
 }
 
 .ai-description {
-  color: #4b5563;
+  color: var(--muted-color-current-mode);
   font-size: 0.875rem;
   margin-top: 0.75rem;
 }
@@ -206,9 +207,9 @@
 //card
 .card {
   border-radius: 0.5rem;
-  border: 1px solid #e5e7eb;
-  background-color: #ffffff;
-  color: #1f2937;
+  border: 1px solid var(--border-color-current-mode);
+  background-color: var(--card-background-current-mode);
+  color: var(--primary-color-current-mode);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
@@ -224,11 +225,12 @@
   font-weight: 600;
   line-height: 1.25;
   letter-spacing: -0.01em;
+  color: var(--primary-color-current-mode);
 }
 
 .card-description {
   font-size: 0.875rem;
-  color: #6b7280;
+  color: var(--muted-color-current-mode);
 }
 
 .card-content {
@@ -293,7 +295,7 @@
 //separator
 .separator {
   flex-shrink: 0;
-  background-color: var(--border);
+  background-color: var(--border-color-current-mode);
 }
 
 .separator--horizontal {
@@ -304,4 +306,8 @@
 .separator--vertical {
   height: 100%;
   width: 1px;
+}
+
+.back-to-problems-btn {
+  display: none;
 }

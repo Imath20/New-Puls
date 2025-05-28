@@ -18,6 +18,7 @@ import Lissajous from "./components/pages/resurse/lissajous";
 import Seism from "./components/pages/resurse/seism";
 import ScrollToTop from "./components/ScrollToTop";
 import Profile from "./components/pages/Profile";
+import APITest from "./components/APITest";
 
 const App = () => {
 
@@ -108,6 +109,7 @@ const App = () => {
           <Route path="/about-us" element={<About />} />
           <Route path="/search" element={<SearchResults />} />
           <Route path="/profil" element={<Profile />} />
+          <Route path="/api-test" element={<APITest />} />
         </Routes>
       </div>
     </Router>

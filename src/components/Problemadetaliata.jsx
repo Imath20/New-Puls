@@ -101,7 +101,8 @@ export const ProblemaDetaliata = ({ problema }) => {
                   {problema.subpuncte.map((subpunct, index) => (
                     <div key={subpunct.id} className="subpunct">
                       <span className="font-semibold text-blue-600">{String.fromCharCode(97 + index)}) </span>
-                      <span className="text-gray-800">{subpunct.cerinta}</span>
+                      <span className="text-gray-800" dangerouslySetInnerHTML={{ __html: subpunct.cerinta }} />
+                      <MathJaxRender /> {/* Aici adaugă MathJaxRender */}
                     </div>
                   ))}
                 </div>

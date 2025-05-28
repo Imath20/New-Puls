@@ -153,7 +153,7 @@ export const problemeData = [
     punctajTotal: 6,
     continut: 'Interferența apare când două unde se suprapun.',
     formule: ['Δx = λ/2'],
-    date: { lambda: 0.5 }
+    date: { λ: 0.5 }
   },
   // Lissajous
   {
@@ -164,7 +164,7 @@ export const problemeData = [
     categorie: 'lissajous',
     dificultate: 'ușor',
     subpuncte: [
-      { id: '9a', cerinta: 'Desenează figura pentru f_x = f_y.', punctaj: 3 },
+      { id: '9a', cerinta: 'Desenează figura pentru fₓ = fy.', punctaj: 3 },
       { id: '9b', cerinta: 'Explică forma obținută.', punctaj: 2 }
     ],
     punctajTotal: 5,
@@ -180,7 +180,7 @@ export const problemeData = [
     categorie: 'lissajous',
     dificultate: 'dificil',
     subpuncte: [
-      { id: '10a', cerinta: 'Desenează figura pentru f_x = 2f_y.', punctaj: 4 },
+      { id: '10a', cerinta: 'Desenează figura pentru fₓ = 2fy.', punctaj: 4 },
       { id: '10b', cerinta: 'Explică simetria figurii.', punctaj: 4 }
     ],
     punctajTotal: 8,

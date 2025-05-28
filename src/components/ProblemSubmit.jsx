@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Layout from './Layout';
 import { Card, CardHeader, CardTitle, CardContent } from './card';
 import { Badge } from './badge';
@@ -128,6 +128,14 @@ const ProblemSubmit = () => {
 
     const triggerFileInput = (ref) => ref.current?.click();
 
+    // Highlight the textarea on mount
+    useEffect(() => {
+        if (problemInputRef.current) {
+            problemInputRef.current.focus();
+            problemInputRef.current.style.borderColor = '#3b82f6';
+        }
+    }, []);
+
     return (
             <div style={{ 
                 maxWidth: '1200px',
@@ -136,6 +144,7 @@ const ProblemSubmit = () => {
                 margin: '0 auto', 
                 padding: '2rem',
                 backgroundColor: 'var(--primary-background-current-mode)',
+                color: 'var(--primary-color-current-mode)',
                 minHeight: '100vh',
                 display: 'flex',
                 flexDirection: 'column',
@@ -180,15 +189,15 @@ const ProblemSubmit = () => {
                         {/* Problem Section */}
                         <Card style={{ 
                             marginBottom: '2rem', 
-                            border: '1px solid #e2e8f0',
+                            border: '1px solid var(--border-color-current-mode)',
                             borderRadius: '12px',
                             boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',
-                            backgroundColor: 'var(--secondary-background-curent-mode)'
+                            backgroundColor: 'var(--secondary-background-current-mode)'
                         }}>
-                            <CardHeader style={{ padding: '1.5rem', borderBottom: '1px solid #e2e8f0' }}>
+                            <CardHeader style={{ padding: '1.5rem', borderBottom: '1px solid var(--border-color-current-mode)' }}>
                                 <CardTitle style={{ 
                                     fontSize: '1.5rem', 
-                                    color: '#1e293b',
+                                    color: 'var(--primary-color-current-mode)',
                                     display: 'flex',
                                     alignItems: 'center',
                                     gap: '0.5rem'
@@ -202,7 +211,7 @@ const ProblemSubmit = () => {
                                         display: 'block', 
                                         marginBottom: '0.5rem', 
                                         fontWeight: '600',
-                                        color: '#374151'
+                                        color: 'var(--primary-color-current-mode)'
                                     }}>
                                         Text Problemă:
                                     </label>
@@ -211,18 +220,20 @@ const ProblemSubmit = () => {
                                         value={problemText}
                                         onChange={(e) => setProblemText(e.target.value)}
                                         disabled={!!problemImageFile}
+                                        ref={problemInputRef}
                                         style={{
                                             width: '100%',
                                             minHeight: '120px',
                                             padding: '0.75rem',
                                             paddingLeft: '1rem',
-                                            border: '2px solid #e2e8f0',
+                                            border: '2px solid var(--border-color-current-mode)',
                                             borderRadius: '8px',
                                             fontSize: '1rem',
                                             fontFamily: 'inherit',
                                             resize: 'vertical',
                                             transition: 'border-color 0.2s',
-                                            backgroundColor: problemImageFile ? 'var(--primary-background-current-mode)' : 'var(--secondary-background-curent-mode)'
+                                            backgroundColor: problemImageFile ? 'var(--primary-background-current-mode)' : 'var(--secondary-background-current-mode)',
+                                            color: 'var(--primary-color-current-mode)'
                                         }}
                                         onFocus={(e) => e.target.style.borderColor = '#3b82f6'}
                                         onBlur={(e) => e.target.style.borderColor = '#e2e8f0'}
@@ -240,12 +251,12 @@ const ProblemSubmit = () => {
                                         left: '0',
                                         right: '0',
                                         height: '1px',
-                                        backgroundColor: '#e2e8f0'
+                                        backgroundColor: 'var(--border-color-current-mode)'
                                     }}></div>
                                     <span style={{ 
-                                        backgroundColor: 'var(--secondary-background-curent-mode)',
+                                        backgroundColor: 'var(--secondary-background-current-mode)',
                                         padding: '0 1rem',
-                                        color: '#64748b',
+                                        color: 'var(--muted-color-current-mode)',
                                         fontWeight: '500',
                                         position: 'relative'
                                     }}>
@@ -258,7 +269,7 @@ const ProblemSubmit = () => {
                                         display: 'block', 
                                         marginBottom: '0.5rem', 
                                         fontWeight: '600',
-                                        color: '#374151'
+                                        color: 'var(--primary-color-current-mode)'
                                     }}>
                                         Imagine Problemă:
                                     </label>
@@ -277,8 +288,8 @@ const ProblemSubmit = () => {
                                         style={{
                                             width: '100%',
                                             padding: '0.75rem',
-                                            backgroundColor: problemText.trim() ? '#e2e8f0' : '#3b82f6',
-                                            color: problemText.trim() ? '#64748b' : 'var(--secondary-background-curent-mode)',
+                                            backgroundColor: problemText.trim() ? 'var(--border-color-current-mode)' : '#3b82f6',
+                                            color: problemText.trim() ? 'var(--muted-color-current-mode)' : 'var(--secondary-background-current-mode)',
                                             border: 'none',
                                             borderRadius: '8px',
                                             fontWeight: '500',
@@ -316,7 +327,7 @@ const ProblemSubmit = () => {
                                                     top: '0.5rem',
                                                     right: '0.5rem',
                                                     backgroundColor: '#ef4444',
-                                                    color: 'var(--secondary-background-curent-mode)',
+                                                    color: 'var(--secondary-background-current-mode)',
                                                     border: 'none',
                                                     borderRadius: '50%',
                                                     width: '32px',
@@ -339,22 +350,22 @@ const ProblemSubmit = () => {
 
                         {/* Solution Section */}
                         <Card style={{ 
-                            border: '1px solid #e2e8f0',
+                            border: '1px solid var(--border-color-current-mode)',
                             borderRadius: '12px',
                             boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',
-                            backgroundColor: 'var(--secondary-background-curent-mode)'
+                            backgroundColor: 'var(--secondary-background-current-mode)'
                         }}>
-                            <CardHeader style={{ padding: '1.5rem', borderBottom: '1px solid #e2e8f0' }}>
+                            <CardHeader style={{ padding: '1.5rem', borderBottom: '1px solid var(--border-color-current-mode)' }}>
                                 <CardTitle style={{ 
                                     fontSize: '1.5rem', 
-                                    color: '#1e293b',
+                                    color: 'var(--primary-color-current-mode)',
                                     display: 'flex',
                                     alignItems: 'center',
                                     gap: '0.5rem'
                                 }}>
                                     🔧 Soluție 
                                     <Badge style={{ 
-                                        backgroundColor: '#dbeafe', 
+                                        backgroundColor: 'var(--accent-color-current-mode)', 
                                         color: '#1e40af',
                                         padding: '0.25rem 0.5rem',
                                         borderRadius: '12px',
@@ -369,7 +380,7 @@ const ProblemSubmit = () => {
                                     display: 'block', 
                                     marginBottom: '0.5rem', 
                                     fontWeight: '600',
-                                    color: '#374151'
+                                    color: 'var(--primary-color-current-mode)'
                                 }}>
                                     Imagini Soluție *
                                 </label>
@@ -388,7 +399,7 @@ const ProblemSubmit = () => {
                                         width: '100%',
                                         padding: '0.75rem',
                                         backgroundColor: '#10b981',
-                                        color: 'var(--secondary-background-curent-mode)',
+                                        color: 'var(--secondary-background-current-mode)',
                                         border: 'none',
                                         borderRadius: '8px',
                                         fontWeight: '500',
@@ -431,7 +442,7 @@ const ProblemSubmit = () => {
                                                         top: '0.25rem',
                                                         right: '0.25rem',
                                                         backgroundColor: '#ef4444',
-                                                        color: 'var(--secondary-background-curent-mode)',
+                                                        color: 'var(--secondary-background-current-mode)',
                                                         border: 'none',
                                                         borderRadius: '50%',
                                                         width: '24px',
@@ -452,12 +463,12 @@ const ProblemSubmit = () => {
                                     <div style={{ 
                                         marginTop: '1rem',
                                         height: '120px',
-                                        border: '2px dashed #cbd5e1',
+                                        border: '2px dashed var(--border-color-current-mode)',
                                         borderRadius: '8px',
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
-                                        color: '#64748b',
+                                        color: 'var(--muted-color-current-mode)',
                                         backgroundColor: 'var(--primary-background-current-mode)',
                                         fontSize: '1rem'
                                     }}>
@@ -494,13 +505,15 @@ const ProblemSubmit = () => {
                                 paddingBottom: '1.25rem !important',
                                 fontSize: '1.1rem',
                                 fontWeight: '600',
-                                backgroundColor: (isLoading || solutionImageFiles.length === 0 || (!problemText.trim() && !problemImageFile)) 
-                                    ? '#e2e8f0' : '#8b5cf6',
-                                color: (isLoading || solutionImageFiles.length === 0 || (!problemText.trim() && !problemImageFile)) 
-                                    ? '#64748b' : 'var(--secondary-background-curent-mode)',
+                                backgroundColor: (isLoading || solutionImageFiles.length === 0 || (!problemText.trim() && !problemImageFile))
+                                    ? '#e5e7eb' // fixed disabled color for both modes
+                                    : '#8b5cf6',
+                                color: (isLoading || solutionImageFiles.length === 0 || (!problemText.trim() && !problemImageFile))
+                                    ? '#64748b' // fixed disabled text color for both modes
+                                    : 'var(--secondary-background-current-mode)',
                                 border: 'none',
                                 borderRadius: '8px',
-                                cursor: (isLoading || solutionImageFiles.length === 0 || (!problemText.trim() && !problemImageFile)) 
+                                cursor: (isLoading || solutionImageFiles.length === 0 || (!problemText.trim() && !problemImageFile))
                                     ? 'not-allowed' : 'pointer',
                                 transition: 'all 0.2s',
                                 marginBottom: '2.5rem',
@@ -546,7 +559,8 @@ const ProblemSubmit = () => {
                                             borderRadius: '8px',
                                             fontSize: '0.95rem',
                                             lineHeight: '1.5',
-                                            margin: '0'
+                                            margin: '0',
+                                            color: '#18181b' // always black for score
                                         }}>
                                             {apiResponse.rating}
                                         </pre>
@@ -555,13 +569,13 @@ const ProblemSubmit = () => {
 
                                 <Card style={{ 
                                     marginBottom: '1.5rem',
-                                    border: '1px solid #e2e8f0',
+                                    border: '1px solid var(--border-color-current-mode)',
                                     borderRadius: '12px',
-                                    backgroundColor: 'white',
+                                    backgroundColor: 'var(--primary-background-current-mode)',
                                     boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)'
                                 }}>
-                                    <CardHeader style={{ padding: '1.5rem', borderBottom: '1px solid #e2e8f0' }}>
-                                        <CardTitle style={{ color: '#1e293b', fontSize: '1.25rem' }}>
+                                    <CardHeader style={{ padding: '1.5rem', borderBottom: '1px solid var(--border-color-current-mode)' }}>
+                                        <CardTitle style={{ color: 'var(--primary-color-current-mode)', fontSize: '1.25rem' }}>
                                             ✅ Soluție Corectă
                                         </CardTitle>
                                     </CardHeader>
@@ -569,12 +583,13 @@ const ProblemSubmit = () => {
                                         <pre style={{ 
                                             whiteSpace: 'pre-wrap', 
                                             fontFamily: 'monospace',
-                                            backgroundColor: 'var(--primary-background-current-mode)',
+                                            backgroundColor: 'var(--secondary-background-current-mode)',
                                             padding: '1rem',
                                             borderRadius: '8px',
                                             fontSize: '0.95rem',
                                             lineHeight: '1.5',
-                                            margin: '0'
+                                            margin: '0',
+                                            color: 'var(--primary-color-current-mode)'
                                         }}>
                                             {apiResponse.solution}
                                         </pre>
@@ -582,13 +597,13 @@ const ProblemSubmit = () => {
                                 </Card>
 
                                 <Card style={{ 
-                                    border: '1px solid #e2e8f0',
+                                    border: '1px solid var(--border-color-current-mode)',
                                     borderRadius: '12px',
                                     backgroundColor: 'var(--secondary-background-current-mode)',
                                     boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)'
                                 }}>
-                                    <CardHeader style={{ padding: '1.5rem', borderBottom: '1px solid #e2e8f0' }}>
-                                        <CardTitle style={{ color: '#1e293b', fontSize: '1.25rem' }}>
+                                    <CardHeader style={{ padding: '1.5rem', borderBottom: '1px solid var(--border-color-current-mode)' }}>
+                                        <CardTitle style={{ color: 'var(--primary-color-current-mode)', fontSize: '1.25rem' }}>
                                             🔍 Analiză Erori & Feedback
                                         </CardTitle>
                                     </CardHeader>
@@ -601,7 +616,8 @@ const ProblemSubmit = () => {
                                             borderRadius: '8px',
                                             fontSize: '0.95rem',
                                             lineHeight: '1.5',
-                                            margin: '0'
+                                            margin: '0',
+                                            color: 'var(--primary-color-current-mode)'
                                         }}>
                                             {apiResponse.errorAnalysis}
                                         </pre>
@@ -614,10 +630,10 @@ const ProblemSubmit = () => {
                             <div style={{
                                 padding: '3rem',
                                 textAlign: 'center',
-                                backgroundColor: 'white',
+                                backgroundColor: 'var(--secondary-background-current-mode)',
                                 borderRadius: '12px',
-                                border: '2px dashed #cbd5e1',
-                                color: '#64748b'
+                                border: '2px dashed var(--border-color-current-mode)',
+                                color: 'var(--muted-color-current-mode)'
                             }}>
                                 <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>📊</div>
                                 <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>Rezultatele vor apărea aici</h3>

@@ -1,15 +1,12 @@
 .problems-page {
     min-height: 100vh;
-    // background-color: #0f172a;
-    color: #f8fafc;
+    background-color: transparent; // transparent by default (white mode)
+    color: var(--primary-color-current-mode);
     padding: 2rem;
     padding-top: 120px !important;
-    // padding-left: 0px !important;
 
     .problems-page-inner {
-        // background-color: red;
-        // max-width: 1200px;
-
+        background-color: transparent; // transparent by default (white mode)
         min-height: 90vh !important;
         max-width: 92rem;
         margin: 0 auto;
@@ -19,7 +16,7 @@
         font-size: 2rem;
         font-weight: 700;
         margin-bottom: 2rem;
-        color: var(--primary-color-current-mode); // folosește variabila, nu alb!
+        color: var(--primary-color-current-mode);
     }
 
     .problems-page-filters {
@@ -45,17 +42,17 @@
                     left: 0.75rem;
                     top: 50%;
                     transform: translateY(-50%);
-                    color: #64748b;
+                    color: var(--muted-color-current-mode);
                 }
 
                 .search-input {
                     width: 95%;
                     padding: 0.75rem 1rem 0.75rem 2.5rem;
-                    border: 1px solid #334155;
+                    border: 1px solid var(--border-color-current-mode);
                     border-radius: 8px;
                     font-size: 1rem;
-                    background-color: #1e293b;
-                    color: #f8fafc;
+                    background-color: var(--input-background-current-mode);
+                    color: var(--primary-color-current-mode);
                     outline: none;
                 }
             }
@@ -66,11 +63,11 @@
 
                 .filter-select {
                     padding: 0.75rem 1rem;
-                    border: 1px solid #334155;
+                    border: 1px solid var(--border-color-current-mode);
                     border-radius: 8px;
-                    background-color: #1e293b;
+                    background-color: var(--input-background-current-mode);
                     font-size: 1rem;
-                    color: #f8fafc;
+                    color: var(--primary-color-current-mode);
                     outline: none;
                     min-width: 120px;
                 }
@@ -89,13 +86,13 @@
             font-size: 0.875rem;
             border-radius: 9999px;
             border: none;
-            background-color: #334155;
-            color: #f8fafc;
+            background-color: var(--pill-background-current-mode);
+            color: var(--primary-color-current-mode);
             cursor: pointer;
             transition: all 0.2s ease;
 
             &.active {
-                background-color: #3b82f6;
+                background-color: var(--accent-color-current-mode);
                 color: #fff;
             }
         }
@@ -108,17 +105,17 @@
         margin-bottom: 1.5rem;
 
         .results-count {
-            color: #94a3b8;
+            color: var(--muted-color-current-mode);
             margin: 0;
         }
 
         .sort-select {
             padding: 0.5rem 0.75rem;
-            border: 1px solid #334155;
+            border: 1px solid var(--border-color-current-mode);
             border-radius: 6px;
-            background-color: #1e293b;
+            background-color: var(--input-background-current-mode);
             font-size: 0.875rem;
-            color: #f8fafc;
+            color: var(--primary-color-current-mode);
             outline: none;
         }
     }
@@ -131,8 +128,8 @@
     }
 
     .problem-card {
-        background-color: #1e293b;
-        border: 1px solid #334155;
+        background-color: var(--card-background-current-mode);
+        border: 1px solid var(--border-color-current-mode);
         border-radius: 8px;
         padding: 1rem;
         transition: all 0.2s ease;
@@ -152,7 +149,7 @@
 
                 .problem-card-id {
                     font-size: 0.875rem;
-                    color: #94a3b8;
+                    color: var(--muted-color-current-mode);
                     display: block;
                     margin-bottom: 0.5rem;
                 }
@@ -161,12 +158,12 @@
                     font-size: 1.125rem;
                     font-weight: 600;
                     margin: 0 0 0.25rem 0;
-                    color: #f8fafc;
+                    color: var(--primary-color-current-mode);
                 }
 
                 .problem-card-topic {
                     font-size: 0.875rem;
-                    color: #94a3b8;
+                    color: var(--muted-color-current-mode);
                     margin: 0 0 0.75rem 0;
                 }
             }
@@ -209,7 +206,7 @@
 
             .problem-card-link {
                 font-size: 0.875rem;
-                color: #3b82f6;
+                color: var(--accent-color-current-mode);
                 background: transparent;
                 border: none;
                 cursor: pointer;
@@ -237,11 +234,11 @@
             font-size: 1.125rem;
             font-weight: 500;
             margin-bottom: 0.5rem;
-            color: #f8fafc;
+            color: var(--primary-color-current-mode);
         }
 
         p {
-            color: #94a3b8;
+            color: var(--muted-color-current-mode);
             margin: 0;
         }
     }
@@ -258,28 +255,38 @@
 
         .pagination-btn {
             padding: 0.5rem 1rem;
-            border: 1px solid #334155;
+            border: 1px solid var(--border-color-current-mode);
             border-radius: 6px;
-            background-color: #1e293b;
+            background-color: var(--input-background-current-mode);
             font-size: 0.875rem;
             cursor: pointer;
-            color: #f8fafc;
+            color: var(--primary-color-current-mode);
 
             &:disabled {
                 cursor: not-allowed;
-                color: #64748b;
+                color: var(--muted-color-current-mode);
             }
 
             &--active {
-                background-color: #3b82f6;
-                border-color: #3b82f6;
+                background-color: var(--accent-color-current-mode);
+                border-color: var(--accent-color-current-mode);
                 color: #fff;
             }
         }
 
         .pagination-dots {
-            padding: 0 0.5rem;
-            color: #94a3b8;
+            color: var(--muted-color-current-mode);
+        }
+    }
+}
+
+// Only in dark mode, override to use the variable backgrounds
+.dark-mode {
+    .problems-page {
+        background-color: var(--primary-background-current-mode);
+
+        .problems-page-inner {
+            background-color: var(--secondary-background-current-mode);
         }
     }
 }

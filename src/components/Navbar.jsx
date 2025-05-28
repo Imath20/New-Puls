@@ -1,20 +1,21 @@
 import { Book, FileQuestion, HelpCircle, Home, Layout, ListCheck, ListChecks, Settings, User, Search, ChevronDown } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import { useState, useRef, useEffect } from "react";
 import DarkModeToggle from "./DarkModeToggle";
 import PulsLogoWhite from '/res/puls-logo-new2.png';
 import PulsLogoBlack from '/res/puls-logo-new3.png';
 import useDarkMode from "../hooks/useDarkMode";
 
+import $ from 'jquery';
+import { useEffect, useRef, useState } from "react";
+
 const Navbar = () => {
     const [pulsOpen, setPulsOpen] = useState(false);
     const [hoveringDropdown, setHoveringDropdown] = useState(false);
     const [searchValue, setSearchValue] = useState("");
-    const [scrolled, setScrolled] = useState(false);
     const dropdownRef = useRef(null);
     let closeTimeout = useRef();
-    const darkModeOn = useDarkMode();
     const navigate = useNavigate();
+    const darkModeOn = useDarkMode();
 
     // Close dropdown when clicking outside
     useEffect(() => {
@@ -61,16 +62,76 @@ const Navbar = () => {
         }
     };
 
+
+    // Change header on scroll
+    $(document).on("scroll", () => {
+        if ($(document).scrollTop() <= 100)
+        {
+            $('nav').css('backdrop-filter', `blur(${0.2 * ($(document).scrollTop() / 10)}px)`);
+            $('nav').css('background', `linear-gradient(to bottom, rgba(0, 0, 0, ${$(document).scrollTop() / 100 * 0.74}), rgba(0, 0, 0, 0))`);
+        }
+        else
+        {
+            $('nav').css('backdrop-filter', 'blur(2px)');
+            $('nav').css('background', 'linear-gradient(to bottom, rgba(0, 0, 0, 0.78), rgba(0, 0, 0, 0))');
+        }
+    });
+
+    
+    
     useEffect(() => {
-        const handleScroll = () => {
-            setScrolled(window.scrollY > 10);
-        };
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
+        if (!darkModeOn)
+        {            
+            if ($(document).scrollTop() <= 100) {
+                $('nav > #nav-container > ul > li > .nav-link').css({ color: 'black' });
+                $('nav #navbar-search .search-icon, nav #navbar-search .search-input').css({ color: 'black' });
+                $('nav #navbar-search').css({ borderColor: 'black' });
+                $('nav #dark-mode-toggle-container .toggle-parent .dark-mode-toggle').css({ color: 'black' });
+                $('#logo-link img').attr('src', PulsLogoBlack);
+            } else {
+                $('nav > #nav-container > ul > li > .nav-link').css({ color: 'white' });
+                $('nav #navbar-search .search-icon, nav #navbar-search .search-input').css({ color: 'white' });
+                $('nav #navbar-search').css({ borderColor: 'white' });
+                $('nav #dark-mode-toggle-container .toggle-parent .dark-mode-toggle').css({ color: 'white' });
+                $('#logo-link img').attr('src', PulsLogoWhite);
+            }
+
+            console.log('Current mode: white mode');
+            $(document).off("scroll.white-mode-scroll"); // To be sure
+            $(document).on("scroll.white-mode-scroll", () => {
+                if ($(document).scrollTop() <= 100) {
+                    $('nav > #nav-container > ul > li > .nav-link').css({ color: 'black' });
+                    $('nav #navbar-search .search-icon, nav #navbar-search .search-input').css({ color: 'black' });
+                    $('nav #navbar-search').css({ borderColor: 'black' });
+                    $('nav #dark-mode-toggle-container .toggle-parent .dark-mode-toggle').css({ color: 'black' });
+                    $('#logo-link img').attr('src', PulsLogoBlack);
+                } else {
+                    $('nav > #nav-container > ul > li > .nav-link').css({ color: 'white' });
+                    $('nav #navbar-search .search-icon, nav #navbar-search .search-input').css({ color: 'white' });
+                    $('nav #navbar-search').css({ borderColor: 'white' });
+                    $('nav #dark-mode-toggle-container .toggle-parent .dark-mode-toggle').css({ color: 'white' });
+                    $('#logo-link img').attr('src', PulsLogoWhite);
+                }
+            });
+        }
+        else
+        {
+            $(document).off("scroll.white-mode-scroll");
+            console.log('Current mode: dark mode');
+            $('nav > #nav-container > ul > li > .nav-link').css({ color: 'white' });
+            $('nav #navbar-search .search-icon, nav #navbar-search .search-input').css({ color: 'white' });
+            $('nav #navbar-search').css({ borderColor: 'white' });
+            $('nav #dark-mode-toggle-container .toggle-parent .dark-mode-toggle').css({ color: 'white' });
+            $('#logo-link img').attr('src', PulsLogoWhite);
+        }
+
+        return () => {
+            $(document).off("scroll.white-mode-scroll");
+        }
+    }, [darkModeOn]);
 
     return (
-        <nav className={`${darkModeOn ? "" : "light-navbar"}${scrolled ? " scrolled" : ""}`}>
+        <nav>
             {/* Logo */}
             <div id="logo-container">
                 <Link to="/" id="logo-link">
@@ -85,7 +146,6 @@ const Navbar = () => {
                     className="search-input"
                     value={searchValue}
                     onChange={handleSearchChange}
-                    placeholder="Caută..."
                 />
             </form>
             {/* Links */}

@@ -17,6 +17,7 @@ import Unde from "./components/pages/resurse/unde";
 import Lissajous from "./components/pages/resurse/lissajous";
 import Seism from "./components/pages/resurse/seism";
 import ScrollToTop from "./components/ScrollToTop";
+import Profile from "./components/pages/Profile";
 
 const App = () => {
 
@@ -105,6 +106,7 @@ const App = () => {
           <Route path="/resurse/lissajous" element={<Lissajous />} />
           <Route path="/resurse/seism" element={<Seism />} />
           <Route path="/about-us" element={<About />} />
+          <Route path="/profil" element={<Profile />} />
         </Routes>
       </div>
     </Router>

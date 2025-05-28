@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from './card';
 import { Badge } from './badge';
 import { Separator } from './separator';
 import MathJaxRender from './MathJaxRender';
+import ProblemSubmit from './ProblemSubmit';
 
 export const ProblemaDetaliata = ({ problema }) => {
   const navigate = useNavigate();
@@ -95,41 +96,43 @@ export const ProblemaDetaliata = ({ problema }) => {
               <CardTitle className="text-xl">Cerințe</CardTitle>
             </CardHeader>
             <CardContent>
-            {problema.subpuncte && problema.subpuncte.length > 0 && (
-              <div className="space-y-4">
-                {problema.subpuncte.map((subpunct, index) => (
-                  <div key={subpunct.id} className="subpunct">
-                    <span className="font-semibold text-blue-600">{String.fromCharCode(97 + index)}) </span>
-                    <span className="text-gray-800">{subpunct.cerinta}</span>
-                  </div>
-                ))}
-              </div>
-            )}
+              {problema.subpuncte && problema.subpuncte.length > 0 && (
+                <div className="space-y-4">
+                  {problema.subpuncte.map((subpunct, index) => (
+                    <div key={subpunct.id} className="subpunct">
+                      <span className="font-semibold text-blue-600">{String.fromCharCode(97 + index)}) </span>
+                      <span className="text-gray-800">{subpunct.cerinta}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
             </CardContent>
           </Card>
+
+
         </div>
 
-        <div>
+        <div style={{ width: '300px' }} className="sidebar">
           <Card className="mb-6 sticky top-4">
             <CardHeader>
               <CardTitle className="text-lg">Punctaje</CardTitle>
             </CardHeader>
             <CardContent>
-            {problema.subpuncte && problema.subpuncte.length > 0 && (
-              <div className="space-y-3">
-                {problema.subpuncte.map((subpunct, index) => (
-                  <div key={subpunct.id} className="punctaj-item">
-                    <span>Punctul {String.fromCharCode(97 + index)})</span>
-                    <Badge variant="secondary" className="bg-blue-100 text-blue-700">{subpunct.punctaj}p</Badge>
+              {problema.subpuncte && problema.subpuncte.length > 0 && (
+                <div className="space-y-3">
+                  {problema.subpuncte.map((subpunct, index) => (
+                    <div key={subpunct.id} className="punctaj-item">
+                      <span>Punctul {String.fromCharCode(97 + index)})</span>
+                      <Badge variant="secondary" className="bg-blue-100 text-blue-700">{subpunct.punctaj}p</Badge>
+                    </div>
+                  ))}
+                  <Separator className="my-4" />
+                  <div className="punctaj-item bg-blue-50">
+                    <span className="font-bold text-blue-900">Total</span>
+                    <Badge className="total-badge">{problema.punctajTotal}p</Badge>
                   </div>
-                ))}
-                <Separator className="my-4" />
-                <div className="punctaj-item bg-blue-50">
-                  <span className="font-bold text-blue-900">Total</span>
-                  <Badge className="total-badge">{problema.punctajTotal}p</Badge>
                 </div>
-              </div>
-            )}
+              )}
             </CardContent>
           </Card>
 
@@ -148,7 +151,20 @@ export const ProblemaDetaliata = ({ problema }) => {
             </CardContent>
           </Card>
         </div>
+
+      {/* Mutat aici: Card Trimite o problemă */}
+      <Card className="mt-6">
+        <CardHeader>
+          <CardTitle className="text-lg">Trimite o problemă</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ProblemSubmit />
+        </CardContent>
+      </Card>
+
       </div>
+
+
     </div>
   );
 };

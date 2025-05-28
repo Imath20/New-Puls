@@ -1,6 +1,6 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { Button } from "../../Buttons";
+import { Button } from "../../Button";
 import MathJaxRender from "@/components/MathJaxRender";
 
 import simulatorLissajousImg from "/res/screenshots/Lissajous_Screenshot.png";

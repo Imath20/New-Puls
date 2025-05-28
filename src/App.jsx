@@ -106,6 +106,8 @@ const App = () => {
           <Route path="/resurse/lissajous" element={<Lissajous />} />
           <Route path="/resurse/seism" element={<Seism />} />
           <Route path="/about-us" element={<About />} />
+          <Route path="/search" element={<SearchResults />} />
+          <Route path="/profil" element={<Profile />} />
         </Routes>
       </div>
     </Router>

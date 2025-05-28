@@ -1,6 +1,6 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { Button } from "@/components/button";
+import { Button } from "../../Button";
 import MathJaxRender from "@/components/MathJaxRender";
 import React, { useRef } from "react";
 

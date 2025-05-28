@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../scss/components/ProblemaDetaliata.scss';
 import { ArrowLeft, Bot, Calculator, BookOpen } from 'lucide-react';
@@ -35,6 +35,13 @@ export const ProblemaDetaliata = ({ problema }) => {
       default: return dificultate;
     }
   };
+
+  useEffect(() => {
+    if (typeof window?.MathJax !== "undefined") {
+      window.MathJax.typeset()
+    }
+  });
+  
 
   return (
     <div className="container">

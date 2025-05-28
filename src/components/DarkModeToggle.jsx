@@ -43,6 +43,7 @@ const DarkModeToggle = () => {
             documentStyle.setProperty('--input-background-current-mode', getVar('--input-background-dark-mode'));
             documentStyle.setProperty('--pill-background-current-mode', getVar('--pill-background-dark-mode'));
             documentStyle.setProperty('--pill-hover-background-current-mode', getVar('--pill-hover-background-dark-mode'));
+            documentStyle.setProperty('--border-color-current-mode', getVar('--border-color-dark-mode'));
 
             // BONUS
             for (const card of document.getElementsByClassName('feature-card')) {
@@ -66,6 +67,7 @@ const DarkModeToggle = () => {
             documentStyle.setProperty('--input-background-current-mode', getVar('--input-background-white-mode'));
             documentStyle.setProperty('--pill-background-current-mode', getVar('--pill-background-white-mode'));
             documentStyle.setProperty('--pill-hover-background-current-mode', getVar('--pill-hover-background-white-mode'));
+            documentStyle.setProperty('--border-color-current-mode', getVar('--border-color-white-mode'));
 
             // BONUS
             for (const card of document.getElementsByClassName('feature-card')) {

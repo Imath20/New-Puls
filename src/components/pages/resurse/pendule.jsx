@@ -193,11 +193,11 @@ const PendulePage = () => {
                     <h3 className="text-xl font-semibold mb-2">Formule:</h3>
                     Ecuația de mișcare pentru pendulul simplu neliniar este:
                     <div className="formula-resurse text-lg font-mono mt-2">
-                      {"\\( \\frac{d^2\\theta}{dt^2} + \\frac{g}{l} \\sin\\theta = 0 \\)"}
+                      {"\\( \\frac{d^2\\phi}{dt^2} + \\frac{g}{l} \\sin\\phi = 0 \\)"}
                       <MathJaxRender />
                     </div>
                     <p className="text-muted-foreground mt-2">
-                      unde {"\\(\\theta\\)"} <MathJaxRender /> este unghiul de deviație, l este lungimea firului și g este accelerația gravitațională.
+                      unde {"\\(\\phi\\)"} <MathJaxRender /> este unghiul de deviație, l este lungimea firului și g este accelerația gravitațională.
                     </p>
                   </div>
                   <a

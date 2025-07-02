@@ -10,10 +10,9 @@ import { useEffect, useRef, useState } from "react";
 
 const Navbar = () => {
     const [pulsOpen, setPulsOpen] = useState(false);
-    const [hoveringDropdown, setHoveringDropdown] = useState(false);
     const [searchValue, setSearchValue] = useState("");
     const dropdownRef = useRef(null);
-    let closeTimeout = useRef();
+    const closeTimeoutRef = useRef(null);
     const navigate = useNavigate();
     const darkModeOn = useDarkMode();
 
@@ -33,20 +32,29 @@ const Navbar = () => {
         };
     }, []);
 
-    // Delay closing when mouse leaves
+    // Improved hover handlers with delay
     const handleMouseEnter = () => {
-        clearTimeout(closeTimeout.current);
-        setHoveringDropdown(true);
+        if (closeTimeoutRef.current) {
+            clearTimeout(closeTimeoutRef.current);
+            closeTimeoutRef.current = null;
+        }
         setPulsOpen(true);
     };
 
     const handleMouseLeave = () => {
-        setHoveringDropdown(false);
-        setPulsOpen(false); // Close instantly on mouse leave
+        closeTimeoutRef.current = setTimeout(() => {
+            setPulsOpen(false);
+        }, 150); // 150ms delay before closing
     };
 
-    const handleDropdownClick = () => {
+    const handleDropdownClick = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
         setPulsOpen((prev) => !prev);
+    };
+
+    const handleDropdownItemClick = () => {
+        setPulsOpen(false);
     };
 
     const handleSearchChange = (e) => {
@@ -159,79 +167,29 @@ const Navbar = () => {
                             onMouseEnter={handleMouseEnter}
                             onMouseLeave={handleMouseLeave}
                             onClick={handleDropdownClick}
-                            style={{
-                                position: "relative",
-                                display: "inline-block",
-                                cursor: "pointer"
-                            }}
                         >
-                            <span style={{ display: "flex", alignItems: "center" }}>
+                            <span className="dropdown-toggle-content">
                                 <span>P.U.L.S.</span>
-                                <ChevronDown className="nav-icon" style={{ marginLeft: 4 }} />
+                                <ChevronDown className="nav-icon" />
                             </span>
                             {pulsOpen && (
-                                <div
+                                <div 
                                     className="dropdown-menu"
-                                    style={{
-                                        position: "absolute",
-                                        top: "100%",
-                                        left: "50%",
-                                        transform: "translateX(-50%)",
-                                        background: "#222",
-                                        borderRadius: "0.5rem",
-                                        boxShadow: "0 4px 16px rgba(0,0,0,0.15)",
-                                        minWidth: "140px",
-                                        maxWidth: "200px",
-                                        zIndex: 2000,
-                                        padding: "0.25rem 0",
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        alignItems: "flex-start",
-                                        marginTop: 4,
-                                        border: "1px solid #444",
-                                        overflow: "hidden"
-                                    }}
+                                    onMouseEnter={handleMouseEnter}
+                                    onMouseLeave={handleMouseLeave}
                                 >
-                                    <Link to="/resurse/pendule" className="dropdown-item" style={{
-                                        color: "white",
-                                        padding: "0.5rem 1rem",
-                                        textDecoration: "none",
-                                        fontSize: "1rem",
-                                        transition: "background 0.2s",
-                                        cursor: "pointer",
-                                        width: "100%",
-                                        textAlign: "left"
-                                    }}>Pendule</Link>
-                                    <Link to="/resurse/unde" className="dropdown-item" style={{
-                                        color: "white",
-                                        padding: "0.5rem 1rem",
-                                        textDecoration: "none",
-                                        fontSize: "1rem",
-                                        transition: "background 0.2s",
-                                        cursor: "pointer",
-                                        width: "100%",
-                                        textAlign: "left"
-                                    }}>Unde</Link>
-                                    <Link to="/resurse/lissajous" className="dropdown-item" style={{
-                                        color: "white",
-                                        padding: "0.5rem 1rem",
-                                        textDecoration: "none",
-                                        fontSize: "1rem",
-                                        transition: "background 0.2s",
-                                        cursor: "pointer",
-                                        width: "100%",
-                                        textAlign: "left"
-                                    }}>Lissajous</Link>
-                                    <Link to="/resurse/seism" className="dropdown-item" style={{
-                                        color: "white",
-                                        padding: "0.5rem 1rem",
-                                        textDecoration: "none",
-                                        fontSize: "1rem",
-                                        transition: "background 0.2s",
-                                        cursor: "pointer",
-                                        width: "100%",
-                                        textAlign: "left"
-                                    }}>Seisme</Link>
+                                    <Link to="/resurse/pendule" className="dropdown-item" onClick={handleDropdownItemClick}>
+                                        Pendule
+                                    </Link>
+                                    <Link to="/resurse/unde" className="dropdown-item" onClick={handleDropdownItemClick}>
+                                        Unde
+                                    </Link>
+                                    <Link to="/resurse/lissajous" className="dropdown-item" onClick={handleDropdownItemClick}>
+                                        Lissajous
+                                    </Link>
+                                    <Link to="/resurse/seism" className="dropdown-item" onClick={handleDropdownItemClick}>
+                                        Seisme
+                                    </Link>
                                 </div>
                             )}
                         </div>

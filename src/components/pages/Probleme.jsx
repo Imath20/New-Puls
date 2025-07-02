@@ -261,7 +261,10 @@ const PhysicsProblems = () => {
     if (selectedProblem) {
         return (
             <Layout>
-                <ProblemaDetaliata problema={selectedProblem} />
+                <ProblemaDetaliata 
+                    problema={selectedProblem} 
+                    onBack={() => setSelectedProblem(null)}
+                />
             </Layout>
         );
     }

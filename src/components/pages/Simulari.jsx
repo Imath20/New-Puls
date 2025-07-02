@@ -194,7 +194,7 @@ const SimulariPage = () => {
                         break;
                       case 7:
                         window.open(
-                          "/simulari/Functii/functii1.html",
+                          "/simulari/Functii/Functii/index.html",
                           "_blank"
                         );
                         break;

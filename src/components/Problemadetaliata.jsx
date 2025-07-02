@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../scss/components/ProblemaDetaliata.scss';
-import { ArrowLeft, Bot, Calculator, BookOpen } from 'lucide-react';
+import { ArrowLeft, Bot, Calculator, BookOpen, Copy, Check } from 'lucide-react';
 import { Button } from './Buttondet';
 import { Card, CardContent, CardHeader, CardTitle } from './card';
 import { Badge } from './badge';
@@ -9,8 +9,9 @@ import { Separator } from './separator';
 import MathJaxRender from './MathJaxRender';
 import ProblemSubmit from './ProblemSubmit';
 
-export const ProblemaDetaliata = ({ problema }) => {
+export const ProblemaDetaliata = ({ problema, onBack }) => {
   const navigate = useNavigate();
+  const [copied, setCopied] = useState(false);
 
   const getDifficultyClass = (dificultate) => {
     return `badge-difficulty ${dificultate || 'default'}`;
@@ -36,6 +37,89 @@ export const ProblemaDetaliata = ({ problema }) => {
     }
   };
 
+  // Funcție pentru generarea textului compact al problemei
+  const generateProblemText = () => {
+    let text = `PROBLEMA #${problema.index}: ${problema.titlu}\n`;
+    text += `Categorie: ${getCategoryName(problema.categorie)}\n`;
+    text += `Dificultate: ${getDifficultyName(problema.dificultate)}\n`;
+    text += `Punctaj total: ${problema.punctajTotal} puncte\n\n`;
+    
+    text += `DESCRIERE:\n${problema.descriere}\n\n`;
+    
+    if (problema.continut) {
+      text += `CONTINUT:\n${problema.continut}\n\n`;
+    }
+    
+    if (problema.formule && problema.formule.length > 0) {
+      text += `FORMULE RELEVANTE:\n`;
+      problema.formule.forEach((formula, index) => {
+        text += `${index + 1}. ${formula}\n`;
+      });
+      text += '\n';
+    }
+    
+    if (problema.date && Object.keys(problema.date).length > 0) {
+      text += `DATE CUNOSCUTE:\n`;
+      Object.entries(problema.date).forEach(([key, value]) => {
+        text += `${key.replace(/_/g, ' ')}: ${value}\n`;
+      });
+      text += '\n';
+    }
+    
+    if (problema.subpuncte && problema.subpuncte.length > 0) {
+      text += `CERINTE:\n`;
+      problema.subpuncte.forEach((subpunct, index) => {
+        text += `${String.fromCharCode(97 + index)}) ${subpunct.cerinta} (${subpunct.punctaj}p)\n`;
+      });
+      text += '\n';
+      
+      text += `BAREM:\n`;
+      problema.subpuncte.forEach((subpunct, index) => {
+        text += `${String.fromCharCode(97 + index)}) ${subpunct.punctaj} puncte\n`;
+      });
+    }
+    
+    return text;
+  };
+
+  // Funcție pentru copierea textului
+  const copyToClipboard = async () => {
+    try {
+      const text = generateProblemText();
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error('Eroare la copiere:', err);
+      // Fallback pentru browsere mai vechi
+      const textArea = document.createElement('textarea');
+      textArea.value = generateProblemText();
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
+  // Funcție pentru navigarea la secțiunea AI
+  const navigateToAI = () => {
+    // Navighează direct la pagina AI
+    navigate('/api-test');
+  };
+
+  // Funcție pentru revenirea la lista de probleme
+  const goBackToProblems = () => {
+    if (onBack) {
+      // Dacă avem funcția onBack, o folosim pentru a reveni la lista de probleme
+      onBack();
+    } else {
+      // Altfel navigăm la pagina de probleme
+      navigate('/probleme');
+    }
+  };
+
   useEffect(() => {
     if (typeof window?.MathJax !== "undefined") {
       window.MathJax.typeset()
@@ -50,11 +134,36 @@ export const ProblemaDetaliata = ({ problema }) => {
         <div>
           <Card className="mb-6">
             <CardHeader>
-              <CardTitle className="card-title">{problema.titlu}</CardTitle>
-              <p className="card-description">{problema.descriere}</p>
-              <div className="flex items-center space-x-4">
-                <Badge className="category">{getCategoryName(problema.categorie)}</Badge>
-                <span className="total-points">Total: {problema.punctajTotal} puncte</span>
+              <div className="card-header-container">
+                <div className="card-header-content">
+                  <div className="back-button-container">
+                    <button
+                      onClick={goBackToProblems}
+                      className="back-button"
+                      title="Înapoi la probleme"
+                    >
+                      <ArrowLeft className="w-4 h-4" />
+                      <span>Înapoi la probleme</span>
+                    </button>
+                  </div>
+                  <CardTitle className="card-title">{problema.titlu}</CardTitle>
+                  <p className="card-description">{problema.descriere}</p>
+                  <div className="flex items-center space-x-4">
+                    <Badge className="category">{getCategoryName(problema.categorie)}</Badge>
+                    <span className="total-points">Total: {problema.punctajTotal} puncte</span>
+                  </div>
+                </div>
+                <button
+                  onClick={copyToClipboard}
+                  className="copy-button"
+                  title="Copiază problema completă"
+                >
+                  {copied ? (
+                    <Check className="w-5 h-5 text-green-600" />
+                  ) : (
+                    <Copy className="w-5 h-5 text-gray-600 hover:text-blue-600" />
+                  )}
+                </button>
               </div>
             </CardHeader>
             <CardContent>
@@ -149,7 +258,7 @@ export const ProblemaDetaliata = ({ problema }) => {
               <CardTitle className="text-lg">Ajutor AI</CardTitle>
             </CardHeader>
             <CardContent>
-              <Button className="ai-button">
+              <Button className="ai-button" onClick={navigateToAI}>
                 <Bot className="w-4 h-4 mr-2" />
                 Inteligența Artificială
               </Button>

@@ -3,6 +3,16 @@ import Layout from "../Layout";
 import Slideshow from "../Slideshow";
 import { Waves, Atom, Circle, Activity, Calculator, BookOpen, Lightbulb, Target } from "lucide-react";
 import { useEffect } from "react";
+import useTranslate, { getTextNodes, useTranslateObject } from "../../hooks/useTranslate";
+
+translate = () => {
+    const texts = getTextNodes(document.body);
+    const newObj = {};
+    for (const { path, text } of texts) {
+        newObj[path] = text;
+    }
+    console.log(JSON.stringify(newObj, null, 2));
+}
 
 const Index = () => {
 
@@ -18,11 +28,22 @@ const Index = () => {
         })
     });
 
+    // const texts = useTranslate().map(text => text);
+    const translations = useTranslateObject();
+    
+
     useEffect(() => {
         const hiddenElements = document.querySelectorAll('.hidden');
         hiddenElements.forEach(el => observer.observe(el));
     }, []);
 
+    // useEffect(() => {
+    //     console.log(texts);
+    // }, [texts]);
+
+    useEffect(() => {
+        console.log(JSON.stringify(translations, null, 2));
+    }, [translations]);
     
     return (
         <Layout>

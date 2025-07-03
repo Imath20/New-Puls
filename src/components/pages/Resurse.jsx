@@ -187,28 +187,28 @@ const ResursePage = () => {
                     <p className="text-muted-foreground mb-2">
                       Descoperă mișcarea oscilatorie, formulele și simulări pentru pendulul simplu, amortizat și neliniar.
                     </p>
-                    <a href="/resurse/pendule" className="resurse-link">Citește lecția</a>
+                    <Link to="/resurse/pendule" className="resurse-link">Citește lecția</Link>
                   </div>
                   <div className="formula-card">
                     <h3 className="text-xl font-semibold mb-2">Unde</h3>
                     <p className="text-muted-foreground mb-2">
                       Află despre propagarea undelor mecanice și electromagnetice, tipuri de unde și simulări interactive.
                     </p>
-                    <a href="/resurse/unde" className="resurse-link">Citește lecția</a>
+                    <Link to="/resurse/unde" className="resurse-link">Citește lecția</Link>
                   </div>
                   <div className="formula-card">
                     <h3 className="text-xl font-semibold mb-2">Figuri Lissajous</h3>
                     <p className="text-muted-foreground mb-2">
                       Explorează curbele Lissajous, ecuațiile parametrice și aplicațiile lor în fizică.
                     </p>
-                    <a href="/resurse/lissajous" className="resurse-link">Citește lecția</a>
+                    <Link to="/resurse/lissajous" className="resurse-link">Citește lecția</Link>
                   </div>
                   <div className="formula-card">
                     <h3 className="text-xl font-semibold mb-2">Seisme</h3>
                     <p className="text-muted-foreground mb-2">
                       Învață despre cutremure, unde seismice, propagare și vizualizări interactive.
                     </p>
-                    <a href="/resurse/seism" className="resurse-link">Citește lecția</a>
+                    <Link to="/resurse/seism" className="resurse-link">Citește lecția</Link>
                   </div>
                 </div>
               </div>

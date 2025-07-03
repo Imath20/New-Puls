@@ -8,10 +8,10 @@ const Footer = () => {
                     <div className="footer-links">
                         <div className="footer-column">
                             <ul>
-                                <li><a href="/resurse/pendule">Pendule</a></li>
-                                <li><a href="/resurse/unde">Unde</a></li>
-                                <li><a href="/resurse/lissajous">Lissajous</a></li>
-                                <li><a href="/resurse/seism">Seisme</a></li>
+                                <li><Link to="/resurse/pendule">Pendule</Link></li>
+                                <li><Link to="/resurse/unde">Unde</Link></li>
+                                <li><Link to="/resurse/lissajous">Lissajous</Link></li>
+                                <li><Link to="/resurse/seism">Seisme</Link></li>
                             </ul>
                         </div>
                     </div>
@@ -20,28 +20,28 @@ const Footer = () => {
                     <div className="footer-column">
                         <h4>Platformă</h4>
                         <ul>
-                            <li><a href="/">Acasă</a></li>
-                            <li><a href="/probleme">Probleme</a></li>
-                            <li><a href="/simulari">Simulări</a></li>
-                            <li><a href="/resurse">Resurse</a></li>
+                            <li><Link to="/">Acasă</Link></li>
+                            <li><Link to="/probleme">Probleme</Link></li>
+                            <li><Link to="/simulari">Simulări</Link></li>
+                            <li><Link to="/resurse">Resurse</Link></li>
                         </ul>
                     </div>
                     <div className="footer-column">
                         <h4>Resurse</h4>
                         <ul>
-                            <li><a href="#">Documentație</a></li>
-                            <li><a href="#">FAQ</a></li>
-                            <li><a href="#">Termeni și condiții</a></li>
-                            <li><a href="#">Politica de confidențialitate</a></li>
+                            <li><Link to="#">Documentație</Link></li>
+                            <li><Link to="#">FAQ</Link></li>
+                            <li><Link to="#">Termeni și condiții</Link></li>
+                            <li><Link to="#">Politica de confidențialitate</Link></li>
                         </ul>
                     </div>
                     <div className="footer-column">
                         <h4>Contact</h4>
                         <ul>
-                            <li><a href="/about-us">Despre noi</a></li>
-                            <li><a href="#">Suport</a></li>
+                            <li><Link to="/about-us">Despre noi</Link></li>
+                            <li><Link to="#">Suport</Link></li>
                             <li>
-                                <a href="mailto:pulsphysics@gmail.com">Email</a>
+                                <Link to="mailto:pulsphysics@gmail.com">Email</Link>
                             </li>
                         </ul>
                     </div>

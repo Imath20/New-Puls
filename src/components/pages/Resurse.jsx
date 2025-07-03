@@ -10,6 +10,7 @@ import Video5 from "/res/Videos/Front Unda 2.mp4";
 import Video6 from "/res/Videos/Lissajous-Video-1.mp4";
 import Layout from "../Layout";
 import { useEffect } from "react";
+import { Link } from "react-router-dom";
 
 const ResursePage = () => {
 

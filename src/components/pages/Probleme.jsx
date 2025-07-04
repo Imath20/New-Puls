@@ -36,6 +36,9 @@ const ProblemCard = ({ problem, onResolveClick }) => {
             case 'dificil':
             case 'dificile':
                 return 'difficulty--dificil';
+            case 'concurs':
+            case 'concursuri':
+                return 'difficulty--concurs';
             default:
                 return '';
         }
@@ -114,7 +117,7 @@ const PhysicsProblems = () => {
         "Seismologie",
     ];
 
-    const difficulties = ["Toate", "ușor", "mediu", "dificil"];
+    const difficulties = ["Toate", "ușor", "mediu", "dificil", "concurs"];
 
     const isSpecializedPage = location.pathname.includes("/specialized");
     const specializedTopics = ["pendul", "unde", "lissajous", "seism"];
@@ -151,7 +154,7 @@ const PhysicsProblems = () => {
     });
 
     // Funcție pentru sortarea după dificultate
-    const difficultyOrder = { "ușor": 1, "mediu": 2, "dificil": 3 };
+    const difficultyOrder = { "ușor": 1, "mediu": 2, "dificil": 3, "concurs": 4 };
 
     // Funcție pentru sortarea problemelor
     const sortProblems = (problems) => {

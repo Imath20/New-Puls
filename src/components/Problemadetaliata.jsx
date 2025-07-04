@@ -33,9 +33,21 @@ export const ProblemaDetaliata = ({ problema, onBack }) => {
       case 'medii': return 'Medii';
       case 'grele': return 'Grele';
       case 'dificile': return 'Dificile';
+      case 'concurs': return 'Concurs';
       default: return dificultate;
     }
   };
+
+  // Funcție pentru a extrage latexul dintr-un string cu delimitatori $...$
+  function stripMathJaxDelimiters(str) {
+    if (!str) return str;
+    // Elimină delimitatorii $...$ sau \(...\) și păstrează doar conținutul
+    // Pentru $...$
+    let result = str.replace(/\$(.+?)\$/g, (_, expr) => expr);
+    // Pentru \(...\)
+    result = result.replace(/\\\((.+?)\\\)/g, (_, expr) => expr);
+    return result;
+  }
 
   // Funcție pentru generarea textului compact al problemei
   const generateProblemText = () => {
@@ -47,13 +59,13 @@ export const ProblemaDetaliata = ({ problema, onBack }) => {
     text += `DESCRIERE:\n${problema.descriere}\n\n`;
     
     if (problema.continut) {
-      text += `CONTINUT:\n${problema.continut}\n\n`;
+      text += `CONTINUT:\n${stripMathJaxDelimiters(problema.continut)}\n\n`;
     }
     
     if (problema.formule && problema.formule.length > 0) {
       text += `FORMULE RELEVANTE:\n`;
       problema.formule.forEach((formula, index) => {
-        text += `${index + 1}. ${formula}\n`;
+        text += `${index + 1}. ${stripMathJaxDelimiters(formula)}\n`;
       });
       text += '\n';
     }
@@ -61,7 +73,7 @@ export const ProblemaDetaliata = ({ problema, onBack }) => {
     if (problema.date && Object.keys(problema.date).length > 0) {
       text += `DATE CUNOSCUTE:\n`;
       Object.entries(problema.date).forEach(([key, value]) => {
-        text += `${key.replace(/_/g, ' ')}: ${value}\n`;
+        text += `${stripMathJaxDelimiters(key.replace(/_/g, ' '))}: ${stripMathJaxDelimiters(String(value))}\n`;
       });
       text += '\n';
     }
@@ -69,7 +81,7 @@ export const ProblemaDetaliata = ({ problema, onBack }) => {
     if (problema.subpuncte && problema.subpuncte.length > 0) {
       text += `CERINTE:\n`;
       problema.subpuncte.forEach((subpunct, index) => {
-        text += `${String.fromCharCode(97 + index)}) ${subpunct.cerinta} (${subpunct.punctaj}p)\n`;
+        text += `${String.fromCharCode(97 + index)}) ${stripMathJaxDelimiters(subpunct.cerinta)} (${subpunct.punctaj}p)\n`;
       });
       text += '\n';
       
@@ -120,6 +132,13 @@ export const ProblemaDetaliata = ({ problema, onBack }) => {
     }
   };
 
+  // Adaugă funcția de conversie pentru delimitatori MathJax
+  function convertDollarToInlineMathJax(str) {
+    if (!str) return str;
+    // Înlocuiește TOATE aparițiile $...$ cu \( ... \) (regex global, non-greedy)
+    return str.replace(/\$(.+?)\$/g, (match) => match.replace(/\$(.+?)\$/g, (_, expr) => `\\(${expr}\\)`));
+  }
+
   useEffect(() => {
     if (typeof window?.MathJax !== "undefined") {
       window.MathJax.typeset()
@@ -167,7 +186,20 @@ export const ProblemaDetaliata = ({ problema, onBack }) => {
               </div>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-700 leading-relaxed mb-6">{problema.continut}</p>
+              {problema.imagine && (
+                <div className="problema-imagine-container" style={{ textAlign: 'center', marginBottom: '1rem' }}>
+                  <img src={problema.imagine} alt="Ilustrație problemă" style={{ maxWidth: '100%', height: 'auto', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }} />
+                </div>
+              )}
+              {problema.imagine1 && (
+                <div className="problema-imagine-container" style={{ textAlign: 'center', marginBottom: '1rem', display: 'flex', justifyContent: 'space-between', gap: '1rem' }}>
+                  <img src={problema.imagine1} alt="Ilustrație problemă" style={{ maxWidth: '50%', height: 'auto', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }} />
+                  <img src={problema.imagine2} alt="Ilustrație problemă" style={{ maxWidth: '50%', height: 'auto', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }} />
+                </div>
+              )}
+              {/* ENUNT PROBLEMA CU MATHJAX */}
+              <div className="text-gray-700 leading-relaxed mb-6" dangerouslySetInnerHTML={{ __html: convertDollarToInlineMathJax(problema.continut) }} />
+              <MathJaxRender />
 
               {problema.formule?.length > 0 && (
                 <div className="formule-section">
@@ -197,8 +229,13 @@ export const ProblemaDetaliata = ({ problema, onBack }) => {
                   <div className="grid grid-cols-2 gap-3">
                     {Object.entries(problema.date).map(([key, value]) => (
                       <div key={key} className="flex justify-between">
-                        <span className="text-gray-600">{key.replace(/_/g, ' ')}:</span>
-                        <span className="font-medium">{value}</span>
+                        <span
+                          className="text-gray-600"
+                          dangerouslySetInnerHTML={{
+                            __html: `${convertDollarToInlineMathJax(key.replace(/_/g, ' '))}: <span class='font-medium'>${convertDollarToInlineMathJax(String(value))}</span>`
+                          }}
+                        />
+                        <MathJaxRender />
                       </div>
                     ))}
                   </div>
@@ -217,7 +254,7 @@ export const ProblemaDetaliata = ({ problema, onBack }) => {
                   {problema.subpuncte.map((subpunct, index) => (
                     <div key={subpunct.id} className="subpunct">
                       <span className="font-semibold text-blue-600">{String.fromCharCode(97 + index)}) </span>
-                      <span className="text-gray-800" dangerouslySetInnerHTML={{ __html: subpunct.cerinta }} />
+                      <span className="text-gray-800" dangerouslySetInnerHTML={{ __html: convertDollarToInlineMathJax(subpunct.cerinta) }} />
                       <MathJaxRender /> {/* Aici adaugă MathJaxRender */}
                     </div>
                   ))}

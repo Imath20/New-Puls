@@ -6,7 +6,7 @@ import simulatorUndeImg from "/res/screenshots/Unde_Screenshot.png";
 import simulatorLissajousImg from "/res/screenshots/Lissajous_Screenshot.png";
 import simulatorSeismImg from "/res/screenshots/Seism_Screenshot.png";
 import simulatorPrismaImg from "/res/screenshots/Prisma_Screenshot.png";
-import simulatorFunctiiImg from "/res/screenshots/Functii_Screenshot.png";
+import simulatorFunctiiImg from "/res/screenshots/Functii-nou_Screenshot.png";
 import simulatorGraficePendulImg from "/res/screenshots/Grafice_Pendule_Screenshot.png";
 import simulatorGraficeBasicImg from "/res/screenshots/Grafice_Basic_Screenshot.png";
 import Layout from "../Layout";

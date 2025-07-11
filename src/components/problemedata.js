@@ -196,7 +196,7 @@ export const problemeData = [
     descriere: 'Analiza undelor mecanice și a figurii Lissajous pentru două unde perpendiculare.',
     categorie: 'lissajous',
     dificultate: 'concurs',
-    imagine: '/res/Probleme-poze/concurs1.png',
+    imagine: '/res/Probleme-poze/concurs1.PNG',
     continut: `
 Printr-un mediu material se propagă două unde elastice, o undă longitudinală și o undă transversală, în sensul pozitiv al axei $O_1X$, ca în FIGURA 1. Undele au aceeași frecvență $v$ și viteze de propagare $v_l$ și $v_t$. Sursele celor două unde se găsesc în planul $O_1YZ$ și au elongațiile, amplitudinile și fazele inițiale notate cu $x$, $A_1$, $\\varphi_{01}$ pentru unda longitudinală și, respectiv, cu $y$, $A_t$, $\\varphi_{0t}$ pentru unda transversală.
 $$
@@ -240,8 +240,8 @@ y = A_t \\sin(2\\pi v t + \\varphi_{0t})
     descriere: 'Analiza undelor seismice și aplicarea modelului fizic la situații concrete.',
     categorie: 'Seismologie',
     dificultate: 'concurs',
-    imagine1: '/res/Probleme-poze/concurs2-1.png',
-    imagine2: '/res/Probleme-poze/concurs2-2.png',
+    imagine1: '/res/Probleme-poze/concurs2-1.PNG',
+    imagine2: '/res/Probleme-poze/concurs2-2.PNG',
     continut: `1. Seismologie — Analiza undelor seismice este una dintre modalitățile de investigare a structurii interne a Pământului. Modelul undelor seismice este următorul:
 - Declanșarea seismului la locul de focar și reprezentarea emisiei simultane a două unde mecanice denumite unde P (primare) — unde longitudinale, respectiv unde S — secundare — unde transversale. Focarele seismice sunt situate la diverse adâncimi sub scoarța Pământului.
 - Epicentrul este localizat pe suprafața Pământului fiind situat pe aceeași rază cu focarul subteranului. Perturbația seismică produsă în focar evoluează spre epicentru și, în funcție de structura geologică a straturilor traversate, undele seismice ajung la stațiile seismologice. În procesul de propagare, soluția undei ajunsă la localitatea epicentrului, dar și la diferite stații seismologice, poate suferi atenuări sau amplificări. Propagarea lor determină mișcări în plan orizontal și/sau vertical ale suprafeței Pământului.
@@ -302,7 +302,7 @@ Folosind acest model care are la bază fizica undelor mecanice, rezolvă următo
     descriere: '',
     categorie: 'oscilații',
     dificultate: 'concurs',
-    imagine: '/res/Probleme-poze/concurs3.png',
+    imagine: '/res/Probleme-poze/concurs3.PNG',
     continut: `
 În graficele de mai jos sunt reprezentate dependenţele de timp ale elongaţiilor unor oscilatori liniari
 armonici.

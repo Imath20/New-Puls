@@ -680,37 +680,37 @@
     }
 
     .features-section {
-        // background: #f7f7fa; // sau var(--secondary-background-current-mode)
+        background: var(--primary-background-current-mode); // sau var(--secondary-background-current-mode)
         padding-bottom: 17rem !important;
         padding-top: 0.1rem !important;
         // border-radius: 0 0 2rem 2rem;
     }
     .simulations-section {
-        background: #fff; // sau var(--primary-background-current-mode)
+        background: var(--primary-background-current-mode); // sau var(--primary-background-current-mode)
         padding-bottom: 17rem !important;
         padding-top: 0.1rem !important;
     }
     .problems-section {
-        background: #f7f7fa;
+        background: var(--primary-background-current-mode);
         padding-bottom: 15rem !important;
         padding-top: 0.1rem !important;
         // border-radius: 2rem 2rem 0 0;
     }
     .about-preview-section {
-        background: #fff;
+        background: var(--primary-background-current-mode);
         padding-bottom: 12rem !important;
         padding-top: 1rem !important;
     }
     .resources-section {
-        background: #f7f7fa;
+        background: var(--primary-background-current-mode);
         padding: 2.5rem 0.5rem;
     }
     .cta-section {
-        background: #fff;
+        background: var(--primary-background-current-mode);
         padding: 2.5rem 0.5rem;
     }
     header#hero {
-        background: #fff; // sau var(--primary-background-current-mode)
+        background: var(--primary-background-current-mode); // sau var(--primary-background-current-mode)
         padding-bottom: 2.5rem !important;
         padding-top: 3rem !important;
         border-radius: 0 0 2rem 2rem;

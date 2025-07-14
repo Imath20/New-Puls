@@ -176,16 +176,16 @@ header#hero {
     header#hero {
         border-radius: 1rem !important;
         overflow: hidden;
-        height: auto;
-        min-height: 100vh;
+        height: auto !important;
+        min-height: 0 !important;
 
         main {
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
-            padding: 2rem 1rem;
-            gap: 2rem;
+            // padding: 2rem 1rem;
+            // gap: 2rem;
 
             #hero-text-container {
                 margin-left: 0;
@@ -194,15 +194,16 @@ header#hero {
                 order: 2;
 
                 h1 {
-                    font-size: 2.5rem;
-                    line-height: 1.2;
-                    margin-bottom: 1rem;
+                    width: 95% !important;
+                    font-size: 1.7rem !important;
+                    line-height: 0.8;
+                    margin-bottom: 2rem;
                 }
 
                 &>p {
-                    font-size: 1.1rem;
+                    font-size: 1rem;
                     min-width: auto;
-                    max-width: 100%;
+                    max-width: 95%;
                     margin-bottom: 1.5rem;
                     line-height: 1.5;
                 }
@@ -211,8 +212,9 @@ header#hero {
                     flex-direction: row !important;
                     gap: 0.5rem !important;
                     width: 100%;
-                    justify-content: center;
-                    align-items: center;
+                    display: flex;
+                    justify-content: center !important;
+                    align-items: center !important;
                     button {
                         width: auto !important;
                         max-width: none !important;
@@ -224,23 +226,54 @@ header#hero {
             }
 
             .hero-slideshow-wrapper {
-                margin-right: 0;
+                margin-right: 7% !important;
                 order: 1;
                 width: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
 
                 .slideshow-container {
-                    width: 100%;
-                    max-width: 100%;
+                    width: 90vw;
+                    max-width: 600px;
+                    margin: 0 auto;
 
                     .slideshow {
-                        aspect-ratio: 4 / 3;
-                        max-height: 350px;
+                        aspect-ratio: 6 / 5;
+                        width: 100%;
+                        max-width: 600px;
+                        max-height: 520px; // <--- crește aici (ex: 520px sau cât vrei tu)
                         border-radius: 1rem !important;
+                        filter: drop-shadow(2.5px 2.5px 2.5px black);
+                        box-shadow: rgba(0, 0, 0, 0.25) 0px 0px 24px 5px, rgba(0, 0, 0, 0.12) 0px 0px 24px 5px, rgba(0, 0, 0, 0.12) 0px 0px 24px 5px, rgba(0, 0, 0, 0.17) 0px 0px 24px 5px, rgba(0, 0, 0, 0.09) 0px 0px 24px 5px;
+                        background-color: #0d0d0d;
+                    }
+                    .dots {
+                      margin-top: 1.2rem;
                     }
                 }
             }
         }
     }
+}
+
+@media (max-width: 900px) {
+  header#hero {
+    height: auto !important;
+    min-height: unset !important;
+    max-height: none !important;
+  }
+}
+
+@media (max-width: 600px) {
+  header#hero {
+    height: auto !important;
+    min-height: unset !important;
+    main {
+      height: auto !important;
+      min-height: unset !important;
+    }
+  }
 }
 
 @media (max-width: 480px) {
@@ -278,7 +311,7 @@ header#hero {
             .hero-slideshow-wrapper {
                 .slideshow-container {
                     .slideshow {
-                        max-height: 300px;
+                        max-height: 380px; // sau 400px, cât vrei tu
                         border-radius: 1rem !important;
                     }
                 }
@@ -307,13 +340,29 @@ header#hero {
                 }
             }
 
-            .hero-slideshow-wrapper {
-                .slideshow-container {
-                    .slideshow {
-                        max-height: 250px;
-                    }
-                }
-            }
+            // .hero-slideshow-wrapper {
+            //     .slideshow-container {
+            //         .slideshow {
+            //             max-height: 250px;
+            //         }
+            //     }
+            // }
         }
     }
 }
+
+// @media (max-width: 768px) {
+//   header#hero {
+//     min-height: unset !important;
+//     height: auto !important;
+//   }
+// }
+@media (max-width: 768px) {
+    header#hero {
+      padding-bottom: 0.5rem !important;
+    }
+    header#hero main {
+      padding-bottom: 0.1rem !important;
+      gap: 2rem !important;
+    }
+  }

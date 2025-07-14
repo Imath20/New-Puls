@@ -158,3 +158,15 @@
     color: var(--primary-background-current-mode);
   }
 }
+@media (max-width: 768px) {
+  .simulari-page .main-content {
+    padding: 0.7rem 0.3rem !important;
+    max-width: 97vw !important;
+    width: 97vw !important;
+    box-sizing: border-box;
+  }
+  .simulari-page {
+    width: 97vw !important;
+    overflow-x: hidden;
+  }
+}

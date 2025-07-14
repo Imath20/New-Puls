@@ -268,11 +268,11 @@ header#hero {
 
     .simulations-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        // grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        grid-template-columns: repeat(2, 1fr);
         gap: 2rem;
         max-width: 1200px;
         margin: 0 auto;
-        justify-items: center;
 
         .simulation-card {
             height: 320px;
@@ -1023,24 +1023,24 @@ header#hero {
         }
     }
 
-    // SIMULĂRI: elimin spațiu gol, forțez grid vizibil
-    // .simulations-section {
-    //     .section-title {
-    //         margin-bottom: 0.7rem !important;
-    //     }
-    //     .simulations-grid {
-    //         margin-top: 0 !important;
-    //         min-height: unset !important;
-    //         display: grid !important;
-    //         grid-template-columns: 1fr !important;
-    //         gap: 1.5rem !important;
-    //     }
-    //     .simulation-card {
-    //         min-height: 220px !important;
-    //         height: auto !important;
-    //         display: block !important;
-    //     }
-    // }
+    //SIMULĂRI: elimin spațiu gol, forțez grid vizibil
+    .simulations-section {
+        .section-title {
+            margin-bottom: 0.7rem !important;
+        }
+        .simulations-grid {
+            margin-top: 0 !important;
+            min-height: unset !important;
+            display: grid !important;
+            grid-template-columns: 1fr !important;
+            gap: 1.5rem !important;
+        }
+        .simulation-card {
+            min-height: 220px !important;
+            height: auto !important;
+            display: block !important;
+        }
+    }
 
     .problems-section {
         display: flex;
@@ -1110,7 +1110,7 @@ header#hero {
         }
     }
 
-    Simulations section mobile optimization
+    //Simulations section mobile optimization
     .simulations-grid {
         .simulation-card {
             height: 280px;

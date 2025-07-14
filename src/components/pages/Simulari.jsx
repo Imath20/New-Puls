@@ -133,9 +133,9 @@ const SimulariPage = () => {
           <h1>Simulări</h1>
           <p>Explorează concepte fizice prin intermediul simulărilor interactive.</p>
 
-          <div className="simulations-grid">
+          <div className="simulari-grid">
             {simulationsData.map((simulation) => (
-              <div key={simulation.id} className="simulation-card">
+              <div key={simulation.id} className="simulari-card">
                 <div className="card-content">
                   <h2>{simulation.title}</h2>
                   <p className="description">{simulation.description}</p>

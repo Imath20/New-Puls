@@ -1074,7 +1074,7 @@ header#hero {
 
     // Fix grid layouts for mobile
     .features-grid,
-    .simulations-grid,
+    // .simulations-grid,
     .problems-grid {
         grid-template-columns: 1fr !important;
         gap: 1.5rem;

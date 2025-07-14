@@ -11,6 +11,7 @@ import { useEffect, useRef, useState } from "react";
 const Navbar = () => {
     const [pulsOpen, setPulsOpen] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [mobileDropdownOpen, setMobileDropdownOpen] = useState(false); // NEW
     const [searchValue, setSearchValue] = useState("");
     const dropdownRef = useRef(null);
     const closeTimeoutRef = useRef(null);
@@ -45,6 +46,23 @@ const Navbar = () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, []);
+
+    // Închide dropdown-ul mobil când se închide meniul mobil
+    useEffect(() => {
+        if (!mobileMenuOpen) setMobileDropdownOpen(false);
+    }, [mobileMenuOpen]);
+
+    // Blochează scrollbarul body-ului când meniul mobil e deschis
+    useEffect(() => {
+        if (mobileMenuOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, [mobileMenuOpen]);
 
     // Improved hover handlers with delay
     const handleMouseEnter = () => {
@@ -116,12 +134,14 @@ const Navbar = () => {
                 $('nav #navbar-search').css({ borderColor: 'black' });
                 $('nav #dark-mode-toggle-container .toggle-parent .dark-mode-toggle').css({ color: 'black' });
                 $('#logo-link img').attr('src', PulsLogoBlack);
+                $('#burger-menu svg').css({ color: 'black' });
             } else {
                 $('nav > #nav-container > ul > li > .nav-link').css({ color: 'white' });
                 $('nav #navbar-search .search-icon, nav #navbar-search .search-input').css({ color: 'white' });
                 $('nav #navbar-search').css({ borderColor: 'white' });
                 $('nav #dark-mode-toggle-container .toggle-parent .dark-mode-toggle').css({ color: 'white' });
                 $('#logo-link img').attr('src', PulsLogoWhite);
+                $('#burger-menu svg').css({ color: 'white' });
             }
 
             console.log('Current mode: white mode');
@@ -133,12 +153,14 @@ const Navbar = () => {
                     $('nav #navbar-search').css({ borderColor: 'black' });
                     $('nav #dark-mode-toggle-container .toggle-parent .dark-mode-toggle').css({ color: 'black' });
                     $('#logo-link img').attr('src', PulsLogoBlack);
+                    $('#burger-menu svg').css({ color: 'black' });
                 } else {
                     $('nav > #nav-container > ul > li > .nav-link').css({ color: 'white' });
                     $('nav #navbar-search .search-icon, nav #navbar-search .search-input').css({ color: 'white' });
                     $('nav #navbar-search').css({ borderColor: 'white' });
                     $('nav #dark-mode-toggle-container .toggle-parent .dark-mode-toggle').css({ color: 'white' });
                     $('#logo-link img').attr('src', PulsLogoWhite);
+                    $('#burger-menu svg').css({ color: 'white' });
                 }
             });
         }
@@ -151,6 +173,7 @@ const Navbar = () => {
             $('nav #navbar-search').css({ borderColor: 'white' });
             $('nav #dark-mode-toggle-container .toggle-parent .dark-mode-toggle').css({ color: 'white' });
             $('#logo-link img').attr('src', PulsLogoWhite);
+            $('#burger-menu svg').css({ color: 'white' });
         }
 
         return () => {
@@ -252,6 +275,15 @@ const Navbar = () => {
                 {/* Mobile Menu Overlay */}
                 {mobileMenuOpen && (
                     <div id="mobile-menu" className="active">
+                        {/* Buton de close */}
+                        <button
+                            className="mobile-menu-close"
+                            onClick={() => setMobileMenuOpen(false)}
+                            aria-label="Închide meniul"
+                            style={{ position: 'absolute', top: 20, right: 20, background: 'none', border: 'none', cursor: 'pointer', zIndex: 1100 }}
+                        >
+                            <X size={32} color={darkModeOn ? '#fff' : '#222'} />
+                        </button>
                         <div className="nav-list">
                             <Link to="/" className="nav-link" onClick={handleMobileNavClick}>
                                 <Home className="nav-icon" />
@@ -259,21 +291,21 @@ const Navbar = () => {
                             </Link>
                             
                             <div className="mobile-dropdown">
-                                <div className="mobile-dropdown-header">
+                                <div className="mobile-dropdown-header" onClick={() => setMobileDropdownOpen(v => !v)}>
                                     <span>P.U.L.S.</span>
-                                    <ChevronDown className="nav-icon" />
+                                    <ChevronDown className="nav-icon" style={{ transform: mobileDropdownOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.3s' }} />
                                 </div>
-                                <div className="mobile-dropdown-content">
-                                    <Link to="/resurse/pendule" onClick={handleMobileNavClick}>
+                                <div className={`mobile-dropdown-content${mobileDropdownOpen ? ' open' : ''}`}>
+                                    <Link to="/resurse/pendule" className="nav-link" onClick={handleMobileNavClick}>
                                         Pendule
                                     </Link>
-                                    <Link to="/resurse/unde" onClick={handleMobileNavClick}>
+                                    <Link to="/resurse/unde" className="nav-link" onClick={handleMobileNavClick}>
                                         Unde
                                     </Link>
-                                    <Link to="/resurse/lissajous" onClick={handleMobileNavClick}>
+                                    <Link to="/resurse/lissajous" className="nav-link" onClick={handleMobileNavClick}>
                                         Lissajous
                                     </Link>
-                                    <Link to="/resurse/seism" onClick={handleMobileNavClick}>
+                                    <Link to="/resurse/seism" className="nav-link" onClick={handleMobileNavClick}>
                                         Seisme
                                     </Link>
                                 </div>

@@ -1,5 +1,6 @@
 import { useLocation } from "react-router-dom";
 import { useMemo } from "react";
+import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import "@/scss/components/searchresul.scss";
@@ -110,7 +111,7 @@ const SearchResults = () => {
                     <ul className="search-results-list">
                         {results.map(item => (
                             <li key={item.path} className="search-results-item">
-                                <a href={item.path} className="search-results-link">{item.title}</a>
+                                <Link to={item.path} className="search-results-link">{item.title}</Link>
                             </li>
                         ))}
                     </ul>

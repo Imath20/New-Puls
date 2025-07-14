@@ -1024,23 +1024,23 @@ header#hero {
     }
 
     // SIMULĂRI: elimin spațiu gol, forțez grid vizibil
-    .simulations-section {
-        .section-title {
-            margin-bottom: 0.7rem !important;
-        }
-        .simulations-grid {
-            margin-top: 0 !important;
-            min-height: unset !important;
-            display: grid !important;
-            grid-template-columns: 1fr !important;
-            gap: 1.5rem !important;
-        }
-        .simulation-card {
-            min-height: 220px !important;
-            height: auto !important;
-            display: block !important;
-        }
-    }
+    // .simulations-section {
+    //     .section-title {
+    //         margin-bottom: 0.7rem !important;
+    //     }
+    //     .simulations-grid {
+    //         margin-top: 0 !important;
+    //         min-height: unset !important;
+    //         display: grid !important;
+    //         grid-template-columns: 1fr !important;
+    //         gap: 1.5rem !important;
+    //     }
+    //     .simulation-card {
+    //         min-height: 220px !important;
+    //         height: auto !important;
+    //         display: block !important;
+    //     }
+    // }
 
     .problems-section {
         display: flex;
@@ -1111,36 +1111,36 @@ header#hero {
     }
 
     // Simulations section mobile optimization
-    .simulations-grid {
-        .simulation-card {
-            height: 280px;
-            margin: 0 auto;
-            max-width: 320px;
-            width: 100%;
-            min-height: 250px;
+    // .simulations-grid {
+    //     .simulation-card {
+    //         height: 280px;
+    //         margin: 0 auto;
+    //         max-width: 320px;
+    //         width: 100%;
+    //         min-height: 250px;
 
-            .simulation-content {
-                padding: 1.5rem;
+    //         .simulation-content {
+    //             padding: 1.5rem;
 
-                h3 {
-                    font-size: 1.5rem;
-                    margin-bottom: 0.5rem;
-                }
+    //             h3 {
+    //                 font-size: 1.5rem;
+    //                 margin-bottom: 0.5rem;
+    //             }
 
-                p {
-                    font-size: 0.9rem;
-                    margin-bottom: 1rem;
-                    max-width: 100%;
-                    line-height: 1.4;
-                }
+    //             p {
+    //                 font-size: 0.9rem;
+    //                 margin-bottom: 1rem;
+    //                 max-width: 100%;
+    //                 line-height: 1.4;
+    //             }
 
-                .simulation-button {
-                    padding: 0.5rem 1rem;
-                    font-size: 0.85rem;
-                }
-            }
-        }
-    }
+    //             .simulation-button {
+    //                 padding: 0.5rem 1rem;
+    //                 font-size: 0.85rem;
+    //             }
+    //         }
+    //     }
+    // }
 
     // Problems section mobile optimization
     .problems-grid {

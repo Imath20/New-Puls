@@ -1,6 +1,179 @@
 // Home page styling
 
-// Hero section styles already exist in _header.scss
+// Hero section styles
+header#hero {
+    max-width: 100%;
+    position: relative;
+    color: var(--primary-color-current-mode);
+    width: 100%;
+    height: 100vh;
+
+    main {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+        justify-content: space-between;
+        font-size: xx-large;
+
+        #hero-text-container {
+            margin-left: 10%;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            max-width: min-content;
+            max-width: 800px;
+
+            h1 {
+                color: var(--primary-color-current-mode);
+                font-size: calc(3.5vw);
+            }
+
+            &>p {
+                margin-top: 0;
+                padding-bottom: 20px;
+                font-family: 'Open Sans', sans-serif;
+                font-size: calc(1.4vw);
+                font-weight: 400;
+                min-width: 600px;
+                min-width: calc(40vw);
+            }
+
+            .buttons {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                gap: 20px;
+
+                button {
+                    all: unset;
+                    cursor: pointer;
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 0.75em 2em;
+                    border-radius: 8px;
+                    border: 2px solid var(--primary-color-current-mode);
+                    background: transparent;
+                    color: var(--primary-color-current-mode);
+                    font-size: 0.75em;
+                    font-weight: 600;
+                    letter-spacing: 0.05em;
+                    transition: 0.15s, color 0.15s, border-color 0.15s, box-shadow 0.15s;
+                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+                    width: 50%;
+
+                    &.filled {
+                        background: var(--primary-color-current-mode);
+                        color: var(--primary-background-current-mode);
+                        border-color: var(--primary-color-current-mode);
+                    }
+
+                    &:hover,
+                    &:focus {
+                        background: var(--primary-color-current-mode);
+                        color: var(--primary-background-current-mode);
+                        border-color: #e5e5e5;
+                        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+                        outline: none;
+                    }
+
+                    &:active {
+                        background: #e5e5e5;
+                        color: #121212;
+                        border-color: #e5e5e5;
+                    }
+                }
+            }
+        }
+
+        .hero-slideshow-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 10%;
+
+            .slideshow-container {
+                width: 80%;
+                max-width: 600px;
+                margin: 0 auto;
+
+                .slideshow {
+                    display: flex;
+                    overflow-x: hidden;
+                    scroll-snap-type: x mandatory;
+                    aspect-ratio: 6 / 5;
+                    max-height: 800px;
+                    border-radius: 1rem;
+                    filter: drop-shadow(2.5px 2.5px 2.5px black);
+                    box-shadow: rgba(0, 0, 0, 0.25) 0px 0px 24px 5px, rgba(0, 0, 0, 0.12) 0px 0px 24px 5px, rgba(0, 0, 0, 0.12) 0px 0px 24px 5px, rgba(0, 0, 0, 0.17) 0px 0px 24px 5px, rgba(0, 0, 0, 0.09) 0px 0px 24px 5px;
+                    background-color: #0d0d0d;
+
+                    .slide {
+                        flex: 0 0 100%;
+                        scroll-snap-align: start;
+                        position: relative;
+
+                        .image-wrapper {
+                            width: 100%;
+                            height: 100%;
+                            position: relative;
+                            overflow: hidden;
+                            border-radius: 1rem;
+
+                            img {
+                                width: 100%;
+                                height: 100%;
+                                object-fit: cover;
+                                display: block;
+                            }
+
+                            .gradient-overlay {
+                                position: absolute;
+                                inset: 0;
+                                background: linear-gradient(to top, rgba(0, 0, 0, 0.4), transparent);
+                                z-index: 1;
+                            }
+
+                            .caption {
+                                position: absolute;
+                                bottom: 0;
+                                padding: 0.75rem;
+                                color: #fff;
+                                font-size: 0.875rem;
+                                font-weight: 500;
+                                z-index: 2;
+                            }
+                        }
+                    }
+                }
+
+                .dots {
+                    display: flex;
+                    justify-content: center;
+                    gap: 0.5rem;
+                    margin-top: 1rem;
+
+                    .dot {
+                        width: 0.8rem;
+                        height: 0.8rem;
+                        border-radius: 50%;
+                        background-color: rgba(0, 123, 255, 0.3);
+                        border: none;
+                        cursor: pointer;
+                        transition: background-color 0.3s;
+
+                        &.active {
+                            background-color: #007bff;
+                            box-shadow: 0 0 6.5px #007bff;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
 
 // Features section
 .features-section {
@@ -21,6 +194,7 @@
         gap: 2rem;
         max-width: 1200px;
         margin: 0 auto;
+        justify-items: center;
 
         .feature-card {
             background-color: var(--tertiary-background-current-mode);
@@ -94,11 +268,11 @@
 
     .simulations-grid {
         display: grid;
-        // grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
         gap: 2rem;
         max-width: 1200px;
         margin: 0 auto;
+        justify-items: center;
 
         .simulation-card {
             height: 320px;
@@ -202,6 +376,7 @@
         gap: 1.5rem;
         max-width: 1400px;
         margin: 0 auto;
+        justify-items: center;
 
         @media (max-width: 1200px) {
             grid-template-columns: repeat(3, 1fr);
@@ -563,6 +738,8 @@
     background-color: var(--primary-background-current-mode) !important;
     padding: 4rem 2rem 2rem;
     border-top: 2px solid rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 2;
     // background-color: red;
 
     &.dark-mode {
@@ -648,6 +825,72 @@
     }
 }
 
+// About preview section
+.about-preview-section {
+    border-top: 1px solid var(--border-color-current-mode);
+    background: var(--secondary-background-current-mode);
+    color: var(--primary-color-current-mode);
+    padding: 3rem 1rem 2rem 1rem;
+    display: flex;
+    justify-content: center;
+    padding-bottom: 4rem;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    position: relative;
+    z-index: 1;
+
+    .about-preview-text {
+        max-width: 1200px;
+        margin: 0 auto;
+        text-align: center;
+
+        .about-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 2.5rem;
+            margin-top: 2.5rem;
+            text-align: center;
+            color: var(--primary-color-current-mode);
+        }
+
+        .about-description {
+            font-size: 1.125rem;
+            max-width: 90rem;
+            font-weight: bold;
+            margin-bottom: 2.5rem;
+            text-align: center;
+            color: var(--primary-color-current-mode);
+        }
+
+        .about-story {
+            font-size: 1.125rem;
+            margin-bottom: 2.5rem;
+            text-align: center;
+            max-width: 90rem;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.7;
+            letter-spacing: 0.01em;
+            color: var(--primary-color-current-mode);
+        }
+
+        .about-preview-button {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.6rem 2rem;
+            background: var(--accent-color-current-mode);
+            color: #fff;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background 0.2s;
+
+            &:hover {
+                background: #2563eb;
+            }
+        }
+    }
+}
+
 // General container for all page content
 .page-container {
     min-height: 100vh;
@@ -655,19 +898,623 @@
     flex-direction: column;
 }
 
-// Responsive adjustments
+// Responsive design - Complete rewrite
+@media (max-width: 1200px) {
+    .problems-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.25rem;
+    }
+}
+
+@media (max-width: 900px) {
+    .problems-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+}
+
 @media (max-width: 768px) {
-    .section-title {
-        font-size: 2rem !important;
+    // HERO: Ordine și stiluri optimizate pe mobil
+    header#hero {
+        overflow-x: hidden !important;
+        margin-bottom: 1.2rem !important; // gap mai mic sub hero
+        main {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 1.2rem;
+            padding-top: 2.5rem;
+            width: 100vw;
+            box-sizing: border-box;
+            #hero-text-container {
+                order: 1;
+                h1 {
+                    order: 1;
+                    font-size: 2.3rem;
+                    margin-top: 2.5rem;
+                    margin-bottom: 1.2rem;
+                    line-height: 1.15;
+                    font-weight: 800;
+                    letter-spacing: -1px;
+                    word-break: normal;
+                    white-space: normal;
+                    overflow-wrap: break-word;
+                    max-width: 95vw;
+                }
+                &>p {
+                    order: 3;
+                    margin-top: 1.1rem;
+                    margin-bottom: 0.5rem;
+                    font-size: 1.08rem;
+                    max-width: 95vw;
+                    line-height: 1.5;
+                    word-break: normal;
+                    white-space: normal;
+                    overflow-wrap: break-word;
+                }
+                .buttons {
+                    order: 4;
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 0.7rem;
+                    width: 100%;
+                    margin-top: 0.7rem;
+                    flex-wrap: nowrap;
+                    button {
+                        flex: 1 1 0;
+                        min-width: 120px;
+                        max-width: 100%;
+                        width: auto;
+                        padding: 0.5rem 1.1rem;
+                        font-size: 0.93rem;
+                        border-radius: 0.4rem;
+                        font-weight: 600;
+                        white-space: normal;
+                    }
+                }
+            }
+            .hero-slideshow-wrapper {
+                order: 2;
+                width: 100vw;
+                margin: 0 auto 0 auto;
+                overflow-x: hidden !important;
+                overflow-y: hidden !important;
+                height: auto !important;
+                max-height: 220px !important;
+                min-height: unset !important;
+                .slideshow-container {
+                    width: 100vw;
+                    max-width: 100vw;
+                    overflow-x: hidden !important;
+                    overflow-y: hidden !important;
+                    height: auto !important;
+                    max-height: 220px !important;
+                    min-height: unset !important;
+                    .slideshow {
+                        width: 100vw;
+                        max-width: 100vw;
+                        aspect-ratio: unset;
+                        height: auto !important;
+                        max-height: 220px !important;
+                        min-height: unset !important;
+                        overflow-x: hidden !important;
+                        overflow-y: hidden !important;
+                        object-fit: cover !important;
+                    }
+                }
+            }
+        }
+    }
+    // Gap mic între hero și următoarea secțiune
+    .features-section {
+        margin-top: 0 !important;
+        padding-top: 0.5rem !important;
     }
 
+    // FEATURES: gap mic între titlu și grid
+    .features-section {
+        .section-title {
+            margin-bottom: 0.7rem !important;
+        }
+        .features-grid {
+            margin-top: 0 !important;
+        }
+    }
+
+    // SIMULĂRI: elimin spațiu gol, forțez grid vizibil
+    .simulations-section {
+        .section-title {
+            margin-bottom: 0.7rem !important;
+        }
+        .simulations-grid {
+            margin-top: 0 !important;
+            min-height: unset !important;
+            display: grid !important;
+            grid-template-columns: 1fr !important;
+            gap: 1.5rem !important;
+        }
+        .simulation-card {
+            min-height: 220px !important;
+            height: auto !important;
+            display: block !important;
+        }
+    }
+
+    .problems-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 1.5rem !important;
+        padding-bottom: 1.5rem !important;
+        margin: 0 !important;
+        min-height: unset !important;
+        .section-title {
+            margin-bottom: 1.5rem !important;
+        }
+        .problems-grid {
+            margin-top: 0 !important;
+            margin-bottom: 0 !important;
+            padding: 0 !important;
+            min-height: unset !important;
+        }
+    }
+
+    .about-preview-section {
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+        padding-top: 1.5rem !important;
+        padding-bottom: 1.5rem !important;
+        min-height: unset !important;
+        .about-preview-text {
+            margin-bottom: 0 !important;
+        }
+    }
+
+    // Fix grid layouts for mobile
     .features-grid,
     .simulations-grid,
-    .resources-grid {
+    .problems-grid {
         grid-template-columns: 1fr !important;
+        gap: 1.5rem;
+        max-width: 100%;
+        justify-items: center;
     }
 
-    .footer-content {
-        flex-direction: column !important;
+    // Features section mobile optimization
+    .features-grid {
+        .feature-card {
+            padding: 1.5rem;
+            margin: 0 auto;
+            max-width: 320px;
+            width: 100%;
+
+            .feature-link {
+                .feature-icon {
+                    width: 60px;
+                    height: 60px;
+                    margin-bottom: 0.75rem;
+                }
+
+                h3 {
+                    font-size: 1.25rem;
+                    margin-bottom: 0.75rem;
+                }
+
+                p {
+                    font-size: 0.9rem;
+                    line-height: 1.5;
+                }
+            }
+        }
     }
+
+    // Simulations section mobile optimization
+    .simulations-grid {
+        .simulation-card {
+            height: 280px;
+            margin: 0 auto;
+            max-width: 320px;
+            width: 100%;
+            min-height: 250px;
+
+            .simulation-content {
+                padding: 1.5rem;
+
+                h3 {
+                    font-size: 1.5rem;
+                    margin-bottom: 0.5rem;
+                }
+
+                p {
+                    font-size: 0.9rem;
+                    margin-bottom: 1rem;
+                    max-width: 100%;
+                    line-height: 1.4;
+                }
+
+                .simulation-button {
+                    padding: 0.5rem 1rem;
+                    font-size: 0.85rem;
+                }
+            }
+        }
+    }
+
+    // Problems section mobile optimization
+    .problems-grid {
+        .problem-card-link {
+            .problem-card {
+                padding: 1.25rem;
+                min-height: auto;
+                margin: 0 auto;
+                max-width: 320px;
+                width: 100%;
+
+                .problem-icon {
+                    width: 45px;
+                    height: 45px;
+                    margin-bottom: 0.75rem;
+                }
+
+                h3 {
+                    font-size: 1.1rem;
+                    margin-bottom: 0.5rem;
+                }
+
+                p {
+                    font-size: 0.85rem;
+                    margin-bottom: 0.75rem;
+                    -webkit-line-clamp: 4;
+                }
+
+                .problem-stats {
+                    padding: 0.3rem 0.5rem;
+                    margin-bottom: 0.75rem;
+
+                    span:first-child {
+                        font-size: 0.7rem;
+                    }
+
+                    .difficulty {
+                        font-size: 0.6rem;
+                        padding: 0.1rem 0.4rem;
+                    }
+                }
+
+                .problem-button {
+                    padding: 0.5rem 1rem;
+                    font-size: 0.8rem;
+                }
+            }
+        }
+    }
+
+    // About preview section mobile optimization
+    .about-preview-section {
+        padding: 2rem 1rem;
+        margin-bottom: 0;
+
+        .about-preview-text {
+            max-width: 100%;
+
+            .about-title {
+                font-size: 1.75rem;
+                margin-bottom: 1rem;
+            }
+
+            .about-description,
+            .about-story {
+                font-size: 0.95rem;
+                line-height: 1.6;
+                margin-bottom: 1rem;
+                text-align: left;
+            }
+
+            .about-preview-button {
+                padding: 0.75rem 1.5rem;
+                font-size: 0.9rem;
+                width: 100%;
+                max-width: 280px;
+                text-align: center;
+            }
+        }
+    }
+
+    // Footer mobile optimization
+    .footer {
+        padding: 2rem 1rem 1rem;
+
+        .footer-content {
+            gap: 2rem;
+            flex-direction: column !important;
+
+            .footer-logo {
+                h3 {
+                    font-size: 1.5rem;
+                }
+
+                p {
+                    font-size: 0.9rem;
+                }
+            }
+
+            .footer-links {
+                gap: 1.5rem;
+
+                .footer-column {
+                    min-width: 120px;
+
+                    h4 {
+                        font-size: 1rem;
+                        margin-bottom: 1rem;
+                    }
+
+                    ul li {
+                        margin-bottom: 0.5rem;
+
+                        a {
+                            font-size: 0.85rem;
+                        }
+                    }
+                }
+            }
+        }
+
+        .footer-bottom {
+            padding-top: 1.5rem;
+            margin-top: 1.5rem;
+
+            p {
+                font-size: 0.8rem;
+            }
+        }
+    }
+}
+
+@media (max-width: 600px) {
+  header#hero {
+    margin-top: 0 !important;
+    padding-top: 7rem !important;
+    height: auto !important;
+    min-height: unset !important;
+    main {
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center;
+      text-align: center;
+      gap: 0.5rem;
+      padding: 0 !important;
+      width: 100vw;
+      box-sizing: border-box;
+      #hero-text-container {
+        order: 1 !important;
+        width: 100vw;
+        max-width: 100vw;
+        padding: 0 0.2rem;
+        margin: 0 auto;
+        h1 {
+          font-size: 3rem;
+          margin: 0.3rem auto 2rem auto;
+          line-height: 1.1;
+          font-weight: 800;
+          max-width: 95vw;
+          word-break: break-word;
+          text-align: center;
+        }
+        &>p {
+          font-size: 1.2rem;
+          line-height: 1.15;
+          max-width: 88vw;
+          margin: 0.1rem auto 1rem auto;
+          word-break: break-word;
+          overflow-wrap: break-word;
+          white-space: normal;
+          text-align: center;
+          display: block;
+          margin-left: auto;
+          margin-right: auto;
+        }
+        .buttons {
+          display: flex;
+          flex-direction: row;
+          gap: 0.3rem;
+          width: 100%;
+          justify-content: center;
+          align-items: center;
+          margin: 0.1rem auto 1rem auto;
+          max-width: 320px;
+          button {
+            flex: 1 1 0;
+            min-width: 80px;
+            max-width: 140px;
+            width: 100%;
+            padding: 0.4rem 0.1rem;
+            font-size: 0.8rem;
+            border-radius: 0.4rem;
+            font-weight: 600;
+            white-space: normal;
+          }
+        }
+      }
+      .hero-slideshow-wrapper {
+        order: 2 !important;
+        width: 92vw;
+        max-width: 320px;
+        min-width: 180px;
+        height: 180px !important;
+        max-height: 180px !important;
+        min-height: 180px !important;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        .slideshow-container {
+          width: 92vw;
+          max-width: 320px;
+          min-width: 180px;
+          height: 180px !important;
+          max-height: 180px !important;
+          min-height: 180px !important;
+          margin-left: auto;
+          margin-right: auto;
+          padding: 0;
+          display: flex;
+          align-items: center;
+          flex-direction: column;
+          .slideshow {
+            width: 92vw;
+            max-width: 320px;
+            min-width: 180px;
+            height: 180px !important;
+            max-height: 180px !important;
+            min-height: 180px !important;
+            object-fit: cover !important;
+            border-radius: 1rem;
+            overflow: hidden !important;
+            margin-left: auto;
+            margin-right: auto;
+          }
+          .dots {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 0.3rem;
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+    // Hero section adjustments for small screens
+    header#hero main {
+        padding: 1.5rem 1rem;
+
+        #hero-text-container {
+            h1 {
+                font-size: 2rem;
+            }
+
+            &>p {
+                font-size: 1rem;
+            }
+
+            .buttons button {
+                max-width: 280px;
+                padding: 0.75rem 1.25rem;
+                font-size: 0.85rem;
+            }
+        }
+
+        .hero-slideshow-wrapper {
+            .slideshow-container {
+                .slideshow {
+                    max-height: 300px;
+                }
+            }
+        }
+    }
+
+    .features-section,
+    .simulations-section,
+    .problems-section {
+        padding: 2rem 1rem;
+
+        .section-title {
+            font-size: 1.5rem !important;
+        }
+    }
+
+    .about-preview-section {
+        padding: 1.5rem 1rem;
+    }
+
+    // Further reduce card sizes on very small screens
+    .features-grid .feature-card,
+    .simulations-grid .simulation-card,
+    .problems-grid .problem-card-link .problem-card {
+        max-width: 280px;
+        width: 100%;
+    }
+}
+
+@media (max-width: 360px) {
+    // Hero section adjustments for very small screens
+    header#hero main {
+        padding: 1rem 0.5rem;
+
+        #hero-text-container {
+            h1 {
+                font-size: 1.75rem;
+            }
+
+            &>p {
+                font-size: 0.9rem;
+            }
+
+            .buttons button {
+                padding: 0.75rem 1rem;
+                font-size: 0.8rem;
+            }
+        }
+
+        .hero-slideshow-wrapper {
+            .slideshow-container {
+                .slideshow {
+                    max-height: 250px;
+                }
+            }
+        }
+    }
+
+    .features-section,
+    .simulations-section,
+    .problems-section {
+        padding: 1.5rem 0.5rem;
+
+        .section-title {
+            font-size: 1.3rem !important;
+        }
+    }
+
+    .about-preview-section {
+        padding: 1rem 0.5rem;
+    }
+
+    // Even smaller cards for very small screens
+    .features-grid .feature-card,
+    .simulations-grid .simulation-card,
+    .problems-grid .problem-card-link .problem-card {
+        max-width: 260px;
+        width: 100%;
+        padding: 1rem;
+    }
+}
+
+@media (max-width: 768px) {
+  .hero-slideshow-wrapper .slideshow-container {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+  }
+  .hero-slideshow-wrapper .slideshow-container .slideshow {
+    order: 1;
+  }
+  .hero-slideshow-wrapper .slideshow-container .dots {
+    order: 2;
+    margin-top: 1rem;
+    width: 100%;
+    justify-content: center;
+    display: flex !important;
+    opacity: 1 !important;
+    z-index: 10 !important;
+    position: static !important;
+    height: auto !important;
+    background: #eee !important;
+  }
 }

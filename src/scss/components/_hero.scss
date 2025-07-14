@@ -172,3 +172,156 @@ header#hero {
         }
     }
 }
+
+// Mobile responsive design for hero section - BEAUTIFUL VERSION
+@media (max-width: 768px) {
+    header#hero {
+        border-radius: 1rem !important;
+        overflow: hidden;
+        height: auto;
+        min-height: 100vh;
+
+        main {
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem 1rem;
+            gap: 2rem;
+
+            #hero-text-container {
+                margin-left: 0;
+                margin-right: 0;
+                max-width: 100%;
+                order: 2;
+
+                h1 {
+                    font-size: 2.5rem;
+                    line-height: 1.2;
+                    margin-bottom: 1rem;
+                }
+
+                &>p {
+                    font-size: 1.1rem;
+                    min-width: auto;
+                    max-width: 100%;
+                    margin-bottom: 1.5rem;
+                    line-height: 1.5;
+                }
+
+                .buttons {
+                    flex-direction: row !important;
+                    gap: 0.5rem !important;
+                    width: 100%;
+                    justify-content: center;
+                    align-items: center;
+                    button {
+                        width: auto !important;
+                        max-width: none !important;
+                        white-space: nowrap !important;
+                        padding: 0.6rem 0.7rem !important;
+                        font-size: 0.85rem !important;
+                    }
+                }
+            }
+
+            .hero-slideshow-wrapper {
+                margin-right: 0;
+                order: 1;
+                width: 100%;
+
+                .slideshow-container {
+                    width: 100%;
+                    max-width: 100%;
+
+                    .slideshow {
+                        aspect-ratio: 4 / 3;
+                        max-height: 350px;
+                        border-radius: 1rem !important;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    header#hero {
+        border-radius: 1rem !important;
+        overflow: hidden;
+        main {
+            padding: 1.5rem 1rem;
+
+            #hero-text-container {
+                h1 {
+                    font-size: 2rem;
+                }
+
+                &>p {
+                    font-size: 1rem;
+                }
+
+                .buttons {
+                    flex-direction: row !important;
+                    gap: 0.3rem !important;
+                    width: 100%;
+                    justify-content: center;
+                    align-items: center;
+                    button {
+                        width: auto !important;
+                        max-width: none !important;
+                        white-space: nowrap !important;
+                        padding: 0.5rem 0.5rem !important;
+                        font-size: 0.8rem !important;
+                    }
+                }
+            }
+
+            .hero-slideshow-wrapper {
+                .slideshow-container {
+                    .slideshow {
+                        max-height: 300px;
+                        border-radius: 1rem !important;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 360px) {
+    header#hero {
+        main {
+            padding: 1rem 0.5rem;
+
+            #hero-text-container {
+                h1 {
+                    font-size: 1.75rem;
+                }
+
+                &>p {
+                    font-size: 0.9rem;
+                }
+
+                .buttons button {
+                    padding: 0.75rem 1rem;
+                    font-size: 0.8rem;
+                }
+            }
+
+            .hero-slideshow-wrapper {
+                .slideshow-container {
+                    .slideshow {
+                        max-height: 250px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.hero-slideshow-wrapper, .hero-slideshow-wrapper .slideshow-container {
+  border-radius: 1rem !important;
+  overflow: hidden !important;
+  background: #fff !important;
+}

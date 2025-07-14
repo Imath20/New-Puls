@@ -1,4 +1,4 @@
-import { Book, FileQuestion, HelpCircle, Home, Layout, ListCheck, ListChecks, Settings, User, Search, ChevronDown } from "lucide-react";
+import { Book, FileQuestion, HelpCircle, Home, Layout, ListCheck, ListChecks, Settings, User, Search, ChevronDown, Menu, X } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import DarkModeToggle from "./DarkModeToggle";
 import PulsLogoWhite from '/res/puls-logo-new2.png';
@@ -10,6 +10,7 @@ import { useEffect, useRef, useState } from "react";
 
 const Navbar = () => {
     const [pulsOpen, setPulsOpen] = useState(false);
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [searchValue, setSearchValue] = useState("");
     const dropdownRef = useRef(null);
     const closeTimeoutRef = useRef(null);
@@ -24,6 +25,19 @@ const Navbar = () => {
                 !dropdownRef.current.contains(event.target)
             ) {
                 setPulsOpen(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
+    // Close mobile menu when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (!event.target.closest('#nav-mobile') && !event.target.closest('#burger-menu')) {
+                setMobileMenuOpen(false);
             }
         };
         document.addEventListener("mousedown", handleClickOutside);
@@ -55,6 +69,15 @@ const Navbar = () => {
 
     const handleDropdownItemClick = () => {
         setPulsOpen(false);
+        setMobileMenuOpen(false);
+    };
+
+    const handleMobileMenuToggle = () => {
+        setMobileMenuOpen(!mobileMenuOpen);
+    };
+
+    const handleMobileNavClick = () => {
+        setMobileMenuOpen(false);
     };
 
     const handleSearchChange = (e) => {
@@ -143,6 +166,7 @@ const Navbar = () => {
                     <img src={darkModeOn ? PulsLogoWhite : PulsLogoBlack} alt="P.U.L.S" />
                 </Link>
             </div>
+            
             {/* Search Bar */}
             <form id="navbar-search" onSubmit={handleSearchSubmit}>
                 <Search className="search-icon" strokeWidth={3} />
@@ -151,9 +175,11 @@ const Navbar = () => {
                     className="search-input"
                     value={searchValue}
                     onChange={handleSearchChange}
+                    placeholder="Caută..."
                 />
             </form>
-            {/* Links */}
+            
+            {/* Desktop Navigation */}
             <div id="nav-container">
                 <ul id="nav-list">
                     <li>
@@ -211,12 +237,69 @@ const Navbar = () => {
                         </Link>
                     </li>
                 </ul>
-                <div id="nav-mobile">
-                    <a id="burger-menu" data-href="#">
-                        <span />
-                    </a>
-                </div>
             </div>
+
+            {/* Mobile Menu Button */}
+            <div id="nav-mobile">
+                <button 
+                    id="burger-menu" 
+                    onClick={handleMobileMenuToggle}
+                    className={mobileMenuOpen ? 'active' : ''}
+                >
+                    {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                </button>
+                
+                {/* Mobile Menu Overlay */}
+                {mobileMenuOpen && (
+                    <div id="mobile-menu" className="active">
+                        <div className="nav-list">
+                            <Link to="/" className="nav-link" onClick={handleMobileNavClick}>
+                                <Home className="nav-icon" />
+                                <span>Acasa</span>
+                            </Link>
+                            
+                            <div className="mobile-dropdown">
+                                <div className="mobile-dropdown-header">
+                                    <span>P.U.L.S.</span>
+                                    <ChevronDown className="nav-icon" />
+                                </div>
+                                <div className="mobile-dropdown-content">
+                                    <Link to="/resurse/pendule" onClick={handleMobileNavClick}>
+                                        Pendule
+                                    </Link>
+                                    <Link to="/resurse/unde" onClick={handleMobileNavClick}>
+                                        Unde
+                                    </Link>
+                                    <Link to="/resurse/lissajous" onClick={handleMobileNavClick}>
+                                        Lissajous
+                                    </Link>
+                                    <Link to="/resurse/seism" onClick={handleMobileNavClick}>
+                                        Seisme
+                                    </Link>
+                                </div>
+                            </div>
+                            
+                            <Link to="/probleme" className="nav-link" onClick={handleMobileNavClick}>
+                                <ListCheck className="nav-icon" />
+                                <span>Probleme</span>
+                            </Link>
+                            <Link to="/simulari" className="nav-link" onClick={handleMobileNavClick}>
+                                <Settings className="nav-icon" />
+                                <span>Simulari</span>
+                            </Link>
+                            <Link to="/resurse" className="nav-link" onClick={handleMobileNavClick}>
+                                <Book className="nav-icon" />
+                                <span>Resurse</span>
+                            </Link>
+                            <Link to="/profil" className="nav-link" onClick={handleMobileNavClick}>
+                                <User className="nav-icon" />
+                                <span>Profil</span>
+                            </Link>
+                        </div>
+                    </div>
+                )}
+            </div>
+            
             {/* Dark Mode Toggle */}
             <div id="dark-mode-toggle-container">
                 <DarkModeToggle />

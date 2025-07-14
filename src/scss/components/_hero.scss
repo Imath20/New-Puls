@@ -1,4 +1,3 @@
-
 header#hero {
     max-width: 100%;
     position: relative;
@@ -172,7 +171,6 @@ header#hero {
         }
     }
 }
-
 // Mobile responsive design for hero section - BEAUTIFUL VERSION
 @media (max-width: 768px) {
     header#hero {
@@ -318,10 +316,4 @@ header#hero {
             }
         }
     }
-}
-
-.hero-slideshow-wrapper, .hero-slideshow-wrapper .slideshow-container {
-  border-radius: 1rem !important;
-  overflow: hidden !important;
-  background: #fff !important;
 }

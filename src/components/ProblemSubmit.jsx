@@ -3,6 +3,7 @@ import Layout from './Layout';
 import { Card, CardHeader, CardTitle, CardContent } from './card';
 import { Badge } from './badge';
 import { Button } from './Buttondet';
+import '../scss/components/ProblemSubmit.scss';
 
 const ProblemSubmit = () => {
     const [problemText, setProblemText] = useState('');
@@ -137,18 +138,7 @@ const ProblemSubmit = () => {
     }, []);
 
     return (
-            <div style={{ 
-                maxWidth: '1200px',
-                minWidth: '900px',
-                width: '500px',
-                margin: '0 auto', 
-                padding: '2rem',
-                backgroundColor: 'var(--primary-background-current-mode)',
-                color: 'var(--primary-color-current-mode)',
-                minHeight: '100vh',
-                display: 'flex',
-                flexDirection: 'column',
-            }}>
+            <div className="problem-submit-container">
                 {/* Header Section */}
                 {/* <div style={{ 
                     textAlign: 'center', 
@@ -182,7 +172,7 @@ const ProblemSubmit = () => {
                     </p>
                 </div> */}
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', alignItems: 'start', width: '100%' }}>
+                <div className="problem-submit-grid">
                 {/* <div> */}
                     {/* Left Column - Input Section */}
                     <div>

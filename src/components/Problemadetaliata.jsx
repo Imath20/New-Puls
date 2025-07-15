@@ -266,7 +266,7 @@ export const ProblemaDetaliata = ({ problema, onBack }) => {
 
         </div>
 
-        <div style={{ width: '300px' }} className="sidebar">
+        <div className="sidebar">
           <Card className="mb-6 sticky top-4">
             <CardHeader>
               <CardTitle className="text-lg">Punctaje</CardTitle>

@@ -404,3 +404,114 @@
     transition: all 0.2s ease;
   }
 }
+/* === TABLETĂ (768px - 1024px) === */
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+  .container {
+    padding: 20px;
+    max-width: 100%;
+  }
+
+  .main {
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .card-title,
+  .card-description,
+  .formule-section,
+  .date-section,
+  .punctaj-item,
+  .ai-description {
+    font-size: 1rem;
+  }
+
+  .card-header-container {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .copy-button,
+  .back-button,
+  .back-to-problems-btn {
+    width: 100%;
+    font-size: 0.9rem;
+    padding: 10px;
+  }
+
+  .badge {
+    font-size: 0.75rem;
+    padding: 4px 8px;
+  }
+
+  .separator--vertical {
+    display: none;
+  }
+}
+
+/* === TELEFON (max-width: 767px) === */
+@media screen and (max-width: 767px) {
+  .container {
+    padding: 16px;
+    max-width: 100%;
+    padding-top: 20%;
+  }
+
+  .main {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .card-title,
+  .card-description,
+  .formule-section,
+  .date-section,
+  .punctaj-item,
+  .ai-description {
+    font-size: 0.95rem;
+  }
+
+  .card-header-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .copy-button{
+    width: 10%;
+    font-size: 0.85rem;
+    padding: 10px;
+  }
+  .back-button,
+  .back-to-problems-btn {
+    width: 50% !important;
+    min-width: 180px; // opțional, ca să nu fie prea mic
+    max-width: 100%;
+    font-size: 0.85rem;
+    padding: 10px;
+  }
+
+  .badge {
+    font-size: 0.7rem;
+    padding: 3px 6px;
+  }
+
+  .separator--vertical {
+    display: none;
+  }
+
+  .punctaj-item {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+.sidebar {
+  width: 300px;
+}
+
+@media screen and (max-width: 767px) {
+  .sidebar {
+    width: 100% !important;
+  }
+}

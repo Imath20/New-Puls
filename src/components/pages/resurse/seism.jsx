@@ -89,7 +89,18 @@ const SeismePage = () => {
             <p className="row"><span>&#9734;<b>Apasa sageata dreapta, sageata stanga pentru a te misca in jurul obiectului 3d.</b></span></p>
             <p className="row"><span>&#9734;<b>Apasa Enter pentru a te duce la urmatorul eveniment.</b></span></p>
             <div className="model-container">
-              <iframe id="modelFrame" src="https://stefanarctic.github.io/Cutremure-Unity/" width="960" height="700" style={{ border: 'none' }} allowFullScreen={true}></iframe>
+               <div class="iframe-wrapper">  
+              <div className="w-full aspect-[960/700] max-w-[960px] mx-auto">
+                <iframe
+                  id="modelFrame"
+                  src="https://stefanarctic.github.io/Cutremure-Unity/"
+                  className="w-full h-full border-none"
+                  allowFullScreen
+                  
+                ></iframe>
+                </div>
+              </div>
+
               <div id="modelDescription" className="sketchfab-info1">
                 🌀🌏〰Reprezentare Seism<br />🔁 Poți apasa stanga drepta pentru a te misca<br />🔁Poti apasa Enter pentru a vedea urmatoarea figura
               </div>

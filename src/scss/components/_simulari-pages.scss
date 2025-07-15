@@ -228,12 +228,6 @@
     margin-right: 20px;
   }
 
-  .model-container {
-    position: relative;
-    width: 100%;
-    max-width: 1400px;
-    margin-bottom: 40px;
-  }
 
   .sketchfab-info {
     position: absolute;
@@ -267,13 +261,10 @@
     display: flex;
     gap: -200px;
     flex-wrap: wrap;
-    justify-content: flex-start;
-    /* aliniere la stânga */
-    margin-left: 10px;
-    /* mai mult spațiu pe stânga */
+    justify-content: flex-start; /* aliniere la stânga */
+    margin-left: 10px; /* mai mult spațiu pe stânga */
     width: 50%;
-    max-width: 100%;
-    /* eliminăm limita maximă de lățime */
+    max-width: 100%; /* eliminăm limita maximă de lățime */
   }
 
   .model-buttons button {
@@ -321,11 +312,65 @@
   }
 }
 
+.d-desktop { display: inline; }
+.d-mobile { display: none; }
 @media (max-width: 768px) {
+  .d-desktop { display: none !important; }
+  .d-mobile { display: inline !important; }
   .resurse-pagina h1,
   .resurse-pagina h2,
   .resurse-pagina .text-lg,
   .resurse-pagina .text-muted-foreground {
     text-align: center;
+  }
+  .model-container {
+    width: 100%;
+    max-width: 100%;
+    padding: 1rem;
+    box-sizing: border-box;
+  }
+  
+  .iframe-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    overflow: hidden; // evită scroll în interior
+  }
+  
+  .iframe-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    overflow: hidden;
+  }
+  
+  .sketchfab-info1 {
+    // position: absolute;
+    // left: 5%;
+    // font-size: 13px !important;
+    // padding: 10px 14px;
+    display:none;
+  }
+  
+  .model-buttons {
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 1rem !important;
+    justify-content: center !important;
+    flex-wrap: wrap !important;
+    margin-left: 0 !important;
+  }
+  .model-buttons button {
+    flex: 1 1 45%;
+    min-width: 120px;
+    max-width: 100%;
+    margin-right: 0 !important;
+    margin-bottom: 0 !important;
+    text-align: center;
+    white-space: normal;
   }
 }

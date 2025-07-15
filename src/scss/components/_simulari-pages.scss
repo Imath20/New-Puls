@@ -320,3 +320,12 @@
     color: var(--primary-color-current-mode);
   }
 }
+
+@media (max-width: 768px) {
+  .resurse-pagina h1,
+  .resurse-pagina h2,
+  .resurse-pagina .text-lg,
+  .resurse-pagina .text-muted-foreground {
+    text-align: center;
+  }
+}

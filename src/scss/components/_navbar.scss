@@ -194,7 +194,8 @@ nav {
                     &:hover {
                         background-color: var(--navbar-mobile-dropdown-bg);
                         color: var(--navbar-mobile-color);
-                        transform: translateX(10px);
+                        transform: translateY(10px);
+                        width: 80%;
                     }
 
                     .nav-icon {

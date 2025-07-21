@@ -2,7 +2,7 @@ import React, { Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, useGLTF } from "@react-three/drei";
 
-const MODEL_PATH = "/Modele Asistent/Professor_Whiz_0720133453_texture.glb";
+const MODEL_PATH = "/Modele Asistent/bebu.glb";
 
 function Model() {
   const { scene } = useGLTF(MODEL_PATH);

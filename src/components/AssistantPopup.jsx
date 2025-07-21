@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import "../scss/components/_assistant-popup.scss";
 import Assistant3DViewer from "./Assistant3DViewer";
 import { X, Send } from "lucide-react";
-import { searchKnowledgeBase } from "../lib/assistant-knowledge-base.js"; 
+import { searchKnowledgeBase } from "../lib/assistant-knowledge-base.js";
 
 const PROMPTS = [
   "Raportează o problemă",
@@ -17,6 +17,8 @@ const PROMPTS = [
 
 const SUPPORT_EMAIL = "pulsphysics@gmail.com";
 
+const GENKIT_ENDPOINT = "http://localhost:3001/api/assistant/ask";
+
 function isGraveProblem(text) {
   const keywords = ["eroare", "nu merge", "bug", "problemă gravă", "crash", "fatal", "nu funcționează", "nu pot accesa", "nu pot folosi", "nu pot intra", "nu pot deschide"];
   return keywords.some(kw => text.toLowerCase().includes(kw));
@@ -29,6 +31,7 @@ const AssistantPopup = ({ onClose }) => {
   const [messages, setMessages] = useState([]); // {role: 'user'|'ai', text: string}
   const textareaRef = useRef(null);
   const chatRef = useRef(null);
+  const [loading, setLoading] = useState(false);
 
   const handlePromptClick = (prompt) => {
     setSelectedPrompt(prompt);
@@ -42,7 +45,7 @@ const AssistantPopup = ({ onClose }) => {
     setInputValue("");
   };
 
-  const handleSend = (e, prompt = null) => {
+  const handleSend = async (e, prompt = null) => {
     if (e) e.preventDefault();
     const text = prompt || inputValue.trim();
     if (!text) return;
@@ -50,15 +53,34 @@ const AssistantPopup = ({ onClose }) => {
     if (!chatMode) setChatMode(true);
     setMessages((msgs) => [...msgs, { role: "user", text }]);
     setInputValue("");
-    
-    setTimeout(() => {
+    setLoading(true);
+
+    try {
+      const response = await fetch(GENKIT_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question: text }),
+      });
+      const data = await response.json();
+      if (data && data.result) {
+        setMessages((msgs) => [...msgs, { role: "ai", text: data.result }]);
+      } else if (data && data.answer) {
+        setMessages((msgs) => [...msgs, { role: "ai", text: data.answer }]);
+      } else {
+        // fallback la knowledge base
+        const aiText = searchKnowledgeBase(text);
+        setMessages((msgs) => [...msgs, { role: "ai", text: aiText }]);
+      }
+    } catch (err) {
+      // fallback la knowledge base
       const aiText = searchKnowledgeBase(text);
       setMessages((msgs) => [...msgs, { role: "ai", text: aiText }]);
-      
+    } finally {
+      setLoading(false);
       setTimeout(() => {
         if (chatRef.current) chatRef.current.scrollTop = chatRef.current.scrollHeight;
       }, 100);
-    }, 800);
+    }
   };
 
   const handleInput = (e) => {
@@ -163,6 +185,9 @@ const AssistantPopup = ({ onClose }) => {
                       )}
                     </div>
                   ))}
+                  {loading && (
+                    <div className="assistant-popup-chat-bubble ai loading">Profesorul Whiz scrie...</div>
+                  )}
                 </div>
                 <form className="assistant-popup-form" onSubmit={handleSend}>
                   <div className="assistant-popup-input-row">

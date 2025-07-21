@@ -198,7 +198,7 @@ const Navbar = () => {
                     className="search-input"
                     value={searchValue}
                     onChange={handleSearchChange}
-                    placeholder="Caută..."
+                    // placeholder="Caută..."
                 />
             </form>
             

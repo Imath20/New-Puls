@@ -17,7 +17,7 @@ const PROMPTS = [
 
 const SUPPORT_EMAIL = "pulsphysics@gmail.com";
 
-const GENKIT_ENDPOINT = "http://localhost:3001/api/assistant/ask";
+const GENKIT_ENDPOINT = "/api/assistant/ask";
 
 function isGraveProblem(text) {
   const keywords = ["eroare", "nu merge", "bug", "problemă gravă", "crash", "fatal", "nu funcționează", "nu pot accesa", "nu pot folosi", "nu pot intra", "nu pot deschide"];

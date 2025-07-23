@@ -15,15 +15,6 @@ const PROMPTS = [
   "Cum te cheamă?"
 ];
 
-const SUPPORT_EMAIL = "pulsphysics@gmail.com";
-
-const GENKIT_ENDPOINT = "/api/assistant/ask";
-
-function isGraveProblem(text) {
-  const keywords = ["eroare", "nu merge", "bug", "problemă gravă", "crash", "fatal", "nu funcționează", "nu pot accesa", "nu pot folosi", "nu pot intra", "nu pot deschide"];
-  return keywords.some(kw => text.toLowerCase().includes(kw));
-}
-
 const AssistantPopup = ({ onClose }) => {
   const [selectedPrompt, setSelectedPrompt] = useState("");
   const [inputValue, setInputValue] = useState("");
@@ -36,7 +27,6 @@ const AssistantPopup = ({ onClose }) => {
   const handlePromptClick = (prompt) => {
     setSelectedPrompt(prompt);
     setInputValue(prompt);
-    // Automatically submit the prompt as a message
     handleSend(null, prompt);
   };
 
@@ -55,32 +45,13 @@ const AssistantPopup = ({ onClose }) => {
     setInputValue("");
     setLoading(true);
 
-    try {
-      const response = await fetch(GENKIT_ENDPOINT, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ question: text }),
-      });
-      const data = await response.json();
-      if (data && data.result) {
-        setMessages((msgs) => [...msgs, { role: "ai", text: data.result }]);
-      } else if (data && data.answer) {
-        setMessages((msgs) => [...msgs, { role: "ai", text: data.answer }]);
-      } else {
-        // fallback la knowledge base
-        const aiText = searchKnowledgeBase(text);
-        setMessages((msgs) => [...msgs, { role: "ai", text: aiText }]);
-      }
-    } catch (err) {
-      // fallback la knowledge base
-      const aiText = searchKnowledgeBase(text);
-      setMessages((msgs) => [...msgs, { role: "ai", text: aiText }]);
-    } finally {
-      setLoading(false);
-      setTimeout(() => {
-        if (chatRef.current) chatRef.current.scrollTop = chatRef.current.scrollHeight;
-      }, 100);
-    }
+    // Fallback doar la knowledge base static
+    const aiText = searchKnowledgeBase(text);
+    setMessages((msgs) => [...msgs, { role: "ai", text: aiText }]);
+    setLoading(false);
+    setTimeout(() => {
+      if (chatRef.current) chatRef.current.scrollTop = chatRef.current.scrollHeight;
+    }, 100);
   };
 
   const handleInput = (e) => {
@@ -104,7 +75,6 @@ const AssistantPopup = ({ onClose }) => {
     }
   };
 
-  // Add this handler to send message on Enter (but allow Shift+Enter for newline)
   const handleKeyDown = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -112,7 +82,6 @@ const AssistantPopup = ({ onClose }) => {
     }
   };
 
-  // Scroll chat to bottom when new message
   React.useEffect(() => {
     if (chatMode && chatRef.current) {
       chatRef.current.scrollTop = chatRef.current.scrollHeight;

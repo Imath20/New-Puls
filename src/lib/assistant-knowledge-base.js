@@ -89,6 +89,7 @@ export const knowledgeBase = [
         response: "Subiectele legate de electricitate și magnetism sunt esențiale în fizică, dar momentan nu sunt acoperite pe platforma noastră, care se concentrează pe fenomene oscilatorii și unde."
     },
 
+
     // --- General Info & Support ---
     {
         keywords: ["despre", "creator", "echipa"],
@@ -132,18 +133,50 @@ export const knowledgeBase = [
     },
     {
         keywords: ["bug", "eroare", "problemă", "sugestie", "feedback", "conecta"],
-        response: () => {
+        response: (query) => {
+            const grave = ["crash", "fatal", "nu funcționează", "nu pot accesa", "nu pot folosi", "nu pot intra", "nu pot deschide"];
+            const isGrave = grave.some(kw => query.toLowerCase().includes(kw));
+            if (isGrave || query.toLowerCase().includes("problemă gravă")) {
+                return `Se pare că întâmpini o problemă serioasă. Cel mai bine este să ne scrii direct la <a href="mailto:pulsphysics@gmail.com" class="assistant-link">pulsphysics@gmail.com</a> pentru a primi ajutor rapid.`;
+            }
             return "Mulțumim pentru feedback! Vom analiza sugestia sau problema raportată. Dacă este ceva urgent, te rugăm să ne contactezi pe adresa de email.";
         }
     }
 ];
 
+// List of other names that could trigger the "annoyed" response.
+const OTHER_NAMES = ["gigel", "costel", "ion", "vasile", "gpt", "chatgpt", "copilot", "gemini", "bard"];
+
 export const searchKnowledgeBase = (query) => {
     const lowerCaseQuery = query.toLowerCase();
+
+    let response = null;
+
+    // Check for annoyed state
+    const calledAnotherName = OTHER_NAMES.some(name => lowerCaseQuery.includes(name));
+    if (calledAnotherName && !lowerCaseQuery.includes("whiz")) {
+        response = "Numele meu este Profesorul Whiz! Te rog să reții acest lucru. Acum, să revenim... ";
+    }
+
+    // Find a matching keyword
     for (const item of knowledgeBase) {
         if (item.keywords.some(keyword => lowerCaseQuery.includes(keyword))) {
-            return typeof item.response === 'function' ? item.response(query) : item.response;
+            const result = typeof item.response === 'function' ? item.response(query) : item.response;
+            if (response) {
+                // Prepend the annoyed message
+                response += result;
+            } else {
+                response = result;
+            }
+            return response;
         }
     }
+
+    if (response) {
+        // This means the user called him another name but didn't match any other keyword
+        return response + "Cum te pot ajuta?";
+    }
+
+    // Default response if no match
     return "Îmi pare rău, nu am găsit informații despre acest subiect. Ai putea, te rog, să reformulezi întrebarea? Poți încerca să folosești cuvinte cheie precum 'pendul', 'probleme' sau 'simulări'.";
 }; 

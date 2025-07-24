@@ -4,6 +4,11 @@ import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import ProblemaDetaliata from "../Problemadetaliata";
 import { problemeData } from '../problemedata';
+import { useDispatch, useSelector } from 'react-redux';
+import { addProblem, removeProblem } from '../../problemeSlice';
+import { db } from '../../lib/firebase';
+import { doc, setDoc, getDocs, collection, getDoc, deleteDoc } from 'firebase/firestore';
+import { auth } from '../../lib/firebase';
 
 // Icon components
 const SearchIcon = () => (
@@ -261,6 +266,107 @@ const PhysicsProblems = () => {
         }
     };
 
+    const [showAddModal, setShowAddModal] = useState(false);
+    const [newTitle, setNewTitle] = useState('');
+    const [newCategory, setNewCategory] = useState(categories[1] || '');
+    const [newDifficulty, setNewDifficulty] = useState(difficulties[1] || '');
+    const [newEnunt, setNewEnunt] = useState('');
+    const [newImages, setNewImages] = useState([]); // array de url-uri
+    const [uploading, setUploading] = useState(false);
+    const [newPunctajTotal, setNewPunctajTotal] = useState('');
+    const [newSubpuncte, setNewSubpuncte] = useState([{ cerinta: '', punctaj: '' }]);
+    const dispatch = useDispatch();
+
+    const IMAGEKIT_PUBLIC_KEY = 'public_6rkxL+q+51xT8d2+GHpJeNSzOTE=';
+    const IMAGEKIT_UPLOAD_URL = 'https://upload.imagekit.io/api/v1/files/upload';
+
+    const handleImageUpload = async (file) => {
+      if (!file) return;
+      if (file.size > 2 * 1024 * 1024) {
+        alert('Imaginea trebuie să fie sub 2MB!');
+        return;
+      }
+      setUploading(true);
+
+      // Ia semnătura de la backend
+      const authRes = await fetch('/api/assistant/imagekit-auth');
+      const { signature, expire, token } = await authRes.json();
+
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('fileName', file.name);
+      formData.append('publicKey', IMAGEKIT_PUBLIC_KEY);
+      formData.append('signature', signature);
+      formData.append('expire', expire);
+      formData.append('token', token);
+
+      try {
+        const res = await fetch(IMAGEKIT_UPLOAD_URL, { method: 'POST', body: formData });
+        const data = await res.json();
+        if (data && data.url) {
+          setNewImages((imgs) => [...imgs, data.url]);
+        } else {
+          alert('Eroare la upload poză!');
+        }
+      } catch (err) {
+        alert('Eroare la upload poză!');
+      }
+      setUploading(false);
+    };
+    const handleAddProblem = async () => {
+      if (!newTitle.trim() || !newCategory || !newDifficulty || !newEnunt.trim()) {
+        alert('Completează toate câmpurile!');
+        return;
+      }
+      const user = auth.currentUser;
+      let createdByAlias = '';
+      if (user) {
+        const userRef = doc(db, 'users', user.uid);
+        const snap = await getDoc(userRef);
+        if (snap.exists() && snap.data().alias) {
+          createdByAlias = snap.data().alias;
+        }
+      }
+      const newProblem = {
+        id: Date.now().toString(),
+        index: nextIndex,
+        titlu: newTitle,
+        categorie: newCategory,
+        dificultate: newDifficulty,
+        descriere: newEnunt,
+        images: newImages,
+        punctajTotal: newPunctajTotal,
+        subpuncte: newSubpuncte.filter(sp => sp.cerinta && sp.punctaj),
+        createdByAlias,
+      };
+      dispatch(addProblem(newProblem));
+      setShowAddModal(false);
+      setNewTitle(''); setNewCategory(categories[1] || ''); setNewDifficulty(difficulties[1] || ''); setNewEnunt(''); setNewImages([]); setNewPunctajTotal(''); setNewSubpuncte([{ cerinta: '', punctaj: '' }]);
+      if (user) {
+        const userProblemRef = doc(db, 'users', user.uid, 'userProblems', newProblem.id);
+        await setDoc(userProblemRef, newProblem);
+      }
+    };
+
+    const userProblems = useSelector(state => state.problems.userProblems);
+    const [selectedUserProblem, setSelectedUserProblem] = useState(null);
+
+    useEffect(() => {
+      const unsubscribe = auth.onAuthStateChanged(async (firebaseUser) => {
+        if (firebaseUser) {
+          // Citește problemele userului din Firestore
+          const userProblemsRef = collection(db, 'users', firebaseUser.uid, 'userProblems');
+          const snap = await getDocs(userProblemsRef);
+          const userProblems = snap.docs.map(doc => doc.data());
+          dispatch({ type: 'problems/setProblems', payload: userProblems });
+        }
+      });
+      return () => unsubscribe();
+    }, [dispatch]);
+
+    const allProblems = [...problemeData, ...userProblems];
+    const nextIndex = allProblems.length > 0 ? Math.max(...allProblems.map(p => Number(p.index) || 0)) + 1 : 1;
+
     if (selectedProblem) {
         return (
             <Layout>
@@ -272,12 +378,68 @@ const PhysicsProblems = () => {
         );
     }
 
+    if (selectedUserProblem) {
+      return (
+        <Layout>
+          <ProblemaDetaliata
+            problema={selectedUserProblem}
+            onBack={() => setSelectedUserProblem(null)}
+          />
+        </Layout>
+      );
+    }
+
     return (
         <Layout>
             <div className="problems-page">
                 <div className="problems-page-inner">
                     {/* Title */}
-                    <h1 className="problems-page-title">Probleme de fizică</h1>
+                    <div className="problems-page-title-row" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                        <h1 className="problems-page-title">Probleme de fizică</h1>
+                        <button className="add-problem-btn" onClick={() => setShowAddModal(true)} title="Adaugă problemă">
+                            <span style={{ fontSize: 24, fontWeight: 'bold' }}>+</span>
+                        </button>
+                    </div>
+
+                    {showAddModal && (
+                        <div className="add-problem-modal" style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(0,0,0,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
+                            <div style={{ background: '#fff', padding: 24, borderRadius: 12, minWidth: 320, maxWidth: 400 }}>
+                                <h2>Adaugă problemă</h2>
+                                <label>Titlu:</label>
+                                <input type="text" value={newTitle} onChange={e => setNewTitle(e.target.value)} style={{ width: '100%', marginBottom: 8 }} />
+                                <label>Categorie:</label>
+                                <select value={newCategory} onChange={e => setNewCategory(e.target.value)} style={{ width: '100%', marginBottom: 8 }}>
+                                    {categories.filter(c => c !== 'Toate').map(c => <option key={c} value={c}>{c}</option>)}
+                                </select>
+                                <label>Dificultate:</label>
+                                <select value={newDifficulty} onChange={e => setNewDifficulty(e.target.value)} style={{ width: '100%', marginBottom: 8 }}>
+                                    {difficulties.filter(d => d !== 'Toate').map(d => <option key={d} value={d}>{d}</option>)}
+                                </select>
+                                <label>Enunț:</label>
+                                <textarea value={newEnunt} onChange={e => setNewEnunt(e.target.value)} style={{ width: '100%', marginBottom: 8 }} />
+                                <label>Poze:</label>
+                                <input type="file" accept="image/*" disabled={uploading} onChange={e => handleImageUpload(e.target.files[0])} />
+                                <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', margin: '8px 0' }}>
+                                    {newImages.map((url, i) => <img key={i} src={url} alt="preview" style={{ width: 60, height: 60, objectFit: 'cover', borderRadius: 6 }} />)}
+                                </div>
+                                <label>Punctaj total:</label>
+                                <input type="number" value={newPunctajTotal} onChange={e => setNewPunctajTotal(e.target.value)} style={{ width: '100%', marginBottom: 8 }} />
+                                <label>Cerințe (subpuncte):</label>
+                                {newSubpuncte.map((sp, i) => (
+                                  <div key={i} style={{ display: 'flex', gap: 8, marginBottom: 4 }}>
+                                    <input type="text" placeholder="Cerință" value={sp.cerinta} onChange={e => setNewSubpuncte(subpuncte => subpuncte.map((s, j) => j === i ? { ...s, cerinta: e.target.value } : s))} style={{ flex: 2 }} />
+                                    <input type="number" placeholder="Punctaj" value={sp.punctaj} onChange={e => setNewSubpuncte(subpuncte => subpuncte.map((s, j) => j === i ? { ...s, punctaj: e.target.value } : s))} style={{ flex: 1 }} />
+                                    <button onClick={() => setNewSubpuncte(subpuncte => subpuncte.filter((_, j) => j !== i))} disabled={newSubpuncte.length === 1}>✕</button>
+                                  </div>
+                                ))}
+                                <button onClick={() => setNewSubpuncte([...newSubpuncte, { cerinta: '', punctaj: '' }])} style={{ marginBottom: 8 }}>Adaugă subpunct</button>
+                                <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>
+                                    <button onClick={handleAddProblem} disabled={uploading}>Salvează</button>
+                                    <button onClick={() => setShowAddModal(false)} disabled={uploading}>Anulează</button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
 
                     {/* Search and Filters */}
                     <div className="problems-page-filters">
@@ -349,6 +511,45 @@ const PhysicsProblems = () => {
                             <option value="difficulty-desc">Dificultate (descrescător)</option>
                         </select>
                     </div>
+
+                    {userProblems.length > 0 && (
+                        <div className="user-problems-section" style={{ marginBottom: 24 }}>
+                            <h2 style={{ fontSize: 18, margin: '16px 0 8px 0' }}>Probleme adăugate de tine</h2>
+                            <div className="problems-grid">
+                                {userProblems.map((problem) => (
+                                    <div key={problem.id} className="problem-card user-problem-card" style={{ position: 'relative' }}>
+                                        <div className="problem-card-header">
+                                            <div className="problem-card-info" style={{ position: 'relative' }} onClick={() => setSelectedUserProblem(problem)}>
+                                                <span className="problem-card-id">#{problem.index}</span>
+                                                <h3 className="problem-card-title">{problem.titlu}</h3>
+                                                <p className="problem-card-topic">{problem.categorie}</p>
+                                                {problem.createdByAlias && (
+                                                  <span style={{ position: 'absolute', top: 0, right: 0, fontSize: 12, fontStyle: 'italic', color: '#888' }}>{problem.createdByAlias}</span>
+                                                )}
+                                            </div>
+                                            <div className="problem-card-solved-badge" style={{ background: '#4caf50', color: '#fff' }}>Adăugată de tine</div>
+                                        </div>
+                                        <div className="problem-card-footer">
+                                            <div className={`problem-card-difficulty difficulty--${problem.dificultate}`}>{problem.dificultate}</div>
+                                            {problem.images && problem.images.length > 0 && (
+                                                <div style={{ display: 'flex', gap: 4, marginTop: 4 }}>
+                                                    {problem.images.map((url, i) => <img key={i} src={url} alt="img" style={{ width: 32, height: 32, objectFit: 'cover', borderRadius: 4 }} />)}
+                                                </div>
+                                            )}
+                                        </div>
+                                        <div style={{ marginTop: 8, fontSize: 14 }}>{problem.descriere}</div>
+                                        <button
+                                            onClick={() => handleRemoveUserProblem(problem.id)}
+                                            style={{ position: 'absolute', top: 8, right: 8, background: '#f44336', color: '#fff', border: 'none', borderRadius: 4, padding: '2px 8px', cursor: 'pointer' }}
+                                            title="Șterge problema"
+                                        >
+                                            ✕
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
 
                     {/* Problem Cards Grid */}
                     <div className="problems-grid">

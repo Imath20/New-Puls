@@ -8,10 +8,60 @@ import { Badge } from './badge';
 import { Separator } from './separator';
 import MathJaxRender from './MathJaxRender';
 import ProblemSubmit from './ProblemSubmit';
+import { useDispatch, useSelector } from 'react-redux';
+import { addFavorite, removeFavorite, setFavorites } from '../problemeSlice';
+import { db } from '../lib/firebase';
+import { doc, updateDoc, arrayUnion, arrayRemove, getDoc } from 'firebase/firestore';
+import { auth } from '../lib/firebase';
 
 export const ProblemaDetaliata = ({ problema, onBack }) => {
+  if (!problema || !problema.id) {
+    return <div style={{ padding: 32, color: '#c00', fontWeight: 600 }}>Eroare: problema nu este disponibilă sau nu are date valide.</div>;
+  }
   const navigate = useNavigate();
   const [copied, setCopied] = useState(false);
+  const dispatch = useDispatch();
+  const favorites = useSelector(state => state.problems.favorites);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(async (firebaseUser) => {
+      if (firebaseUser) {
+        setUser(firebaseUser);
+        // Sync favorite din Firestore la Redux
+        const userRef = doc(db, 'users', firebaseUser.uid);
+        const snap = await getDoc(userRef);
+        if (snap.exists() && snap.data().favorites) {
+          dispatch({ type: 'problems/setFavorites', payload: snap.data().favorites });
+        }
+      } else {
+        setUser(null);
+      }
+    });
+    return () => unsubscribe();
+  }, [dispatch]);
+
+  const isFavorite = favorites.some(p => p.id === problema.id);
+  const handleToggleFavorite = async () => {
+    if (!user) return;
+    const userRef = doc(db, 'users', user.uid);
+    const snap = await getDoc(userRef);
+    let currentFavorites = [];
+    if (snap.exists() && Array.isArray(snap.data().favorites)) {
+      currentFavorites = snap.data().favorites;
+    }
+    if (isFavorite) {
+      // Șterge problema după id
+      const newFavorites = currentFavorites.filter(p => p.id !== problema.id);
+      await updateDoc(userRef, { favorites: newFavorites });
+      dispatch(setFavorites(newFavorites));
+    } else {
+      // Adaugă obiectul complet
+      const newFavorites = [...currentFavorites, problema];
+      await updateDoc(userRef, { favorites: newFavorites });
+      dispatch(setFavorites(newFavorites));
+    }
+  };
 
   const getDifficultyClass = (dificultate) => {
     return `badge-difficulty ${dificultate || 'default'}`;
@@ -172,17 +222,29 @@ export const ProblemaDetaliata = ({ problema, onBack }) => {
                     <span className="total-points">Total: {problema.punctajTotal} puncte</span>
                   </div>
                 </div>
-                <button
-                  onClick={copyToClipboard}
-                  className="copy-button"
-                  title="Copiază problema completă"
-                >
-                  {copied ? (
-                    <Check className="w-5 h-5 text-green-600" />
-                  ) : (
-                    <Copy className="w-5 h-5 text-gray-600 hover:text-blue-600" />
-                  )}
-                </button>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <button
+                    className="copy-btn"
+                    onClick={copyToClipboard}
+                    title={copied ? 'Copiat!' : 'Copiază enunțul'}
+                    style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+                  >
+                    <Copy size={20} />
+                  </button>
+                  <button
+                    className="favorite-btn"
+                    onClick={handleToggleFavorite}
+                    title={isFavorite ? 'Șterge de la favorite' : 'Adaugă la favorite'}
+                    style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+                    disabled={!problema.id}
+                  >
+                    {isFavorite ? (
+                      <svg width="24" height="24" fill="#FFD700" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                    ) : (
+                      <svg width="24" height="24" fill="none" stroke="#FFD700" strokeWidth="2" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                    )}
+                  </button>
+                </div>
               </div>
             </CardHeader>
             <CardContent>

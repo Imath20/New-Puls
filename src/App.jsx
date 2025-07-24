@@ -5,7 +5,7 @@ import Home from "@/components/Home";
 import OurWork from "@/components/OurWork";
 import Services from "@/components/Services";
 import Testimonials from "@/components/Testimonials";
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, useParams } from 'react-router-dom';
 import SearchResults from "./components/pages/searchresults";
 import './scss/style.scss';
 import Index from "./components/pages/Index";
@@ -19,6 +19,21 @@ import Seism from "./components/pages/resurse/seism";
 import ScrollToTop from "./components/ScrollToTop";
 import Profile from "./components/pages/Profile";
 import ProblemSubmit from "./components/ProblemSubmit";
+import ProblemaDetaliata from './components/Problemadetaliata';
+import { problemeData } from './components/problemedata';
+import { useSelector } from 'react-redux';
+
+function ProblemaDetaliataPage() {
+  const { id } = useParams();
+  const userProblems = useSelector(state => state.problems.userProblems);
+  const favorites = useSelector(state => state.problems.favorites);
+  const allProblems = [...problemeData, ...userProblems, ...favorites];
+  const problema = allProblems.find(p => String(p.id) === String(id));
+  if (!problema) {
+    return <div style={{ padding: 32, color: '#c00', fontWeight: 600 }}>Eroare: problema nu a fost găsită.</div>;
+  }
+  return <ProblemaDetaliata problema={problema} />;
+}
 
 const App = () => {
 
@@ -100,6 +115,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/probleme" element={<Probleme />} />
+          <Route path="/probleme/:id" element={<ProblemaDetaliataPage />} />
           <Route path="/simulari" element={<Simulari />} />
           <Route path="/resurse" element={<Resurse />} />
           <Route path="/resurse/pendule" element={<Pendule />} />

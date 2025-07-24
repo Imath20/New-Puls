@@ -1,10 +1,14 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Layout from "../Layout";
 import Slideshow from "../Slideshow";
 import { Waves, Atom, Circle, Activity, Calculator, BookOpen, Lightbulb, Target } from "lucide-react";
 import { useEffect } from "react";
 import useTranslate, { getTextNodes, useTranslateObject } from "../../hooks/useTranslate";
 import { problemeData } from "../problemedata";
+import { auth, provider } from '../../lib/firebase';
+import { signInWithPopup } from 'firebase/auth';
+import { onAuthStateChanged } from 'firebase/auth';
+import React from "react";
 
 translate = () => {
     const texts = getTextNodes(document.body);
@@ -20,7 +24,13 @@ const Index = () => {
     const getProblemsCountByDifficulty = (difficulty) => {
         return problemeData.filter(problem => problem.dificultate === difficulty).length;
     };
-
+    const handleGoogleLogin = async () => {
+        try {
+            await signInWithPopup(auth, provider);
+        } catch (error) {
+            setAliasError('Eroare la autentificare.');
+        }
+    };
     // Funcție pentru a calcula numărul total de probleme
     const getTotalProblemsCount = () => {
         return problemeData.length;
@@ -39,7 +49,15 @@ const Index = () => {
 
     // const texts = useTranslate().map(text => text);
     const translations = useTranslateObject();
-    
+    const [user, setUser] = React.useState(null);
+    const navigate = useNavigate();
+
+    React.useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+            setUser(firebaseUser);
+        });
+        return () => unsubscribe();
+    }, []);
 
     useEffect(() => {
         const hiddenElements = document.querySelectorAll('.hidden');
@@ -53,7 +71,7 @@ const Index = () => {
     useEffect(() => {
         console.log(JSON.stringify(translations, null, 2));
     }, [translations]);
-    
+
     return (
         <Layout>
             {/* Hero Section */}
@@ -65,12 +83,25 @@ const Index = () => {
                             PULS - Platforma educațională pentru studiul conceptelor de Pendul, Unde, Lissajous și Seism prin probleme și simulări interactive.
                         </p>
                         <div className="buttons">
-                            <button className="filled">
-                                <Link to="/probleme" style={{ 'all': 'unset' }}>Exploreaza problemele</Link>
-                            </button>
-                            <button>
-                                <Link to="/simulari" style={{ 'all': 'unset' }}>Incearca simularile</Link>
-                            </button>
+                            {user ? (
+                                <>
+                                    <button className="filled">
+                                        <Link to="/probleme" style={{ 'all': 'unset' }}>Exploreaza problemele</Link>
+                                    </button>
+                                    <button>
+                                        <Link to="/simulari" style={{ 'all': 'unset' }}>Incearca simularile</Link>
+                                    </button>
+                                </>
+                            ) : (
+                                <>
+                                    <button className="filled" onClick={handleGoogleLogin}>
+                                        Înregistrează-te
+                                    </button>
+                                    <button onClick={handleGoogleLogin}>
+                                        Autentifică-te
+                                    </button>
+                                </>
+                            )}
                         </div>
                     </div>
                     <div className="hero-slideshow-wrapper">
@@ -201,7 +232,7 @@ const Index = () => {
                         </div>
                     </Link>
 
-                   <Link to="/probleme?difficulty=dificil" className="problem-card-link">
+                    <Link to="/probleme?difficulty=dificil" className="problem-card-link">
                         <div className="problem-card">
                             <div className="problem-icon">
                                 <Lightbulb size={32} strokeWidth={1.5} />

@@ -6,9 +6,72 @@ import { doc, setDoc, getDoc, updateDoc, collection, query, where, getDocs } fro
 import { useDispatch, useSelector } from 'react-redux';
 import { setFavorites } from '../../problemeSlice';
 import { problemeData } from '../problemedata';
-import ProblemCard from '../Problemadetaliata'; // sau importă corect ProblemCard din pagina de probleme
+import { ProblemCard } from './Probleme.jsx';
 import ProblemaDetaliata from '../Problemadetaliata';
 import { Link } from 'react-router-dom';
+
+// FavoriteProblemCard definit aici
+const ExternalLinkIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+    <polyline points="15,3 21,3 21,9" />
+    <line x1="10" y1="14" x2="21" y2="3" />
+  </svg>
+);
+
+const FavoriteProblemCard = ({ problem, onUnstar, onResolveClick }) => {
+  const { index, titlu, dificultate, categorie, solved, createdByAlias } = problem;
+  const getDifficultyColorClass = (diff) => {
+    switch (diff) {
+      case 'ușor':
+      case 'usoare':
+        return 'difficulty--usor';
+      case 'mediu':
+      case 'medii':
+        return 'difficulty--mediu';
+      case 'dificil':
+      case 'dificile':
+        return 'difficulty--dificil';
+      case 'concurs':
+      case 'concursuri':
+        return 'difficulty--concurs';
+      default:
+        return '';
+    }
+  };
+  return (
+    <div className={`problem-card${solved ? ' solved' : ''}`} style={{ position: 'relative' }}>
+      {createdByAlias && (
+        <span style={{ position: 'absolute', top: 8, right: 36, fontSize: 12, fontStyle: 'italic', color: '#888', zIndex: 2 }} title="Autor problemă">{createdByAlias}</span>
+      )}
+      <button
+        onClick={onUnstar}
+        title="Elimină din favorite"
+        style={{ position: 'absolute', right: 8, top: 8, background: 'none', border: 'none', cursor: 'pointer', fontSize: 22, color: '#f5b301', zIndex: 3 }}
+      >
+        ★
+      </button>
+      <div className="problem-card-header">
+        <div className="problem-card-info">
+          <span className="problem-card-id">#{index}</span>
+          <h3 className="problem-card-title">{titlu}</h3>
+          <p className="problem-card-topic">{categorie}</p>
+        </div>
+        {solved && <div className="problem-card-solved-badge">Rezolvată</div>}
+      </div>
+      <div className="problem-card-footer">
+        <div className={`problem-card-difficulty ${getDifficultyColorClass(dificultate)}`}>{dificultate}</div>
+        <button
+          className="problem-card-link"
+          onClick={() => onResolveClick(problem)}
+        >
+          <span>Rezolvă</span>
+          <ExternalLinkIcon />
+        </button>
+      </div>
+    </div>
+  );
+};
 
 const ADMIN_EMAILS = [
   'matbajean@gmail.com',
@@ -247,10 +310,10 @@ const Profile = () => {
                 <div className="profile-container profile-login-center">
                     <h2 className="profile-title">Profil</h2>
                     <div className="profile-login-btns">
-                        <button className="profile-btn profile-btn-red" onClick={handleGoogleLogin}>
+                        <button className="profile-btn-big profile-btn-red" onClick={handleGoogleLogin}>
                             Înregistrează-te cu Google
                         </button>
-                        <button className="profile-btn profile-btn-blue" onClick={handleGoogleLogin}>
+                        <button className="profile-btn-big profile-btn-blue" onClick={handleGoogleLogin}>
                             Autentifică-te cu Google
                         </button>
                     </div>
@@ -405,9 +468,22 @@ const Profile = () => {
                                     <div style={{ maxHeight: '420px', overflowY: 'auto', paddingRight: 8 }}>
                                         <div className="problems-grid">
                                             {favoriteProblems.filter(p => p && p.id).map(problem => (
-                                                <Link key={problem.id} to={`/probleme/${problem.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                                                    <ProblemCard problem={problem} />
-                                                </Link>
+                                                <FavoriteProblemCard
+                                                    key={problem.id}
+                                                    problem={problem}
+                                                    onUnstar={async (e) => {
+                                                        e.preventDefault();
+                                                        // elimină din favorite
+                                                        const userRef = doc(db, 'users', user.uid);
+                                                        const snap = await getDoc(userRef);
+                                                        if (snap.exists() && snap.data().favorites) {
+                                                            const newFavs = snap.data().favorites.filter(fid => fid !== problem.id);
+                                                            await setDoc(userRef, { favorites: newFavs }, { merge: true });
+                                                            dispatch(setFavorites(newFavs));
+                                                        }
+                                                    }}
+                                                    onResolveClick={() => window.location.href = `/probleme/${problem.id}`}
+                                                />
                                             ))}
                                         </div>
                                     </div>

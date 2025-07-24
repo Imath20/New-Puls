@@ -29,8 +29,11 @@ const problemsSlice = createSlice({
     removeFavorite: (state, action) => {
       state.favorites = state.favorites.filter(id => id !== action.payload);
     },
+    setUserProblems: (state, action) => {
+      state.userProblems = action.payload;
+    },
   },
 });
 
-export const { addProblem, removeProblem, setProblems, setFavorites, addFavorite, removeFavorite } = problemsSlice.actions;
+export const { addProblem, removeProblem, setProblems, setFavorites, addFavorite, removeFavorite, setUserProblems } = problemsSlice.actions;
 export default problemsSlice.reducer;

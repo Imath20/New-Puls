@@ -11,7 +11,7 @@ import ProblemSubmit from './ProblemSubmit';
 import { useDispatch, useSelector } from 'react-redux';
 import { addFavorite, removeFavorite, setFavorites } from '../problemeSlice';
 import { db } from '../lib/firebase';
-import { doc, updateDoc, arrayUnion, arrayRemove, getDoc } from 'firebase/firestore';
+import { doc, updateDoc, arrayUnion, arrayRemove, getDoc, deleteDoc } from 'firebase/firestore';
 import { auth } from '../lib/firebase';
 
 export const ProblemaDetaliata = ({ problema, onBack }) => {
@@ -23,6 +23,7 @@ export const ProblemaDetaliata = ({ problema, onBack }) => {
   const dispatch = useDispatch();
   const favorites = useSelector(state => state.problems.favorites);
   const [user, setUser] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (firebaseUser) => {
@@ -34,8 +35,14 @@ export const ProblemaDetaliata = ({ problema, onBack }) => {
         if (snap.exists() && snap.data().favorites) {
           dispatch({ type: 'problems/setFavorites', payload: snap.data().favorites });
         }
+        setIsAdmin(snap.exists() && (snap.data().isAdmin || [
+          'matbajean@gmail.com',
+          'aleluianu09@gmail.com',
+          'pulsphysics@gmail.com',
+        ].includes(firebaseUser.email)));
       } else {
         setUser(null);
+        setIsAdmin(false);
       }
     });
     return () => unsubscribe();
@@ -248,12 +255,21 @@ export const ProblemaDetaliata = ({ problema, onBack }) => {
               </div>
             </CardHeader>
             <CardContent>
-              {problema.imagine && (
+              {/* Afișează toate imaginile din array-ul images dacă există */}
+              {Array.isArray(problema.images) && problema.images.length > 0 && (
+                <div className="problema-imagini-grid" style={{ display: 'flex', gap: 12, flexWrap: 'wrap', justifyContent: 'center', marginBottom: 16 }}>
+                  {problema.images.map((url, i) => (
+                    <img key={i} src={url} alt={`Ilustrație problemă ${i+1}`} style={{ maxWidth: 180, maxHeight: 180, borderRadius: 8, boxShadow: '0 2px 8px rgba(0,0,0,0.08)', objectFit: 'cover' }} />
+                  ))}
+                </div>
+              )}
+              {/* Fallback pentru imagine/imagine1/imagine2 */}
+              {problema.imagine && !problema.images && (
                 <div className="problema-imagine-container" style={{ textAlign: 'center', marginBottom: '1rem' }}>
                   <img src={problema.imagine} alt="Ilustrație problemă" style={{ maxWidth: '100%', height: 'auto', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }} />
                 </div>
               )}
-              {problema.imagine1 && (
+              {problema.imagine1 && !problema.images && (
                 <div className="problema-imagine-container" style={{ textAlign: 'center', marginBottom: '1rem', display: 'flex', justifyContent: 'space-between', gap: '1rem' }}>
                   <img src={problema.imagine1} alt="Ilustrație problemă" style={{ maxWidth: '50%', height: 'auto', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }} />
                   <img src={problema.imagine2} alt="Ilustrație problemă" style={{ maxWidth: '50%', height: 'auto', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }} />
@@ -352,6 +368,7 @@ export const ProblemaDetaliata = ({ problema, onBack }) => {
             </CardContent>
           </Card>
 
+          {/* Card Ajutor AI */}
           <Card>
             <CardHeader>
               <CardTitle className="text-lg">Ajutor AI</CardTitle>
@@ -366,6 +383,47 @@ export const ProblemaDetaliata = ({ problema, onBack }) => {
               </p>
             </CardContent>
           </Card>
+
+          {/* Buton de ștergere problemă pentru autor sau admin - mutat sub AI */}
+          {user && (isAdmin || problema.createdByAlias === user.displayName || problema.createdByAlias === user.alias) && (
+            <div style={{ marginTop: 24, textAlign: 'center' }}>
+              <button
+                style={{
+                  background: '#c00',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: 6,
+                  padding: '10px 24px',
+                  fontWeight: 600,
+                  fontSize: 16,
+                  cursor: 'pointer',
+                  marginBottom: 24
+                }}
+                onClick={async () => {
+                  if (window.confirm('Ești sigur că vrei să ștergi această problemă? Această acțiune este ireversibilă.')) {
+                    try {
+                      // Șterge din Firestore
+                      const userId = user.uid;
+                      const problemId = problema.id;
+                      await import('firebase/firestore').then(async ({ deleteDoc, doc }) => {
+                        await deleteDoc(doc(db, 'users', userId, 'userProblems', problemId));
+                      });
+                      // Șterge din store Redux (dacă există acțiune)
+                      dispatch({ type: 'problems/removeProblem', payload: problemId });
+                      // Navighează la lista de probleme
+                      if (onBack) onBack();
+                      else navigate('/probleme');
+                    } catch (err) {
+                      alert('Eroare la ștergere: ' + err.message);
+                    }
+                  }
+                }}
+              >
+                Șterge problema
+              </button>
+            </div>
+          )}
+
         </div>
 
       {/* Mutat aici: Card Trimite o problemă */}

@@ -9,6 +9,7 @@ import { problemeData } from '../problemedata';
 import { ProblemCard } from './Probleme.jsx';
 import ProblemaDetaliata from '../Problemadetaliata';
 import { Link } from 'react-router-dom';
+import '../../scss/components/_probleme.scss';
 
 // FavoriteProblemCard definit aici
 const ExternalLinkIcon = () => (
@@ -41,16 +42,19 @@ const FavoriteProblemCard = ({ problem, onUnstar, onResolveClick }) => {
   };
   return (
     <div className={`problem-card${solved ? ' solved' : ''}`} style={{ position: 'relative' }}>
-      {createdByAlias && (
-        <span style={{ position: 'absolute', top: 8, right: 36, fontSize: 12, fontStyle: 'italic', color: '#888', zIndex: 2 }} title="Autor problemă">{createdByAlias}</span>
-      )}
+      {/* Steaua pentru favorite, poziționată absolut, nu afectează layout-ul */}
       <button
         onClick={onUnstar}
         title="Elimină din favorite"
-        style={{ position: 'absolute', right: 8, top: 8, background: 'none', border: 'none', cursor: 'pointer', fontSize: 22, color: '#f5b301', zIndex: 3 }}
+        style={{ position: 'absolute', right: 12, top: 12, background: 'none', border: 'none', cursor: 'pointer', fontSize: 22, color: '#f5b301', zIndex: 3 }}
+        aria-label="Elimină din favorite"
       >
         ★
       </button>
+      {/* Autorul, ca la ProblemCard */}
+      {createdByAlias && (
+        <span style={{ position: 'absolute', top: 12, right: 44, fontSize: 12, fontStyle: 'italic', color: '#888', zIndex: 2 }} title="Autor problemă">{createdByAlias}</span>
+      )}
       <div className="problem-card-header">
         <div className="problem-card-info">
           <span className="problem-card-id">#{index}</span>

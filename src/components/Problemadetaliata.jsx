@@ -48,7 +48,7 @@ export const ProblemaDetaliata = ({ problema, onBack }) => {
     return () => unsubscribe();
   }, [dispatch]);
 
-  const isFavorite = favorites.some(p => p.id === problema.id);
+  const isFavorite = favorites.includes(problema.id);
   const handleToggleFavorite = async () => {
     if (!user) return;
     const userRef = doc(db, 'users', user.uid);
@@ -59,12 +59,12 @@ export const ProblemaDetaliata = ({ problema, onBack }) => {
     }
     if (isFavorite) {
       // Șterge problema după id
-      const newFavorites = currentFavorites.filter(p => p.id !== problema.id);
+      const newFavorites = currentFavorites.filter(fid => fid !== problema.id);
       await updateDoc(userRef, { favorites: newFavorites });
       dispatch(setFavorites(newFavorites));
     } else {
-      // Adaugă obiectul complet
-      const newFavorites = [...currentFavorites, problema];
+      // Adaugă doar id-ul problemei
+      const newFavorites = [...currentFavorites, problema.id];
       await updateDoc(userRef, { favorites: newFavorites });
       dispatch(setFavorites(newFavorites));
     }

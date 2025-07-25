@@ -10,6 +10,9 @@ import { ProblemCard } from './Probleme.jsx';
 import ProblemaDetaliata from '../Problemadetaliata';
 import { Link } from 'react-router-dom';
 import '../../scss/components/_probleme.scss';
+import RecentActivity from '../RecentActivity';
+import Achievements from '../Achievements';
+import Statistics from '../Statistics';
 
 // FavoriteProblemCard definit aici
 const ExternalLinkIcon = () => (
@@ -20,6 +23,7 @@ const ExternalLinkIcon = () => (
   </svg>
 );
 
+// FavoriteProblemCard identic cu ProblemCard din Probleme.jsx
 const FavoriteProblemCard = ({ problem, onUnstar, onResolveClick }) => {
   const { index, titlu, dificultate, categorie, solved, createdByAlias } = problem;
   const getDifficultyColorClass = (diff) => {
@@ -70,7 +74,7 @@ const FavoriteProblemCard = ({ problem, onUnstar, onResolveClick }) => {
           onClick={() => onResolveClick(problem)}
         >
           <span>Rezolvă</span>
-          <ExternalLinkIcon />
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /><polyline points="15,3 21,3 21,9" /><line x1="10" y1="14" x2="21" y2="3" /></svg>
         </button>
       </div>
     </div>
@@ -102,6 +106,9 @@ const Profile = () => {
     const fileInputRef = React.useRef();
     const dispatch = useDispatch();
     const [selectedFavorite, setSelectedFavorite] = useState(null);
+    const [activityLog, setActivityLog] = useState([]);
+    const [achievements, setAchievements] = useState([]);
+    const [statistics, setStatistics] = useState({});
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
@@ -304,6 +311,70 @@ const Profile = () => {
         }
     };
 
+    useEffect(() => {
+        if (!user || !user.uid) return;
+        // Forțez încărcarea userProblems și a favoritelor
+        const fetchUserProblems = async () => {
+            const userProblemsRef = collection(db, 'users', user.uid, 'userProblems');
+            const querySnapshot = await getDocs(userProblemsRef);
+            const userProblemsList = querySnapshot.docs.map(doc => doc.data());
+            dispatch({ type: 'problems/setUserProblems', payload: userProblemsList });
+        };
+        const fetchFavorites = async () => {
+            const userRef = doc(db, 'users', user.uid);
+            const snap = await getDoc(userRef);
+            if (snap.exists() && snap.data().favorites) {
+                dispatch(setFavorites(snap.data().favorites));
+            }
+        };
+        fetchUserProblems();
+        fetchFavorites();
+    }, [user, dispatch]);
+
+    useEffect(() => {
+        if (!user || !user.uid) return;
+        // Probleme adăugate de utilizator
+        const addedProblems = userProblems.filter(p => p.createdByAlias === alias);
+        // Probleme rezolvate
+        const solvedProblems = [...problemeData, ...userProblems].filter(p => p.solved && p.solvedBy === user.uid);
+        // Simulări accesate (din Firestore, dacă există)
+        let simulationsVisited = [];
+        const fetchSimulations = async () => {
+            try {
+                const userRef = doc(db, 'users', user.uid);
+                const snap = await getDoc(userRef);
+                if (snap.exists() && snap.data().simulationsVisited) {
+                    simulationsVisited = snap.data().simulationsVisited;
+                }
+            } catch (e) {}
+            // Construim activityLog
+            const activity = [
+                ...solvedProblems.map(p => ({ type: 'problem_solved', title: p.titlu, date: p.solvedAt || '', link: p.id ? `/probleme/${p.id}` : undefined })),
+                ...addedProblems.map(p => ({ type: 'problem_added', title: p.titlu, date: p.createdAt || '', link: p.id ? `/probleme/adaugata/${p.id}` : undefined })),
+                ...simulationsVisited.map(s => ({ type: 'simulation_visited', title: s.title, date: s.date, link: s.id ? `/simulari/${s.id}` : undefined })),
+            ].sort((a, b) => new Date(b.date) - new Date(a.date));
+            setActivityLog(activity);
+            // Achievements cumulative pentru probleme adăugate
+            const ach = [];
+            if (addedProblems.length >= 1) ach.push({ type: 'milestone', title: 'Începător în fizică', description: 'Ai adăugat prima ta problemă!', color: '#b0b0b0' });
+            if (addedProblems.length >= 5) ach.push({ type: 'milestone', title: 'Avansat', description: 'Ai adăugat 5 probleme!', color: '#4a90e2' });
+            if (addedProblems.length >= 10) ach.push({ type: 'milestone', title: 'Maestru', description: 'Ai adăugat 10 probleme!', color: '#ffd700' });
+            // Realizări pentru simulări accesate și probleme rezolvate
+            solvedProblems.forEach(p => ach.push({ type: 'problem_solved', title: p.titlu, date: p.solvedAt || '' }));
+            addedProblems.forEach(p => ach.push({ type: 'problem_added', title: p.titlu, date: p.createdAt || '' }));
+            simulationsVisited.forEach(s => ach.push({ type: 'simulation_visited', title: s.title, date: s.date }));
+            setAchievements(ach);
+            // Statistici pe dificultate și categorie DOAR pentru probleme adăugate
+            const stats = { dificultate: {}, categorie: {} };
+            addedProblems.forEach(p => {
+                if (p.dificultate) stats.dificultate[p.dificultate] = (stats.dificultate[p.dificultate] || 0) + 1;
+                if (p.categorie) stats.categorie[p.categorie] = (stats.categorie[p.categorie] || 0) + 1;
+            });
+            setStatistics(stats);
+        };
+        fetchSimulations();
+    }, [user, userProblems, alias]);
+
     if (loading) {
         return <Layout><div className="profile-container"><p>Se încarcă...</p></div></Layout>;
     }
@@ -457,10 +528,7 @@ const Profile = () => {
                     <div className="tab-content">
                         {activeTab === 'activitate' && (
                             <div className="activity-content">
-                                <div className="empty-state">
-                                    <h3>Activitatea ta va apărea aici</h3>
-                                    <p>Rezolvă probleme sau folosește simulări pentru a vedea progresul.</p>
-                                    </div>
+                                <RecentActivity activityLog={activityLog} />
                             </div>
                         )}
                         {activeTab === 'probleme' && (
@@ -496,18 +564,12 @@ const Profile = () => {
                         )}
                         {activeTab === 'realizari' && (
                             <div className="achievements-content">
-                                <div className="empty-state">
-                                    <h3>Realizările tale vor apărea aici</h3>
-                                    <p>Rezolvă probleme pentru a debloca realizări!</p>
-                                    </div>
+                                <Achievements achievements={achievements} />
                             </div>
                         )}
                         {activeTab === 'statistici' && (
                             <div className="statistics-content">
-                                <div className="empty-state">
-                                    <h3>Statistici</h3>
-                                    <p>Progresul tău va fi afișat aici.</p>
-                                </div>
+                                <Statistics statistics={statistics} />
                             </div>
                         )}
                     </div>

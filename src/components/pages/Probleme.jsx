@@ -324,6 +324,19 @@ const PhysicsProblems = () => {
       }
       setUploading(false);
     };
+
+    const fetchAllUserProblems = async () => {
+      const usersSnap = await getDocs(collection(db, 'users'));
+      let allUserProblems = [];
+      for (const userDoc of usersSnap.docs) {
+        const userProblemsRef = collection(db, 'users', userDoc.id, 'userProblems');
+        const problemsSnap = await getDocs(userProblemsRef);
+        allUserProblems = allUserProblems.concat(problemsSnap.docs.map(doc => doc.data()));
+      }
+      console.log('Probleme actualizate din Firestore:', allUserProblems);
+      dispatch(setUserProblems(allUserProblems));
+    };
+
     const handleAddProblem = async () => {
       if (!newTitle.trim() || !newCategory || !newDifficulty || !newEnunt.trim()) {
         alert('Completează toate câmpurile!');
@@ -349,14 +362,16 @@ const PhysicsProblems = () => {
         punctajTotal: newPunctajTotal,
         subpuncte: newSubpuncte.filter(sp => sp.cerinta && sp.punctaj),
         createdByAlias,
+        createdByUid: user ? user.uid : undefined,
       };
-      dispatch(addProblem(newProblem));
-      setShowAddModal(false);
-      setNewTitle(''); setNewCategory(categories[1] || ''); setNewDifficulty(difficulties[1] || ''); setNewEnunt(''); setNewImages([]); setNewPunctajTotal(''); setNewSubpuncte([{ cerinta: '', punctaj: '' }]);
       if (user) {
         const userProblemRef = doc(db, 'users', user.uid, 'userProblems', newProblem.id);
         await setDoc(userProblemRef, newProblem);
+        await fetchAllUserProblems();
       }
+      dispatch(addProblem(newProblem));
+      setShowAddModal(false);
+      setNewTitle(''); setNewCategory(categories[1] || ''); setNewDifficulty(difficulties[1] || ''); setNewEnunt(''); setNewImages([]); setNewPunctajTotal(''); setNewSubpuncte([{ cerinta: '', punctaj: '' }]);
     };
 
     const [selectedUserProblem, setSelectedUserProblem] = useState(null);
@@ -471,16 +486,26 @@ const PhysicsProblems = () => {
     const handleRemoveUserProblem = async (id) => {
       const user = auth.currentUser;
       if (!user) return;
+      const problem = userProblems.find(p => p.id === id);
+      const isAdmin = [
+        'matbajean@gmail.com',
+        'aleluianu09@gmail.com',
+        'pulsphysics@gmail.com',
+      ].includes(user.email);
+      let ownerUid = user.uid;
+      if (isAdmin && problem && problem.createdByUid && problem.createdByUid !== user.uid) {
+        ownerUid = problem.createdByUid;
+      }
       try {
-        await deleteDoc(doc(db, 'users', user.uid, 'userProblems', id));
-        dispatch(removeProblem(id));
-        // Așteaptă ca Redux să se actualizeze, apoi reindexează
-        const updated = userProblems.filter(p => p.id !== id);
-        await reindexUserProblems(updated);
+        await deleteDoc(doc(db, 'users', ownerUid, 'userProblems', id));
+        await fetchAllUserProblems();
       } catch (err) {
         alert('Eroare la ștergere: ' + err.message);
       }
     };
+
+    // Debug: loghează userProblems la fiecare randare
+    console.log('Probleme din store:', userProblems);
 
     return (
         <Layout>

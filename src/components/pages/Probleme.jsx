@@ -466,21 +466,24 @@ const PhysicsProblems = () => {
       );
     }
 
-    // Adaugă funcția de reindexare userProblems după ștergere
-    const reindexUserProblems = async (problems) => {
-      // Sortează după index vechi, apoi reindexează
-      const sorted = [...problems].sort((a, b) => (a.index || 0) - (b.index || 0));
-      const user = auth.currentUser;
+    // Funcție utilitară pentru reindexarea problemelor după ștergere
+    const reindexProblemsAfterDelete = async (ownerUid) => {
+      const userProblemsRef = collection(db, 'users', ownerUid, 'userProblems');
+      const problemsSnap = await getDocs(userProblemsRef);
+      const remainingProblems = problemsSnap.docs.map(doc => doc.data());
+      
+      // Sortează după index vechi și reindexează
+      const sorted = [...remainingProblems].sort((a, b) => (a.index || 0) - (b.index || 0));
+      
+      // Găsește ultimul index din problemele existente (din problemeData)
+      const maxExistingIndex = problemeData.length > 0 ? Math.max(...problemeData.map(p => Number(p.index) || 0)) : 0;
+      
+      // Reindexează începând de la ultimul index existent + 1 (care ar trebui să fie 14)
       for (let i = 0; i < sorted.length; i++) {
-        const p = { ...sorted[i], index: i + 1 };
-        // Update Firestore
-        if (user) {
-          const userProblemRef = doc(db, 'users', user.uid, 'userProblems', p.id);
-          await setDoc(userProblemRef, p, { merge: true });
-        }
-        sorted[i] = p;
+        const p = { ...sorted[i], index: maxExistingIndex + i + 1 };
+        const userProblemRef = doc(db, 'users', ownerUid, 'userProblems', p.id);
+        await setDoc(userProblemRef, p, { merge: true });
       }
-      dispatch(setUserProblems(sorted));
     };
 
     const handleRemoveUserProblem = async (id) => {
@@ -498,6 +501,10 @@ const PhysicsProblems = () => {
       }
       try {
         await deleteDoc(doc(db, 'users', ownerUid, 'userProblems', id));
+        
+        // Reindexare automată după ștergere
+        await reindexProblemsAfterDelete(ownerUid);
+        
         await fetchAllUserProblems();
       } catch (err) {
         alert('Eroare la ștergere: ' + err.message);

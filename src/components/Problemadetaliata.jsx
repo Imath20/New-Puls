@@ -189,6 +189,28 @@ export const ProblemaDetaliata = ({ problema, onBack }) => {
     }
   };
 
+  // Funcție utilitară pentru reindexarea problemelor după ștergere
+  const reindexProblemsAfterDelete = async (ownerUid) => {
+    const { getDocs, collection, setDoc, doc } = await import('firebase/firestore');
+    const userProblemsRef = collection(db, 'users', ownerUid, 'userProblems');
+    const problemsSnap = await getDocs(userProblemsRef);
+    const remainingProblems = problemsSnap.docs.map(doc => doc.data());
+    
+    // Sortează după index vechi și reindexează
+    const sorted = [...remainingProblems].sort((a, b) => (a.index || 0) - (b.index || 0));
+    
+    // Găsește ultimul index din problemele existente (din problemeData)
+    const { problemeData } = await import('./problemedata');
+    const maxExistingIndex = problemeData.length > 0 ? Math.max(...problemeData.map(p => Number(p.index) || 0)) : 0;
+    
+    // Reindexează începând de la ultimul index existent + 1 (care ar trebui să fie 14)
+    for (let i = 0; i < sorted.length; i++) {
+      const p = { ...sorted[i], index: maxExistingIndex + i + 1 };
+      const userProblemRef = doc(db, 'users', ownerUid, 'userProblems', p.id);
+      await setDoc(userProblemRef, p, { merge: true });
+    }
+  };
+
   // Adaugă funcția de conversie pentru delimitatori MathJax
   function convertDollarToInlineMathJax(str) {
     if (!str) return str;
@@ -384,8 +406,12 @@ export const ProblemaDetaliata = ({ problema, onBack }) => {
             </CardContent>
           </Card>
 
-          {/* Buton de ștergere problemă pentru autor sau admin - mutat sub AI */}
-          {user && (isAdmin || problema.createdByAlias === user.displayName || problema.createdByAlias === user.alias) && (
+          {/* Buton de ștergere problemă pentru autor sau admin */}
+          {user && (
+            isAdmin ||
+            (problema.createdByUid && problema.createdByUid === user.uid) ||
+            (problema.createdByAlias && (problema.createdByAlias === user.displayName || problema.createdByAlias === user.alias))
+          ) && (
             <div style={{ marginTop: 24, textAlign: 'center' }}>
               <button
                 style={{
@@ -402,15 +428,14 @@ export const ProblemaDetaliata = ({ problema, onBack }) => {
                 onClick={async () => {
                   if (window.confirm('Ești sigur că vrei să ștergi această problemă? Această acțiune este ireversibilă.')) {
                     try {
-                      // Șterge din Firestore
-                      const userId = user.uid;
+                      const ownerUid = problema.createdByUid || user.uid;
                       const problemId = problema.id;
                       await import('firebase/firestore').then(async ({ deleteDoc, doc }) => {
-                        await deleteDoc(doc(db, 'users', userId, 'userProblems', problemId));
+                        await deleteDoc(doc(db, 'users', ownerUid, 'userProblems', problemId));
+                        
+                        // Reindexare automată după ștergere
+                        await reindexProblemsAfterDelete(ownerUid);
                       });
-                      // Șterge din store Redux (dacă există acțiune)
-                      dispatch({ type: 'problems/removeProblem', payload: problemId });
-                      // Navighează la lista de probleme
                       if (onBack) onBack();
                       else navigate('/probleme');
                     } catch (err) {

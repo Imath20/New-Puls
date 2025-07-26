@@ -8,11 +8,7 @@ const RecentActivity = ({ activityLog = [] }) => (
       {activityLog.map((activity, idx) => (
         <li key={idx} style={{marginBottom: '1em'}}>
           <strong>{activity.type === 'problem_solved' ? 'Rezolvare problemă' : activity.type === 'problem_added' ? 'Problemă adăugată' : 'Simulare accesată'}:</strong> {activity.link ? (
-            activity.link.startsWith(`/probleme/${activity.id}`) ? (
-              <a href={activity.link} onClick={e => { e.preventDefault(); window.location = activity.link; }}>{activity.title}</a>
-            ) : (
-              <a href={activity.link}>{activity.title}</a>
-            )
+            <a href={activity.link} onClick={e => { e.preventDefault(); window.location = activity.link; }}>{activity.title}</a>
           ) : activity.title} <br/>
           <small>{activity.date}</small>
         </li>

@@ -24,7 +24,7 @@ const Statistics = ({ statistics = {} }) => {
           {dificultateData.length === 0 ? (
             <div>Nu există statistici pe dificultate.</div>
           ) : (
-            <div style={{ width: "100%", height: 250 }}>
+            <div style={{ width: "100%", height: 280 }}>
               <ResponsiveContainer>
                 <PieChart>
                   <Pie
@@ -53,7 +53,7 @@ const Statistics = ({ statistics = {} }) => {
           {categorieData.length === 0 ? (
             <div>Nu există statistici pe categorie.</div>
           ) : (
-            <div style={{ width: "100%", height: 250 }}>
+            <div style={{ width: "100%", height: 280 }}>
               <ResponsiveContainer>
                 <PieChart>
                   <Pie

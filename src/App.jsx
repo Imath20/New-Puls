@@ -1,3 +1,4 @@
+import React from 'react';
 import About from "@/components/About";
 import Achievements from "@/components/Achievements";
 import ContactUs from "@/components/ContactUs";
@@ -20,19 +21,83 @@ import ScrollToTop from "./components/ScrollToTop";
 import Profile from "./components/pages/Profile";
 import ProblemSubmit from "./components/ProblemSubmit";
 import ProblemaDetaliata from './components/Problemadetaliata';
+import Layout from './components/Layout';
 import { problemeData } from './components/problemedata';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { setUserProblems } from './problemeSlice';
+import { db } from './lib/firebase';
+import { collection, getDocs } from 'firebase/firestore';
 
 function ProblemaDetaliataPage() {
   const { id } = useParams();
+  const dispatch = useDispatch();
   const userProblems = useSelector(state => state.problems.userProblems);
   const favorites = useSelector(state => state.problems.favorites);
-  const allProblems = [...problemeData, ...userProblems, ...favorites];
+  const [isLoading, setIsLoading] = React.useState(true);
+  
+  // Încarcă userProblems dacă nu sunt încărcate
+  React.useEffect(() => {
+    const fetchAllUserProblems = async () => {
+      try {
+        setIsLoading(true);
+        const usersSnap = await getDocs(collection(db, 'users'));
+        let allUserProblems = [];
+        for (const userDoc of usersSnap.docs) {
+          const userProblemsRef = collection(db, 'users', userDoc.id, 'userProblems');
+          const problemsSnap = await getDocs(userProblemsRef);
+          allUserProblems = allUserProblems.concat(problemsSnap.docs.map(doc => doc.data()));
+        }
+        dispatch(setUserProblems(allUserProblems));
+      } catch (error) {
+        console.error('Eroare la încărcarea problemelor:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    if (userProblems.length === 0) {
+      fetchAllUserProblems();
+    } else {
+      setIsLoading(false);
+    }
+  }, [dispatch, userProblems.length]);
+  
+  const allProblems = [...problemeData, ...userProblems];
+  
+  // Debug: afișează informații despre căutare
+  console.log('Căutare problemă cu ID:', id);
+  console.log('UserProblems:', userProblems.map(p => ({ id: p.id, titlu: p.titlu })));
+  console.log('Toate problemele:', allProblems.map(p => ({ id: p.id, titlu: p.titlu })));
+  
+  if (isLoading) {
+    return (
+      <Layout>
+        <div style={{ padding: 32, textAlign: 'center' }}>
+          Se încarcă problema...
+        </div>
+      </Layout>
+    );
+  }
+  
   const problema = allProblems.find(p => String(p.id) === String(id));
   if (!problema) {
-    return <div style={{ padding: 32, color: '#c00', fontWeight: 600 }}>Eroare: problema nu a fost găsită.</div>;
+    return (
+      <Layout>
+        <div style={{ padding: 32, color: '#c00', fontWeight: 600 }}>
+          Eroare: problema cu ID "{id}" nu a fost găsită.
+          <br />
+          Probleme disponibile: {allProblems.map(p => p.id).join(', ')}
+          <br />
+          UserProblems: {userProblems.map(p => p.id).join(', ')}
+        </div>
+      </Layout>
+    );
   }
-  return <ProblemaDetaliata problema={problema} />;
+  return (
+    <Layout>
+      <ProblemaDetaliata problema={problema} />
+    </Layout>
+  );
 }
 
 const App = () => {

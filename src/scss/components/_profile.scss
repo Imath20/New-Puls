@@ -8,6 +8,159 @@
     padding-top: 150px;
 }
 
+// Stiluri pentru cardurile favorite
+.profile-favorites-section {
+    h2 {
+        margin-bottom: 2rem;
+        border-bottom: 2px solid var(--border-color-current-mode);
+        padding-bottom: 1rem;
+    }
+    
+    .favorites-grid-container {
+        margin-top: 1rem;
+    }
+    
+    .problems-grid {
+        display: grid;
+        gap: 1.5rem;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        margin-bottom: 2rem;
+    }
+
+    .favorite-problem-card {
+        background-color: var(--secondary-background-current-mode);
+        border: 1px solid var(--border-color-current-mode);
+        border-radius: 8px;
+        padding: 1rem;
+        transition: all 0.2s ease;
+        position: relative;
+
+        &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        &.solved {
+            border-left: 4px solid #10b981;
+        }
+
+        // Stiluri pentru steaua de favorite
+        button[aria-label="Elimină din favorite"] {
+            position: absolute;
+            right: 12px;
+            top: 12px;
+            background: rgba(245, 179, 1, 0.1);
+            border: 1px solid #f5b301;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+            font-size: 16px;
+            color: #f5b301;
+            z-index: 3;
+            transition: all 0.2s ease;
+            transform: scale(1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            &:hover {
+                transform: scale(1.1);
+                background: rgba(245, 179, 1, 0.2);
+            }
+        }
+
+        .problem-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+
+            .problem-card-info {
+                flex: 1;
+
+                .problem-card-id {
+                    font-size: 0.875rem;
+                    color: var(--muted-color-current-mode);
+                    display: block;
+                    margin-bottom: 0.5rem;
+                }
+
+                .problem-card-title {
+                    font-size: 1.125rem;
+                    font-weight: 600;
+                    margin: 0 0 0.25rem 0;
+                    color: var(--primary-color-current-mode);
+                }
+
+                .problem-card-topic {
+                    font-size: 0.875rem;
+                    color: var(--muted-color-current-mode);
+                    margin: 0 0 0.75rem 0;
+                }
+            }
+
+            .problem-card-solved-badge {
+                background: #10b981;
+                color: #fff;
+                font-size: 0.75rem;
+                padding: 0.25rem 0.5rem;
+                border-radius: 9999px;
+                white-space: nowrap;
+            }
+        }
+
+        .problem-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            .problem-card-difficulty {
+                font-size: 0.75rem;
+                padding: 0.25rem 0.5rem;
+                border-radius: 9999px;
+                color: #fff;
+
+                &.difficulty--usor {
+                    background-color: #10b981;
+                }
+
+                &.difficulty--mediu {
+                    background-color: #f59e0b;
+                }
+
+                &.difficulty--dificil {
+                    background-color: #ef4444;
+                }
+
+                &.difficulty--concurs {
+                    background-color: rgb(119, 6, 248);
+                }
+            }
+
+            .problem-card-link {
+                font-size: 0.875rem;
+                color: var(--accent-color-current-mode);
+                background: transparent;
+                border: none;
+                cursor: pointer;
+                text-decoration: none;
+                display: flex;
+                align-items: center;
+                gap: 0.25rem;
+
+                &:hover {
+                    text-decoration: underline;
+                }
+
+                svg {
+                    flex-shrink: 0;
+                }
+            }
+        }
+    }
+}
+
 .profile-header {
     background: rgba(0, 0, 0, 0.02);
     padding: 2rem;
@@ -449,6 +602,24 @@
                     }
                 }
             }
+        }
+    }
+
+    .statistics-legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        justify-content: center;
+        margin-top: 1.5rem;
+        font-size: 1rem;
+        line-height: 1.2;
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            min-width: 90px;
+            word-break: break-word;
+            white-space: normal;
         }
     }
 }

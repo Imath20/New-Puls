@@ -23,7 +23,7 @@ const ExternalLinkIcon = () => (
   </svg>
 );
 
-// FavoriteProblemCard identic cu ProblemCard din Probleme.jsx
+// FavoriteProblemCard cu stiluri îmbunătățite
 const FavoriteProblemCard = ({ problem, onUnstar, onResolveClick }) => {
   const { index, titlu, dificultate, categorie, solved, createdByAlias } = problem;
   const getDifficultyColorClass = (diff) => {
@@ -45,7 +45,7 @@ const FavoriteProblemCard = ({ problem, onUnstar, onResolveClick }) => {
     }
   };
   return (
-    <div className={`problem-card${solved ? ' solved' : ''}`} style={{ position: 'relative' }}>
+    <div className={`problem-card favorite-problem-card${solved ? ' solved' : ''}`} style={{ position: 'relative' }}>
       {/* Steaua pentru favorite, poziționată absolut, nu afectează layout-ul */}
       <button
         onClick={onUnstar}
@@ -57,7 +57,15 @@ const FavoriteProblemCard = ({ problem, onUnstar, onResolveClick }) => {
       </button>
       {/* Autorul, ca la ProblemCard */}
       {createdByAlias && (
-        <span style={{ position: 'absolute', top: 12, right: 44, fontSize: 12, fontStyle: 'italic', color: '#888', zIndex: 2 }} title="Autor problemă">{createdByAlias}</span>
+        <span style={{ 
+          position: 'absolute', 
+          top: 12, 
+          right: 44, 
+          fontSize: 12, 
+          fontStyle: 'italic', 
+          color: '#888', 
+          zIndex: 2 
+        }} title="Autor problemă">{createdByAlias}</span>
       )}
       <div className="problem-card-header">
         <div className="problem-card-info">
@@ -74,7 +82,7 @@ const FavoriteProblemCard = ({ problem, onUnstar, onResolveClick }) => {
           onClick={() => onResolveClick(problem)}
         >
           <span>Rezolvă</span>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /><polyline points="15,3 21,3 21,9" /><line x1="10" y1="14" x2="21" y2="3" /></svg>
+          <ExternalLinkIcon />
         </button>
       </div>
     </div>
@@ -347,10 +355,23 @@ const Profile = () => {
                     simulationsVisited = snap.data().simulationsVisited;
                 }
             } catch (e) {}
-            // Construim activityLog
+            // Debug: afișează problemele din activitate
+            console.log('Probleme rezolvate:', solvedProblems.map(p => ({ id: p.id, titlu: p.titlu })));
+            console.log('Probleme adăugate:', addedProblems.map(p => ({ id: p.id, titlu: p.titlu })));
+            console.log('Toate problemele din userProblems:', userProblems.map(p => ({ id: p.id, titlu: p.titlu })));
+            
+            // Construim activityLog - filtrează problemele care nu există
+            const allAvailableProblems = [...problemeData, ...userProblems];
+            const solvedProblemsFiltered = solvedProblems.filter(p => 
+                allAvailableProblems.some(ap => String(ap.id) === String(p.id))
+            );
+            const addedProblemsFiltered = addedProblems.filter(p => 
+                allAvailableProblems.some(ap => String(ap.id) === String(p.id))
+            );
+            
             const activity = [
-                ...solvedProblems.map(p => ({ type: 'problem_solved', title: p.titlu, date: p.solvedAt || '', link: p.id ? `/probleme/${p.id}` : undefined })),
-                ...addedProblems.map(p => ({ type: 'problem_added', title: p.titlu, date: p.createdAt || '', link: p.id ? `/probleme/adaugata/${p.id}` : undefined })),
+                ...solvedProblemsFiltered.map(p => ({ type: 'problem_solved', title: p.titlu, date: p.solvedAt || '', link: p.id ? `/probleme/${p.id}` : undefined })),
+                ...addedProblemsFiltered.map(p => ({ type: 'problem_added', title: p.titlu, date: p.createdAt || '', link: p.id ? `/probleme/${p.id}` : undefined })),
                 ...simulationsVisited.map(s => ({ type: 'simulation_visited', title: s.title, date: s.date, link: s.id ? `/simulari/${s.id}` : undefined })),
             ].sort((a, b) => new Date(b.date) - new Date(a.date));
             setActivityLog(activity);
@@ -533,11 +554,11 @@ const Profile = () => {
                         )}
                         {activeTab === 'probleme' && (
                             <div className="profile-favorites-section" style={{ margin: '32px 0' }}>
-                                <h2 style={{ fontSize: 18, marginBottom: 12 }}>Probleme salvate</h2>
+                                <h2 style={{ fontSize: '2rem', fontWeight: 700, marginBottom: '2rem' }}>Probleme salvate</h2>
                                 {favoriteProblems.filter(p => p && p.id).length === 0 ? (
                                     <div style={{ color: '#888' }}>Nu ai probleme favorite salvate.</div>
                                 ) : (
-                                    <div style={{ maxHeight: '420px', overflowY: 'auto', paddingRight: 8 }}>
+                                    <div className="favorites-grid-container" style={{ maxHeight: '325px', overflowY: 'auto', paddingRight: 8 }}>
                                         <div className="problems-grid">
                                             {favoriteProblems.filter(p => p && p.id).map(problem => (
                                                 <FavoriteProblemCard

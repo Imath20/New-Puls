@@ -17,6 +17,8 @@ import Pendule from "./components/pages/resurse/pendule";
 import Unde from "./components/pages/resurse/unde";
 import Lissajous from "./components/pages/resurse/lissajous";
 import Seism from "./components/pages/resurse/seism";
+import Mecanica from "./components/pages/resurse/mecanica";
+import Termodinamica from "./components/pages/resurse/termodinamica";
 import ScrollToTop from "./components/ScrollToTop";
 import Profile from "./components/pages/Profile";
 import ProblemSubmit from "./components/ProblemSubmit";
@@ -187,6 +189,8 @@ const App = () => {
           <Route path="/resurse/unde" element={<Unde />} />
           <Route path="/resurse/lissajous" element={<Lissajous />} />
           <Route path="/resurse/seism" element={<Seism />} />
+          <Route path="/resurse/termodinamica" element={<Termodinamica />} />
+          <Route path="/resurse/mecanica" element={<Mecanica />} />
           <Route path="/about-us" element={<About />} />
           <Route path="/search" element={<SearchResults />} />
           <Route path="/profil" element={<Profile />} />

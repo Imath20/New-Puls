@@ -1,4 +1,4 @@
-import { Book, FileQuestion, HelpCircle, Home, Layout, ListCheck, ListChecks, Settings, User, Search, ChevronDown, Menu, X } from "lucide-react";
+import { Book, FileQuestion, HelpCircle, Home, Layout, ListCheck, ListChecks, Settings, User, Search, ChevronDown, Menu, X, ChevronRight } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import DarkModeToggle from "./DarkModeToggle";
 import PulsLogoWhite from '/res/puls-logo-new2.png';
@@ -11,9 +11,11 @@ import { useEffect, useRef, useState } from "react";
 const Navbar = () => {
     const [pulsOpen, setPulsOpen] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-    const [mobileDropdownOpen, setMobileDropdownOpen] = useState(false); // NEW
+    const [mobileDropdownOpen, setMobileDropdownOpen] = useState(false);
     const [searchValue, setSearchValue] = useState("");
+    const [maiMulteOpen, setMaiMulteOpen] = useState(false);
     const dropdownRef = useRef(null);
+    const maiMulteRef = useRef(null);
     const closeTimeoutRef = useRef(null);
     const navigate = useNavigate();
     const darkModeOn = useDarkMode();
@@ -26,6 +28,12 @@ const Navbar = () => {
                 !dropdownRef.current.contains(event.target)
             ) {
                 setPulsOpen(false);
+            }
+            if (
+                maiMulteRef.current &&
+                !maiMulteRef.current.contains(event.target)
+            ) {
+                setMaiMulteOpen(false);
             }
         };
         document.addEventListener("mousedown", handleClickOutside);
@@ -79,14 +87,35 @@ const Navbar = () => {
         }, 150); // 150ms delay before closing
     };
 
+    const handleMaiMulteMouseEnter = () => {
+        if (closeTimeoutRef.current) {
+            clearTimeout(closeTimeoutRef.current);
+            closeTimeoutRef.current = null;
+        }
+        setMaiMulteOpen(true);
+    };
+
+    const handleMaiMulteMouseLeave = () => {
+        closeTimeoutRef.current = setTimeout(() => {
+            setMaiMulteOpen(false);
+        }, 50);
+    };
+
     const handleDropdownClick = (e) => {
         e.preventDefault();
         e.stopPropagation();
         setPulsOpen((prev) => !prev);
     };
 
+    const handleMaiMulteClick = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setMaiMulteOpen((prev) => !prev);
+    };
+
     const handleDropdownItemClick = () => {
         setPulsOpen(false);
+        setMaiMulteOpen(false);
         setMobileMenuOpen(false);
     };
 
@@ -95,6 +124,11 @@ const Navbar = () => {
     };
 
     const handleMobileNavClick = () => {
+        setMobileMenuOpen(false);
+    };
+
+    const handleMaiMulteMobileClick = () => {
+        navigate('/resurse?tab=lectii');
         setMobileMenuOpen(false);
     };
 
@@ -239,6 +273,26 @@ const Navbar = () => {
                                     <Link to="/resurse/seism" className="dropdown-item" onClick={handleDropdownItemClick}>
                                         Seisme
                                     </Link>
+                                    <div
+                                        className="dropdown-item mai-multe-item"
+                                        ref={maiMulteRef}
+                                        onMouseEnter={handleMaiMulteMouseEnter}
+                                        onMouseLeave={handleMaiMulteMouseLeave}
+                                        onClick={handleMaiMulteClick}
+                                    >
+                                        <span>Mai multe</span>
+                                        <ChevronRight className="nav-icon" />
+                                        {maiMulteOpen && (
+                                            <div className="submenu">
+                                                <Link to="/resurse/mecanica" className="submenu-item" onClick={handleDropdownItemClick}>
+                                                    Mecanică
+                                                </Link>
+                                                <Link to="/resurse/termodinamica" className="submenu-item" onClick={handleDropdownItemClick}>
+                                                    Termodinamică
+                                                </Link>
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
                             )}
                         </div>
@@ -308,6 +362,9 @@ const Navbar = () => {
                                     <Link to="/resurse/seism" className="nav-link" onClick={handleMobileNavClick}>
                                         Seisme
                                     </Link>
+                                    <button className="nav-link" onClick={handleMaiMulteMobileClick} style={{ background: 'none', border: 'none', cursor: 'pointer', width: '100%', textAlign: 'left' }}>
+                                        <span>Diverse</span>
+                                    </button>
                                 </div>
                             </div>
                             

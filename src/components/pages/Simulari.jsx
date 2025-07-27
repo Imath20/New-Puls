@@ -9,6 +9,11 @@ import simulatorPrismaImg from "/res/screenshots/Prisma_Screenshot.png";
 import simulatorFunctiiImg from "/res/screenshots/Functii-nou_Screenshot.png";
 import simulatorGraficePendulImg from "/res/screenshots/Grafice_Pendule_Screenshot.png";
 import simulatorGraficeBasicImg from "/res/screenshots/Grafice_Basic_Screenshot.png";
+import simulatorOscilatieOYImg from "/res/screenshots/Oscilatieoy_Screenshot.png";
+import simulatorOscilatieOXImg from "/res/screenshots/Oscilatieox_Screenshot.png";
+import simulatorCiocnireImg from "/res/screenshots/Ciocnire_Screenshot.png";
+import simulatorTermodinamicaImg from "/res/screenshots/Termodinamica_Screenshot.png";
+
 import Layout from "../Layout";
 
 // Data for simulations
@@ -82,6 +87,34 @@ const simulationsData = [
     description: "Simulează dispersia luminii printr-o prismă.",
     image: simulatorPrismaImg,
     caption: "Prisma",
+  },
+  {
+    id: 11,
+    title: "Termodinamica",
+    description: "Simulează termodinamica unui sistem.",
+    image: simulatorTermodinamicaImg,
+    caption: "Termodinamica",
+  },
+  {
+    id: 12,
+    title: "Oscilatie elastica pe OY",
+    description: "Simulează oscilatia elastica pe OY.",
+    image: simulatorOscilatieOYImg,
+    caption: "Oscilatie OY",
+  },
+  {
+    id: 13,
+    title: "Oscilatie elastica pe OX",
+    description: "Simulează oscilatia elastica pe OX.",
+    image: simulatorOscilatieOXImg,
+    caption: "Oscilatie OX",
+  },
+  {
+    id: 14,
+    title: "Ciocnire elastica",
+    description: "Simulează ciocnirea elastica a doua corpuri.",
+    image: simulatorCiocnireImg,
+    caption: "Ciocnire elastica",
   },
 ];
 

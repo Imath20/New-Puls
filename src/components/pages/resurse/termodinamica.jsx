@@ -146,12 +146,12 @@ const TermodinamicaPage = () => {
                     </p>
                   </div>
                   <a
-                    href="#"
+                    href="/simulari/Termodinamica/index.html"
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{ textDecoration: "none" }}
                   >
-                    <Button size="lg">Simulare în curând</Button>
+                    <Button size="lg">Vezi simularea</Button>
                   </a>
                 </div>
               </div>

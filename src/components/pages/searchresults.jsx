@@ -51,6 +51,28 @@ const SearchResults = () => {
             ]
         },
         {
+            title: "Termodinamica",
+            path: "/resurse/termodinamica",
+            keywords: [
+              "termodinamica", "termodinamic", "termodinamică", "termodinamicii",
+              "energie internă", "entropie", "căldură", "lucru mecanic", "potențial termodinamic",
+              "temperatură", "presiune", "volum", "gaz ideal", "ecuație de stare", "transformare termodinamică",
+              "izoterm", "izotermă", "izotermic", "izobar", "izobară", "izobaric", "izocor", "izocoră", "izocoric", "adiabatic", "adiabatică",
+              "motor termic", "randament", "eficiență Carnot", "entalpie", "energia liberă", "Helmholtz", "Gibbs", "compresibilitate", "dilatare termică"
+            ]
+        },
+        {
+            title: "Mecanica",
+            path: "/resurse/mecanica",
+            keywords: [
+              "mecanica", "mecanic", "mecanică", "mecanicii",
+              "mişcare", "miscari", "mişcări", "mişcare oscilatorie", "oscilaţie", "oscilator", "oscilatoriu", "oscilatorie", "oscilatorii",
+              "pendul", "arc", "forţă restauratoare", "legea lui Hooke", "constanta elastică",
+              "coliziune", "ciocnire", "impuls", "conservarea impulsului", "energie cinetică", "elastic", "inelastic", "coeficient de restituire",
+              "plan înclinat", "forţă de frecare", "acceleraţie", "viteză", "masă", "gravitaţie"
+            ]
+        },
+        {
             title: "Resurse",
             path: "/resurse",
             keywords: [

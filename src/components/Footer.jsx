@@ -25,7 +25,16 @@ const Footer = () => {
                                     <li><Link to="/resurse/seism">Seisme</Link></li>
                                 </ul>
                             </div>
+                            {/* Noua coloană "Mai multe" */}
+                            <div className="footer-column">
+                                <h4>Mai multe</h4>
+                                <ul>
+                                    <li><Link to="/resurse/mecanica">Mecanica</Link></li>
+                                    <li><Link to="/resurse/termodinamica">Termodinamica</Link></li>
+                                </ul>
+                            </div>
                         </div>
+                        
                     </div>
                     <div className="footer-links">
                         <div className="footer-column">

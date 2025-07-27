@@ -92,7 +92,7 @@ const MecanicaPage = () => {
                     </p>
                   </div>
                   <a
-                    href="/simulari/Grafice-Armonice/index.html"
+                    href="/simulari/Oscilatii elastice  pe OX/index.html"
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{ textDecoration: "none" }}
@@ -160,7 +160,7 @@ const MecanicaPage = () => {
                     </p>
                   </div>
                   <a
-                    href="/simulari/Grafice-Armonice/index.html"
+                    href="/simulari/Legea Hooke-oscilatii oy/index.html"
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{ textDecoration: "none" }}
@@ -232,7 +232,7 @@ const MecanicaPage = () => {
                     </p>
                   </div>
                   <a
-                    href="/simulari/Mix/Ciocnire.html"
+                    href="/simulari/Ciocnire/ciocnire.html"
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{ textDecoration: "none" }}
